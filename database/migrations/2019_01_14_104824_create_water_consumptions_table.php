@@ -17,7 +17,7 @@ class CreateWaterConsumptionsTable extends Migration
             $table->increments('id');
             $table->smallInteger('device_id');
             $table->dateTime('created_at');
-            $table->float('consumption_amount', 6, 1);
+            $table->float('consumption_amount', 9, 1);
         });
     }
 
