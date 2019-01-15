@@ -13,7 +13,9 @@ class ElectricityConsumptionsTableSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        $start_date = Carbon::createFromTimeStamp($faker->dateTimeBetween($startDate = '-30 days', $endDate = '-29 days')->getTimestamp());
+        $start_date = Carbon::createFromTimeStamp($faker
+            ->dateTimeBetween($startDate = '-30 days', $endDate = '-29 days')
+            ->getTimestamp());
         $records_amount = 50;
         $devices_amount = 6;
 
