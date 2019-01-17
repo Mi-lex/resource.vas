@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +12,21 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+mix.webpackConfig({
+    module: {
+        rules: [
+          {
+            test: /\.js$/,
+            loader: 'babel-loader',
+            exclude: path.resolve(__dirname, './node_modules')
+          }
+        ],
+      }
+})
+
+mix.sass('resources/sass/app.scss', 'public/css/');
+
+// Bootstrap, jquery, fancybox, chart.js
+mix.js('resources/js/app.js', 'public/js/');
+
+mix.copy('resources/img', 'public/img', false);
