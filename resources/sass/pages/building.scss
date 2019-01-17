@@ -1,0 +1,20 @@
+/* Building */
+
+.widget-user .box-footer {
+    padding-top: 0;
+}
+
+@media (min-width: 768px) {
+    .buildingInfo .dl-horizontal dt {
+        width: 305px;
+    }
+    .buildingInfo .dl-horizontal dd {
+        margin-left: 315px;
+    }
+    .buildingInfo .image {
+        text-align: right;
+    }
+    .buildingInfo img {
+        height: 170px;
+    }
+}
