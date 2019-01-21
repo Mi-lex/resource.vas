@@ -15,18 +15,22 @@ const path = require('path');
 mix.webpackConfig({
     module: {
         rules: [
-          {
-            test: /\.js$/,
-            loader: 'babel-loader',
-            exclude: path.resolve(__dirname, './node_modules')
-          }
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: path.resolve(__dirname, './node_modules')
+            }
         ],
-      }
+    }
 })
 
-mix.sass('resources/sass/app.scss', 'public/css/');
-
-// Bootstrap, jquery, fancybox, chart.js
-mix.js('resources/js/app.js', 'public/js/');
-
-mix.copy('resources/img', 'public/img', false);
+mix.sass('resources/sass/app.scss', 'public/css/')
+    // Bootstrap, fancybox
+    .js('resources/js/app.js', 'public/js/')
+    // jQuery
+    .copy('resources/js/pages', 'public/js/pages/', false)
+    // Chart js
+    .copy('node_modules/chart.js/Chart.min.js', 'public/js/', false)
+    .copy('resources/img', 'public/img', false)
+    .copy('node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.css', 'public/css/', false)
+    .copy('node_modules/jquery/dist/jquery.min.js', 'public/js/', false);

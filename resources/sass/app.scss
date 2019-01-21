@@ -1,3 +1,12 @@
+// Bootstrap
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+// Font-awesome
+@import "~font-awesome/scss/font-awesome.scss";
+
+// AdminLTE
+@import './AdminLTE.scss';
+@import './skin-blue.scss';
+
 // Pages
 @import './pages/home.scss';
 @import './pages/academy.scss';

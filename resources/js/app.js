@@ -1,4 +1,3 @@
-import 'jquery';
 import '@fancyapps/fancybox';
-import 'bootstrap';
-import 'chart.js';
+import 'bootstrap-sass';
+import './adminlte';
