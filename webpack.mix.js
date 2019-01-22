@@ -27,10 +27,13 @@ mix.webpackConfig({
 mix.sass('resources/sass/app.scss', 'public/css/')
     // Bootstrap, fancybox
     .js('resources/js/app.js', 'public/js/')
-    // jQuery
+    // Js pages
     .copy('resources/js/pages', 'public/js/pages/', false)
     // Chart js
     .copy('node_modules/chart.js/Chart.min.js', 'public/js/', false)
+    // Transparency
+    .copy('node_modules/transparency/dist/transparency.min.js', 'public/js/', false)
+    // Images
     .copy('resources/img', 'public/img', false)
     .copy('node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.css', 'public/css/', false)
     .copy('node_modules/jquery/dist/jquery.min.js', 'public/js/', false);
