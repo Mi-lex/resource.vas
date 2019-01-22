@@ -15,6 +15,8 @@ class CreateMetersTable extends Migration
     {
         Schema::create('meters', function (Blueprint $table) {
             $table->increments('id');
+            $table->tinyInteger('type');
+            $table->integer('building_id')->nullable();
             $table->string('name');
             $table->string('model');
             $table->integer('serial_number')->nullable();
