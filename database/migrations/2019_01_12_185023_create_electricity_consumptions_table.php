@@ -15,7 +15,10 @@ class CreateElectricityConsumptionsTable extends Migration
     {
         Schema::create('electricity_consumptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->smallInteger('device_id');
+
+            $table->unsignedInteger('device_id');
+            $table->foreign('device_id')->references('id')->on('meters');
+            
             $table->dateTime('created_at');
             $table->float('sumDirectActive', 5, 3)->nullable();
             $table->float('sumInverseActive', 5, 3)->nullable();

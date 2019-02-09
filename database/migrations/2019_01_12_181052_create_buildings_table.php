@@ -15,6 +15,10 @@ class CreateBuildingsTable extends Migration
     {
         Schema::create('buildings', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->unsignedInteger('object_id');
+            $table->foreign('object_id')->references('id')->on('miltary_objects');
+
             $table->string('name');
             $table->mediumInteger('area');
             $table->tinyInteger('floors');

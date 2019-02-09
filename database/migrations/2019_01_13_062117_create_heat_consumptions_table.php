@@ -15,7 +15,10 @@ class CreateHeatConsumptionsTable extends Migration
     {
         Schema::create('heat_consumptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->smallInteger('device_id');
+
+            $table->unsignedInteger('device_id');
+            $table->foreign('device_id')->references('id')->on('meters');
+            
             $table->dateTime('created_at');
             $table->integer('thermal_energy');
             $table->integer('volume_flow_1');

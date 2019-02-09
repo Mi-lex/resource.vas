@@ -15,7 +15,10 @@ class CreateWaterConsumptionsTable extends Migration
     {
         Schema::create('water_consumptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->smallInteger('device_id');
+
+            $table->unsignedInteger('device_id');
+            $table->foreign('device_id')->references('id')->on('meters');
+            
             $table->dateTime('created_at');
             $table->float('consumption_amount', 9, 1);
         });
