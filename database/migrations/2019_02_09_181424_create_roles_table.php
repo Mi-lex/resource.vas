@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMiltaryObjectsTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateMiltaryObjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('miltary_objects', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('address');
+            $table->string('slug');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +28,6 @@ class CreateMiltaryObjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('miltary_objects');
+        Schema::dropIfExists('roles');
     }
 }
