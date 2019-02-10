@@ -20,26 +20,26 @@ class CreateElectricityConsumptionsTable extends Migration
             $table->foreign('device_id')->references('id')->on('meters');
             
             $table->dateTime('created_at');
-            $table->float('sumDirectActive', 5, 3)->nullable();
-            $table->float('sumInverseActive', 5, 3)->nullable();
-            $table->float('sumDirectReactive', 5, 3)->nullable();
-            $table->float('sumInverseReactive', 5, 3)->nullable();
-            $table->float('t1DirectActive', 5, 3)->nullable();
-            $table->float('t1InverseActive', 5, 3)->nullable();
-            $table->float('t1DirectReactive', 5, 3)->nullable();
-            $table->float('t1InverseRective', 5, 3)->nullable();
-            $table->float('t2DirectActive', 5, 3)->nullable();
-            $table->float('t2InverseActive', 5, 3)->nullable();
-            $table->float('t2DirectReactive', 5, 3)->nullable();
-            $table->float('t2InverseRective', 5, 3)->nullable();
-            $table->float('t3DirectActive', 5, 3)->nullable();
-            $table->float('t3InverseActive', 5, 3)->nullable();
-            $table->float('t3DirectReactive', 5, 3)->nullable();
-            $table->float('t3InverseRective', 5, 3)->nullable();
-            $table->float('t4DirectActive', 5, 3)->nullable();
-            $table->float('t4InverseActive', 5, 3)->nullable();
-            $table->float('t4DirectReactive', 5, 3)->nullable();
-            $table->float('t4InverseRective', 5, 3)->nullable();
+            $table->float('sumDirectActive', 6, 3)->nullable();
+            $table->float('sumInverseActive', 6, 3)->nullable();
+            $table->float('sumDirectReactive', 6, 3)->nullable();
+            $table->float('sumInverseReactive', 6, 3)->nullable();
+            $table->float('t1DirectActive', 6, 3)->nullable();
+            $table->float('t1InverseActive', 6, 3)->nullable();
+            $table->float('t1DirectReactive', 6, 3)->nullable();
+            $table->float('t1InverseRective', 6, 3)->nullable();
+            $table->float('t2DirectActive', 6, 3)->nullable();
+            $table->float('t2InverseActive', 6, 3)->nullable();
+            $table->float('t2DirectReactive', 6, 3)->nullable();
+            $table->float('t2InverseRective', 6, 3)->nullable();
+            $table->float('t3DirectActive', 6, 3)->nullable();
+            $table->float('t3InverseActive', 6, 3)->nullable();
+            $table->float('t3DirectReactive', 6, 3)->nullable();
+            $table->float('t3InverseRective', 6, 3)->nullable();
+            $table->float('t4DirectActive', 6, 3)->nullable();
+            $table->float('t4InverseActive', 6, 3)->nullable();
+            $table->float('t4DirectReactive', 6, 3)->nullable();
+            $table->float('t4InverseRective', 6, 3)->nullable();
         });
     }
 
