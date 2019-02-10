@@ -15,7 +15,11 @@ class CreateMetersTable extends Migration
     {
         Schema::create('meters', function (Blueprint $table) {
             $table->increments('id');
-            $table->tinyInteger('type');
+
+            $table->unsignedInteger('type_id');
+            $table->foreign('type_id')->references('id')
+                ->on('types');
+
             $table->integer('building_id')->nullable();
             $table->string('name');
             $table->string('model');
