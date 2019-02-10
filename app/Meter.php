@@ -18,6 +18,10 @@ class Meter extends Model
 
     public function heat_consumptions()
     {
-        return $this->hasMany('App\heatConsumption', 'device_id');
+        return $this->hasMany('App\HeatConsumption', 'device_id');
+    }
+
+    public function type(){
+        return $this->belongsTo('App\Type');
     }
 }

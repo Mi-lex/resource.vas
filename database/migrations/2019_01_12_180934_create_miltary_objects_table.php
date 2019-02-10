@@ -15,8 +15,10 @@ class CreateMiltaryObjectsTable extends Migration
     {
         Schema::create('miltary_objects', function (Blueprint $table) {
             $table->increments('id');
+            
             $table->unsignedInteger('district_id');
             $table->foreign('district_id')->references('id')->on('miltary_districts');
+            
             $table->string('name');
             $table->string('address');
         });

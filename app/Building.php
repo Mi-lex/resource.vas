@@ -13,16 +13,16 @@ class Building extends Model
 
     public function electricity_meters()
     {
-        return $this->meters()->where('type', 1);
+        return $this->meters()->where('type_id', 1);
     }
 
     public function water_meters()
     {
-        return $this->meters()->where('type', 2);
+        return $this->meters()->where('type_id', 2);
     }
 
     public function heat_meters()
     {
-        return $this->meters()->where('type', 3);
+        return $this->meters()->where('type_id', 3);
     }
 }
