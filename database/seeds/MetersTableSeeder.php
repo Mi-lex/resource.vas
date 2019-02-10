@@ -15,7 +15,7 @@ class MetersTableSeeder extends Seeder
             // Electrometers
             [
                 'name' => 'Тестовый стенд',
-                'type' => '1',
+                'type_id' => '1',
                 'building_id' => 1,
                 'model' => 'Меркурий 230 AR-01 R',
                 'serial_number' => 32388364,
@@ -28,7 +28,7 @@ class MetersTableSeeder extends Seeder
             ],
             [
                 'name' => 'ЦОД  основной ввод',
-                'type' => '1',
+                'type_id' => '1',
                 'building_id' => 1,
                 'model' => 'Меркурий 230 ART-03 RN',
                 'serial_number' => 31,
@@ -42,7 +42,7 @@ class MetersTableSeeder extends Seeder
             ],
             [
                 'name' => 'ЦОД  резервный ввод',
-                'type' => '1',
+                'type_id' => '1',
                 'building_id' => 1,
                 'model' => 'Меркурий 230 ART-03 RN',
                 'serial_number' => 94,
@@ -55,7 +55,7 @@ class MetersTableSeeder extends Seeder
             ],
             [
                 'name' => 'Аварийная панель 5',
-                'type' => '1',
+                'type_id' => '1',
                 'building_id' => 16,
                 'model' => 'Мерукрий 234',
                 'serial_number' => 21748622,
@@ -68,7 +68,7 @@ class MetersTableSeeder extends Seeder
             ],
             [
                 'name' => 'Распределительная панель 4',
-                'type' => '1',
+                'type_id' => '1',
                 'building_id' => 16,
                 'model' => 'Мерукрий 234',
                 'serial_number' => 21747639,
@@ -81,7 +81,7 @@ class MetersTableSeeder extends Seeder
             ],
             [
                 'name' => 'Распределительная панель 2',
-                'type' => '1',
+                'type_id' => '1',
                 'building_id' => 16,
                 'model' => 'Мерукрий 234',
                 'serial_number' => 21747340,
@@ -95,7 +95,7 @@ class MetersTableSeeder extends Seeder
             // WaterMeters
             [
                 'name' => "ВУ-29 ГП-1 основной",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 1,
                 'active' => true,
                 'description' => "Внутренняя хозбытовая линия ГП-1 со стороны ТСО рабочая ветка",
@@ -107,7 +107,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-25 ГП-2 основной",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 2,
                 'active' => false,
                 'description' => "Внутренняя хозбытовая линия ГП-2 рабочая ветка",
@@ -119,7 +119,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-26 ГП-2 резервный",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 2,
                 'active' => false,
                 'description' => "Внутренняя хозбытовая линия ГП-2 резервная ветка",
@@ -131,7 +131,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "Тестовый стенд Пульсар 80 канал 2",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 13,
                 'active' => false,
                 'description' => "Тест Пульсар",
@@ -143,7 +143,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "Тестовый стенд Пульсар 80 канал 1",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 13,
                 'active' => false,
                 'description' => "Тест Пульсар",
@@ -155,7 +155,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-1 ГП-2 хозбытовой",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 2,
                 'active' => false,
                 'description' => "Ввод РСО хозбытовая ветка ГП-2",
@@ -167,7 +167,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-1 ГП-2 пожарный",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 2,
                 'active' => false,
                 'description' => "Ввод РСО пожарная ветка ГП-2",
@@ -179,7 +179,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-30 ГП-1 резервный",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 1,
                 'active' => false,
                 'description' => "Внутренняя хозбытовая линия ГП-1 со стороны ТСО резервная ветка",
@@ -191,7 +191,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-8 ГП-8",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 8,
                 'active' => false,
                 'description' => "Ввод РСО неопределённая ветка ГП-8",
@@ -203,7 +203,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-8 ГП-8",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 8,
                 'active' => false,
                 'description' => "Ввод РСО неопределённая ветка ГП-8",
@@ -215,7 +215,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-6 ГП-5 хозбытовая",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 5,
                 'active' => true,
                 'description' => "Ввод РСО рабочий со стороны КПП хозбытовая ветка ГП-5",
@@ -227,7 +227,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-6 ГП-5 пожарная",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 5,
                 'active' => false,
                 'description' => "Ввод РСО рабочий со стороны КПП пожарная ветка ГП-5",
@@ -239,7 +239,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-7 ГП-5 хозбытовая",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 5,
                 'active' => true,
                 'description' => "Ввод РСО резервный со стороны поликлиники хозбытовая ветка ГП-5",
@@ -251,7 +251,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-7 ГП-5 пожарная",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 5,
                 'active' => false,
                 'description' => "Ввод РСО резервный со стороны поликлиники пожарная ветка ГП-5",
@@ -263,7 +263,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-5 ГП-4 хозбытовая",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 4,
                 'active' => true,
                 'description' => "Ввод РСО рабочий со стороны поликлиники хозбытовая ветка",
@@ -275,7 +275,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-5 ГП-4 пожарная",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 4,
                 'active' => false,
                 'description' => "Ввод РСО рабочий со стороны поликлиники пожарная ветка",
@@ -287,7 +287,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-4 ГП-4 хозбытовая",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 4,
                 'active' => true,
                 'description' => "Ввод РСО резервный со стороны УЛК хозбытовая ветка",
@@ -299,7 +299,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "ВУ-4 ГП-4 пожарная",
-                'type' => '2',
+                'type_id' => '2',
                 'building_id' => 4,
                 'active' => false,
                 'description' => "Ввод РСО резервный со стороны УЛК пожарная ветка",
@@ -313,7 +313,7 @@ class MetersTableSeeder extends Seeder
               // Heat meters
               [
                 'name' => "Тепловой ввод ГП-1",
-                'type' => '3',
+                'type_id' => '3',
                 'building_id' => 1,
                 'active' => true,
                 'description' => "Главный тепловой ввод ГП-1",
@@ -323,7 +323,7 @@ class MetersTableSeeder extends Seeder
               ],
               [
                 'name' => "Тестовый стенд",
-                'type' => '3',
+                'type_id' => '3',
                 'building_id' => 1,
                 'active' => false,
                 'description' => "Тестовый счётчик",
