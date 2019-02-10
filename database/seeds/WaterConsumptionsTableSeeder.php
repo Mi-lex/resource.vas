@@ -19,11 +19,14 @@ class WaterConsumptionsTableSeeder extends Seeder
         $records_amount = 12;
         $active_water_meters = [1, 13, 15, 17, 19];
 
-        foreach (range(1, $records_amount) as $outer_index) {
-            foreach ($active_water_meters as $device_id) {
-                factory(App\WaterConsumption::class)->create([
+        foreach ($active_water_meters as $device_id) {
+            $consumption_amount = $faker->randomFloat(1, 140000, 2);
+
+            foreach (range(1, $records_amount) as $outer_index) {
+                DB::table('water_consumptions')->insert([
                     'device_id' => $device_id,
-                    'created_at' => $start_date
+                    'created_at' => $start_date,
+                    'consumption_amount' => $consumption_amount += $faker->randomFloat(1, 100, 200)
                 ]);
             }
 
