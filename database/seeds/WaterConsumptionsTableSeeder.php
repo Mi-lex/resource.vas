@@ -17,7 +17,7 @@ class WaterConsumptionsTableSeeder extends Seeder
             ->dateTimeBetween($startDate = '-30 days', $endDate = '-29 days')
             ->getTimestamp());
         $records_amount = 12;
-        $active_water_meters = [1, 13, 15, 17, 19];
+        $active_water_meters = [7, 17, 19, 21, 23];
 
         foreach ($active_water_meters as $device_id) {
             $consumption_amount = $faker->randomFloat(1, 140000, 2);

@@ -13,13 +13,11 @@ class ElectricityConsumptionsTableSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        $start_date = Carbon::createFromTimeStamp($faker
-            ->dateTimeBetween($startDate = '-30 days', $endDate = '-29 days')
-            ->getTimestamp());
-        $records_amount = 50;
-        $devices_amount = 6;
+        $records_amount = 961;
+        $devices_amount = 2;
 
         foreach (range(1, $devices_amount) as $device_id) {
+            $start_date = Carbon::now()->subDays(40);
             
             $sumDirectActive = $faker->randomFloat(3, 1, 3);
             $sumInverseActive = $faker->randomFloat(3, 1, 4);
@@ -43,7 +41,6 @@ class ElectricityConsumptionsTableSeeder extends Seeder
             $t4InverseRective = $faker->randomFloat(3, 1, 3);
 
             foreach (range(1, $records_amount) as $outer_index) {
-
                 DB::table('electricity_consumptions')->insert([
                     'device_id' => $device_id,
                     'created_at' => $start_date,
@@ -68,6 +65,8 @@ class ElectricityConsumptionsTableSeeder extends Seeder
                     't4DirectReactive' => $t4DirectReactive += $faker->randomFloat(3, 1, 2),
                     't4InverseRective' => $t4InverseRective += $faker->randomFloat(3, 1, 2)
                 ]);
+
+                $start_date->addHour();
             }
         }
     }
