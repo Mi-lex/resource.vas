@@ -16,6 +16,13 @@ class MetersController extends Controller
         'heat' => 'heat_consumptions'
     ];
 
+    private $consumption_attributes = [
+        'electricity_consumptions' => 
+            ['id', 'created_at', 'device_id', 'sumDirectActive'],
+        'water_consumptions' => null,
+        'heat_consumptions' => null
+    ];
+
     public function show(Meter $meter)
     {
         $current_consumption = $meter
@@ -31,17 +38,20 @@ class MetersController extends Controller
     {
         $meter_type = $meter->type->name;
 
-        $consumptions = $meter->{$this->type_methods[$meter_type]}()
+        $consumption_type = $this->type_methods[$meter_type];
+
+        $consumptions = $meter->{$consumption_type}()
+            ->select()
             ->where('created_at', '>=', Carbon::now()->subDays($days))
-            ->get()
+            ->get($this->consumption_attributes[$consumption_type] ?? [])
             ->groupBy(function($item) {
                 return Carbon::parse($item->created_at)->format('d');
-            })->toArray();
-            
-            // ->mapWithKeys(function ($row) {
-            //     return [$row['created_at'] => array_slice()]
-            // });
-
+            })
+            ->mapWithKeys(function ($item, $key) {
+                return [Carbon::parse($item[0]['created_at'])->format('d-m-Y') => 
+                    [$item[0], $item[sizeof($item) - 1]]];
+            });
+        
         return response()->json($consumptions);
     }
 }
