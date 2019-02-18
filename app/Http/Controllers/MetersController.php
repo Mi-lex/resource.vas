@@ -41,9 +41,9 @@ class MetersController extends Controller
         $consumption_type = $this->type_methods[$meter_type];
 
         $consumptions = $meter->{$consumption_type}()
-            ->select()
+            ->select($this->consumption_attributes[$consumption_type] ?? [])
             ->where('created_at', '>=', Carbon::now()->subDays($days))
-            ->get($this->consumption_attributes[$consumption_type] ?? [])
+            ->get()
             ->groupBy(function($item) {
                 return Carbon::parse($item->created_at)->format('d');
             })
@@ -53,5 +53,18 @@ class MetersController extends Controller
             });
         
         return response()->json($consumptions);
+    }
+
+    public function last_electricity_consumption(Meter $meter)
+    {
+        $columns = ['id', 'created_at', 'device_id', 't1DirectActive', 
+            't1DirectReactive', 't2DirectActive', 't2DirectReactive'];
+
+        $last_consumption = $meter->electricity_consumptions()
+            ->select($columns)
+            ->latest()
+            ->first();
+        
+        return response()->json($last_consumption);
     }
 }
