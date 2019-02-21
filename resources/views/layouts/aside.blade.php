@@ -1,10 +1,15 @@
 <header class="main-header">
 <!-- Logo -->
-<a href="home" class="logo">
+<a href="{{ url('/') }}" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><img src="./img/icons/favicon-white.svg" style="height: 30px;" alt=""></span>
+    <span class="logo-mini">
+        <img src="{{ asset('img/icons/favicon-white.svg') }}" style="height: 30px;" alt="">
+    </span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><img src="./img/icons/favicon-white.svg" style="height: 30px;" alt=""> Ресурс</span>
+    <span class="logo-lg">
+        <img src="{{ asset('img/icons/favicon-white.svg') }}" style="height: 30px;" alt=""> 
+        Ресурс
+    </span>
 </a>
 <!-- Header Navbar: style can be found in header.less -->
 <nav class="navbar navbar-static-top">
@@ -83,18 +88,17 @@
 
             <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <img src="./img/avatar5.png" class="user-image" alt="User Image">
+                    <img src="{{ asset('img/avatar5.png') }}" class="user-image" alt="User Image">
                     <span class="hidden-xs">Пользователь</span>
                 </a>
                 <ul class="dropdown-menu">
                     <!-- User image -->
                     <li class="user-header">
-                    <img src="./img/avatar5.png" class="img-circle" alt="User Image">
-
-                    <p>
-                        Пользователь Иван Иванович
-                        <small>Заместитель начальника академии по МТО</small>
-                    </p>
+                        <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="User Image">
+                        <p>
+                            Пользователь Иван Иванович
+                            <small>Заместитель начальника академии по МТО</small>
+                        </p>
                     </li>
                     <!-- Menu Footer-->
                     <li class="user-footer">
@@ -130,9 +134,6 @@
             <a href="#">
                 <i class="fa fa-dashboard"></i>
                 <span>Приборы учёта</span>
-                <span class="pull-right-container">
-                    <span class="label label-primary pull-right">186</span>
-                </span>
             </a>
             <ul class="treeview-menu">
                 <li><a href="electricity/2"><i class="fa fa-flash"></i> Электроэнергия</a></li>

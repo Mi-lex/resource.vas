@@ -6,10 +6,9 @@
         <h1>
             {{ $meter->name }}
 
-            {{-- Questinable --}}
-            {{-- <small>
-                <a href="mercury-monitoring2.php?deviceId={{ $meter->id }}">перейти к мониторингу</a>
-            </small> --}}
+            <small>
+                <a href="meter/{{ $meter->id }}/monitoring">перейти к мониторингу</a>
+            </small>
         </h1>
     </section>
 
@@ -46,7 +45,7 @@
             <div class="col-md-2 hidden-xs hidden-sm">
                 <div class="box box-solid">
                     <div class="box-body text-center">
-                        <img src="/mercury230.png" alt="" style="max-height: 140px;">
+                        <img src="{{ asset('img/mercury230.png') }}" alt="" style="max-height: 140px;">
                     </div>
                 </div>
             </div>
@@ -69,7 +68,6 @@
                         <span class="info-box-text">Активная (тариф 1)</span>
 
                         <span class="info-box-number" id="a1">
-                            {{ $current_consumption->t1DirectActive }}
                         </span>
 
                         <span class="info-box-comment"> кВт-ч</span>
@@ -84,7 +82,6 @@
                         <span class="info-box-text">Реактивная (тариф 1)</span>
 
                         <span class="info-box-number" id="r1">
-                            {{ $currentConsumption->t1DirectReactive }}
                         </span>
 
                         <span class="info-box-comment"> кВАр-ч</span>
@@ -97,9 +94,10 @@
                     <span class="info-box-icon bg-light-blue">A2</span>
                     <div class="info-box-content">
                         <span class="info-box-text">Активная (тариф 2)</span>
+
                         <span class="info-box-number" id="a2">
-                            {{ $currentConsumption->t2DirectActive }}
                         </span>
+
                         <span class="info-box-comment"> кВт-ч</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -110,8 +108,8 @@
                     <span class="info-box-icon bg-teal">R2</span>
                     <div class="info-box-content">
                         <span class="info-box-text">Реактивная (тариф 2)</span>
+
                         <span class="info-box-number" id="r2">
-                            {{ $currentConsumption->t2DirectReactive }}
                         </span>
                         <span class="info-box-comment"> кВАр-ч</span>
                     </div>
@@ -181,20 +179,11 @@
             <!-- /.box-header -->
         </div>
 
-        <!-- Php переменные для корректной работы подключенного js скрипта. 
-        !В будущем изменить структуру. -->
-        <script>
-            var errorMaxCount = 5;
-            var lastConsumptionDatetime = {{ $currentConsumption->created_at }};
-            var deviceId = {{ $currentConsumption->id }};
-
-            monthConsumption.reverse();
-        </script>
     </section>
     <!-- /.content -->
-@endsection;
+@endsection
 
 
 @section('scripts')
-  <script src="js/pages/home.js"></script>
+  <script src="{{ asset('js/pages/electricity.js') }}"></script>
 @endsection
