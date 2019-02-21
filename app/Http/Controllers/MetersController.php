@@ -42,15 +42,17 @@ class MetersController extends Controller
 
         $consumptions = $meter->{$consumption_type}()
             ->select($this->consumption_attributes[$consumption_type] ?? [])
-            ->where('created_at', '>=', Carbon::now()->subDays($days))
+            ->where('created_at', '>=', Carbon::now()->subDays($days)->startOfDay())
             ->get()
             ->groupBy(function($item) {
                 return Carbon::parse($item->created_at)->format('d');
             })
-            ->mapWithKeys(function ($item, $key) {
+            ->mapWithKeys(function ($item) {
                 return [Carbon::parse($item[0]['created_at'])->format('d-m-Y') => 
-                    [$item[0], $item[sizeof($item) - 1]]];
+                    [$item->first(), $item->last()]];
             });
+
+            
         
         return response()->json($consumptions);
     }
