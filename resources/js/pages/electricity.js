@@ -9,7 +9,11 @@ var lastConsumptionDatetime, deviceId;
 var currentLocation = window.location.href.split('/');
 var id = currentLocation[currentLocation.length - 1];
 
-var url = 'http://resource.test/meters/' + id + '/consumption/30';
+var autoRefresh = $('#autoRefresh').is(':checked');
+var successTime = new Date(lastConsumptionDatetime);
+var errorMaxCount = 5;
+var errorCount = 0;
+
 
 $(document).ready(function () {
     $('.sidebar-menu').tree()
@@ -19,25 +23,75 @@ $(document).ready(function () {
     showChart();
 })
 
+function refreshData() {
+    let errorCount = 0;
+
+    $.ajax({
+        url: 'http://resource.test/meters/'+ id +'/last_electricity_consumption',
+        type: 'GET',
+        dataType: 'json',
+        beforeSend: setStatusPending()
+    })
+    .done(function (lastConsumption) {
+        $("#a1").text(lastConsumption.t1DirectActive.toFixed(2));
+        $("#r1").text(lastConsumption.t1DirectReactive.toFixed(2));
+        $("#a2").text(lastConsumption.t2DirectActive.toFixed(2));
+        $("#r2").text(lastConsumption.t2DirectReactive.toFixed(2));
+
+        successTime = lastConsumption['created_at'];
+
+        updateTimeFromSuccess();
+        setStatusSuccess();
+    })
+    .fail(function (data) {
+        setStatusError();
+        errorCount++;
+    })
+    .always(function () {
+        if (autoRefresh) {
+            if (errorCount <= errorMaxCount) {
+
+                setTimeout(refreshData, 1000);
+                
+                if (errorCount > 0) {
+                    console.info("Не выполнено запросов подряд: " + errorCount);
+                }
+            } else {
+                console.error("Автоматическое обновление остановлено. Превышел лимит ошибок.")
+                $('#autoRefresh').prop("checked", false)
+                autoRefresh = false;
+            }
+        }
+    });
+}
+
 function showChart() {
-    $.get(url, function (consumptionsObject) {
+    const lastConsumptionUrl = 'http://resource.test/meters/' + id + '/consumption/30';
+
+    $.ajax({
+        url: lastConsumptionUrl,
+        type: 'GET',
+        dataType: 'json',
+    })
+    .done(function (consumptionsObject) {
         const [labels, plotData] = getChartData(consumptionsObject);
     
         loadDataToChart(labels, plotData);
-    });
+    })
 }
 
 function getChartData(consumptionObject) {
     const plotData = [];
+    console.log(consumptionObject);
     // Each day consists two consumption (at the start and at the end)
     days = [...Object.keys(consumptionObject)];
 
     consumptionName = 'sumDirectActive';
 
-    days.forEach((key) => {
+    days.forEach((day) => {
         // get dayly consumptions by subtracting max and min values
-        const diff = (consumptionObject[key][1][consumptionName] -
-            consumptionObject[key][0][consumptionName]).toFixed(2);
+        const diff = (consumptionObject[day][1][consumptionName] -
+            consumptionObject[day][0][consumptionName]).toFixed(2);
 
         // push that difference into the plotData
         plotData.push(diff);
@@ -113,13 +167,6 @@ function loadDataToChart(labels, plotData) {
     })
 };
 
-
-var autoRefresh = $('#autoRefresh').is(':checked');
-var successTime = new Date(lastConsumptionDatetime);
-var errorMaxCount = 5;
-var errorCount = 0;
-
-
 $("#getFreshData").click(refreshData);
 
 $('#autoRefresh').change(function () {
@@ -139,65 +186,13 @@ function setStatusSuccess() {
     $("#statusPanel").addClass("alert alert-success");
     $("#statusHeading").html('<i class="icon fa fa-check"></i> Сведения актуальны</h4>');
 }
+
 function setStatusError() {
     $("#statusPanel").removeClass();
     $("#statusPanel").addClass("alert alert-danger");
     $("#statusHeading").html('<i class="icon fa fa-times"></i> Сведения могут быть не актуальны</h4>')
 }
 
-function refreshData() {
-    const url = 'http://resource.test/meters/'+ id +'/last_electricity_consumption';
-
-    $.get(url, function (lastConsumption) {
-        console.log(lastConsumption);
-
-        $("#a1").text(lastConsumption.t1DirectActive.toFixed(2));
-        $("#r1").text(lastConsumption.t1DirectReactive.toFixed(2));
-        $("#a2").text(lastConsumption.t2DirectActive.toFixed(2));
-        $("#r2").text(lastConsumption.t2DirectReactive.toFixed(2));
-    });
-}
-
-// function refreshData() {
-//     $.ajax({
-//         url: 'http://resource.test/meters/'+ id +'/last_electricity_consumption',
-//         type: 'GET',
-//         dataType: 'json',
-//         data: { deviceId: deviceId },
-//         beforeSend: setStatusPending()
-//     })
-//         .done(function (data) {
-//             errorCount = 0;
-//             $("#a1").text(data.t1DirectActive.toFixed(2));
-//             $("#r1").text(data.t1DirectReactive.toFixed(2));
-//             $("#a2").text(data.t2DirectActive.toFixed(2));
-//             $("#r2").text(data.t2DirectReactive.toFixed(2));
-//             successTime = new Date();
-//             updateTimeFromSuccess();
-//             setStatusSuccess();
-//         })
-//         .fail(function (data) {
-//             setStatusError();
-//             errorCount++;
-//             // alert("Произошла ошибка. Сведения не обновлены.")
-//             console.warn(data.responseText)
-//         })
-//         .always(function () {
-//             if (autoRefresh) {
-//                 if (errorCount <= errorMaxCount) {
-//                     setTimeout(refreshData, 1000);
-//                     if (errorCount > 0) {
-//                         console.info("Не выполнено запросов подряд: " + errorCount);
-//                     }
-//                 } else {
-//                     console.error("Автоматическое обновление остановлено. Превышел лимит ошибок.")
-//                     $('#autoRefresh').prop("checked", false)
-//                     autoRefresh = false;
-//                 }
-//             }
-//         });
-// }
-
 function updateTimeFromSuccess() {
-    $('#timeFromSuccess').text(moment(successTime).fromNow());
+    $('#timeFromSuccess').text(successTime);
 }
