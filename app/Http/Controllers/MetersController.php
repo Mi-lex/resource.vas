@@ -19,7 +19,8 @@ class MetersController extends Controller
     private $consumption_attributes = [
         'electricity_consumptions' => 
             ['id', 'created_at', 'device_id', 'sumDirectActive'],
-        'water_consumptions' => null,
+        'water_consumptions' => 
+            ['id', 'created_at', 'device_id', 'consumption_amount'],
         'heat_consumptions' => null
     ];
 
@@ -29,8 +30,6 @@ class MetersController extends Controller
             ->{$this->type_methods[$meter->type->name]}()
             ->latest()->first();
         
-        // dd($current_consumption->t1DirectReactive);
-
         return view('meters.' . $meter->type->name, compact('meter', 'current_consumption'));
     }
 
@@ -52,8 +51,6 @@ class MetersController extends Controller
                     [$item->first(), $item->last()]];
             });
 
-            
-        
         return response()->json($consumptions);
     }
 
