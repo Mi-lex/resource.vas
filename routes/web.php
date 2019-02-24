@@ -17,3 +17,12 @@ Route::get('/meters/{meter}/last_electricity_consumption', 'MetersController@las
 // District
 
 Route::get('/districts/{district}', 'DistrictsController@show');
+
+// Sector
+
+Route::get('/sectors/{sector}', 'SectorsController@show');
+
+// Object
+
+Route::get('/objects/{object}', 'ObjectsController@show');
+
