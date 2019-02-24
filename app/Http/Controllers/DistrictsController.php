@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\MiltaryDistrict;
 
 class DistrictsController extends Controller
@@ -11,6 +10,6 @@ class DistrictsController extends Controller
     {
         $objects = $district->objects;
 
-        return view('pages.district', 'objects');
+        return view('pages.district', compact('objects'));
     }
 }
