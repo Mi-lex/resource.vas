@@ -15,6 +15,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Главный копрус',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '1936',
                 'updated_at' => '2014',
                 'area' => 35300,
@@ -25,6 +26,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Учебно-лабораторный корпус',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '1988',
                 'updated_at' => '2014',
                 'area' => 51404,
@@ -35,6 +37,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Учебный корпус',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '1975',
                 'updated_at' => '2014',
                 'area' => 3733,
@@ -44,6 +47,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Общежите специального факультета',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '1970',
                 'updated_at' => '2014',
                 'area' => 10599,
@@ -52,6 +56,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Общежите 3 факультета',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '1969',
                 'updated_at' => '2014',
                 'area' => 10461,
@@ -60,6 +65,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Общежите 2 факультета',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2014',
                 'area' => 16039,
                 'floors' => 12,
@@ -67,6 +73,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Общежите 1 факультета',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2014',
                 'area' => 33920,
                 'floors' => 12,
@@ -74,6 +81,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Общежите военнослужащих женского пола',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '1980',
                 'updated_at' => '2014',
                 'area' => 6434,
@@ -82,6 +90,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Бассейн',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2013',
                 'updated_at' => '2014',
                 'area' => 1729,
@@ -92,6 +101,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Столовая',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2014',
                 'area' => 14544,
                 'floors' => 2,
@@ -99,6 +109,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Поликлиника',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2014',
                 'area' => 1038,
                 'floors' => 2,
@@ -106,6 +117,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Продовольственный склад',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2014',
                 'area' => 834,
                 'floors' => 2,
@@ -113,6 +125,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Спортивный зал',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '1972',
                 'updated_at' => '2014',
                 'area' => 3532,
@@ -122,6 +135,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Контроьлно-пропускной пункт №2',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2014',
                 'area' => 204,
                 'floors' => 1,
@@ -129,6 +143,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Школа IT-технологий',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2015',
                 'area' => 6347,
                 'floors' => 4,
@@ -136,6 +151,7 @@ class BuildingsTableSeeder extends Seeder
             [
                 'name' => 'Универсальный спортивный комплекс',
                 'object_id' => 1,
+                'sector_id' => 1,
                 'created_at' => '2014',
                 'area' => 5199,
                 'floors' => 1,

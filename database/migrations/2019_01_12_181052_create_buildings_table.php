@@ -19,6 +19,9 @@ class CreateBuildingsTable extends Migration
             $table->unsignedInteger('object_id');
             $table->foreign('object_id')->references('id')->on('miltary_objects');
 
+            $table->unsignedInteger('sector_id');
+            $table->foreign('sector_id')->references('id')->on('sectors');
+
             $table->string('name');
             $table->mediumInteger('area');
             $table->tinyInteger('floors');
