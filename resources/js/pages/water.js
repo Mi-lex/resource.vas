@@ -20,7 +20,7 @@ function refreshData() {
     let errorCount = 0;
 
     $.ajax({
-        url: 'http://resource.test/meters/'+ id +'/consumption/1',
+        url: 'http://resource.test/meters/'+ id +'/last_consumption',
         type: 'GET',
         dataType: 'json',
         beforeSend: setStatusPending()

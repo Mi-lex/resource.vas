@@ -17,7 +17,7 @@ class WaterConsumptionsTableSeeder extends Seeder
         
         $records_amount = 961;
         // $active_water_meters = [7, 17, 19, 21, 23];
-        $active_water_meters = [7, 17];
+        $active_water_meters = [7, 17, 19, 21, 23];
 
         foreach ($active_water_meters as $device_id) {
             $consumption_amount = $faker->randomFloat(1, 140000, 2);

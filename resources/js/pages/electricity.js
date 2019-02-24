@@ -1,10 +1,3 @@
-/**
- * Необходимо извлечь
- * 1) Дату последнего потребления var lastConsumptionDatetime
- * Информацию нужно получить в отдельном запросе
- * 2) id опрашиваемого устройства var deviceId
- */
-
 var lastConsumptionDatetime, deviceId;
 var currentLocation = window.location.href.split('/');
 var id = currentLocation[currentLocation.length - 1];

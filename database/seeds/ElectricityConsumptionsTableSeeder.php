@@ -14,7 +14,7 @@ class ElectricityConsumptionsTableSeeder extends Seeder
     public function run(Faker $faker)
     {
         $records_amount = 961;
-        $devices_amount = 2;
+        $devices_amount = 6;
 
         foreach (range(1, $devices_amount) as $device_id) {
             $start_date = Carbon::now()->subDays(40);
