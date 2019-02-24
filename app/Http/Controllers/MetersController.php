@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Meter;
+use App\Building;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -19,18 +20,16 @@ class MetersController extends Controller
     private $consumption_attributes = [
         'electricity_consumptions' => 
             ['id', 'created_at', 'device_id', 'sumDirectActive'],
-        'water_consumptions' => 
-            ['id', 'created_at', 'device_id', 'consumption_amount'],
+        'water_consumptions' => null
+           ,
         'heat_consumptions' => null
     ];
 
     public function show(Meter $meter)
     {
-        $current_consumption = $meter
-            ->{$this->type_methods[$meter->type->name]}()
-            ->latest()->first();
+        $current_consumption = $meter->last_consumption();
         
-        return view('meters.' . $meter->type->name, compact('meter', 'current_consumption'));
+        return view('meters.'.$meter->type->name, compact('meter', 'current_consumption'));
     }
 
     public function consumption(Meter $meter, int $days)
@@ -39,8 +38,7 @@ class MetersController extends Controller
 
         $consumption_type = $this->type_methods[$meter_type];
 
-        $consumptions = $meter->{$consumption_type}()
-            ->select($this->consumption_attributes[$consumption_type] ?? [])
+        $consumptions = $meter->consumptions($this->consumption_attributes[$consumption_type])
             ->where('created_at', '>=', Carbon::now()->subDays($days)->startOfDay())
             ->get()
             ->groupBy(function($item) {
@@ -59,11 +57,17 @@ class MetersController extends Controller
         $columns = ['id', 'created_at', 'device_id', 't1DirectActive', 
             't1DirectReactive', 't2DirectActive', 't2DirectReactive'];
 
-        $last_consumption = $meter->electricity_consumptions()
+        $last_consumption = $meter
+            ->consumptions()
             ->select($columns)
             ->latest()
             ->first();
         
         return response()->json($last_consumption);
+    }
+
+    public function last_consumption(Meter $meter)
+    {
+        return response()->json($meter->last_consumption());
     }
 }
