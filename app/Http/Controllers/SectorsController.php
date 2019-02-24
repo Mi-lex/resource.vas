@@ -9,6 +9,6 @@ class SectorsController extends Controller
 {
     public function show(Sector $sector)
     {
-        dd($sector);
+        return view('pages.sector', compact('sector'));
     }
 }

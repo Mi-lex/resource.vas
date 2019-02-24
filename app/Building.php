@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Building extends Model
 {
+    public $timestamps = false;
+
     public function meters()
     {
         return $this->hasMany('App\Meter');
