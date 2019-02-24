@@ -25,4 +25,28 @@ class Building extends Model
     {
         return $this->meters()->where('type_id', 3);
     }
+
+    public function water_consumption()
+    {
+        $summ = $this->water_meters->sum(function ($meter) {
+            $consumption_amount = $meter
+                ->last_consumption('consumption_amount')['consumption_amount'];
+
+            return $consumption_amount;
+        });
+
+        return $summ;
+    }
+
+    public function electricity_consumption()
+    {
+        $summ = $this->electricity_meters->sum(function ($meter) {
+            $consumption_amount = $meter
+                ->last_consumption('sumDirectActive')['sumDirectActive'];
+
+            return $consumption_amount;
+        });
+
+        return $summ;
+    }
 }
