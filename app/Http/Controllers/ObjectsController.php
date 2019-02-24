@@ -9,6 +9,6 @@ class ObjectsController extends Controller
 {
     public function show(MiltaryObject $object)
     {
-        
+        return view('pages.object', compact('object'));
     }
 }
