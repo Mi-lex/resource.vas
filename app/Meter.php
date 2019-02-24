@@ -6,22 +6,35 @@ use Illuminate\Database\Eloquent\Model;
 
 class Meter extends Model
 {
-    public function electricity_consumptions()
+    private $typesConsumptions;
+
+    public function __construct()
     {
-        return $this->hasMany('App\ElectricityConsumption', 'device_id');
+        $this->typesConsumptions = [
+            'electric' => 'App\ElectricityConsumption',
+            'water'    => 'App\WaterConsumption',
+            'heat'     => 'App\HeatConsumption',
+        ];
     }
 
-    public function water_consumptions()
+    public function consumptions($attributes = null)
     {
-        return $this->hasMany('App\WaterConsumption', 'device_id');
+        $attributes = $attributes ?? '*';
+
+        $type = $this->type->name;
+
+        return $this->hasMany($this->typesConsumptions[$type], 'device_id')
+            ->select($attributes);
     }
 
-    public function heat_consumptions()
+    public function last_consumption($attr = null)
     {
-        return $this->hasMany('App\HeatConsumption', 'device_id');
+        return $this->consumptions($attr)
+            ->latest()->first();
     }
 
-    public function type(){
+    public function type()
+    {
         return $this->belongsTo('App\Type');
     }
 }
