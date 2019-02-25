@@ -28,27 +28,27 @@
     <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
             <li>
-                <a href="/" title="Ресурс-РФ">
+                <a href="{{ url('/') }}" title="Ресурс-РФ">
                     <i class="fa fa-star"></i>
                 </a>
             </li>
             <li>
-                <a href="/district" title="Ресурс-Округ">
+                <a href="{{ url('/districts/1') }}" title="Ресурс-Округ">
                     <i class="fa fa-bank"></i>
                 </a>
             </li>
             <li>
-                <a href="/academy" title="Ресурс-ВЧ">
+                <a href="{{ url('/objects/1') }}" title="Ресурс-ВЧ">
                     <i class="fa fa-flag"></i>
                 </a>
             </li>
             <li>
-                <a href="/city" title="Ресурс-ВГ">
+                <a href="{{ url('/sectors/1') }}" title="Ресурс-ВГ">
                     <i class="fa fa-sitemap"></i>
                 </a>
             </li>
             <li>
-                <a href="/building/1" title="Ресурс-ГП">
+                <a href="{{ url('/buildings/1') }}" title="Ресурс-ГП">
                     <i class="fa fa-industry"></i>
                 </a>
             </li>
@@ -126,7 +126,7 @@
     <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Главное меню</li>
         <li>
-            <a href="/">
+            <a href="{{ url('/') }}">
                 <i class="fa fa-files-o"></i> <span>Общая сводка</span>
             </a>
         </li>
@@ -136,9 +136,9 @@
                 <span>Приборы учёта</span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="electricity/2"><i class="fa fa-flash"></i> Электроэнергия</a></li>
-                <li><a href="water/1"><i class="fa fa-tint"></i> Холодная вода</a></li>
-                <li><a href="heat/1"><i class="fa fa-fire"></i> Тепловая энергия</a></li>
+                <li><a href="{{ url('/meters/1') }}"><i class="fa fa-flash"></i> Электроэнергия</a></li>
+                <li><a href="{{ url('/meters/7') }}"><i class="fa fa-tint"></i> Холодная вода</a></li>
+                <li><a href="{{ url('/meters/25') }}"><i class="fa fa-fire"></i> Тепловая энергия</a></li>
             </ul>
         </li>
         <li class="treeview">
@@ -149,9 +149,9 @@
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="/electricity/2"><i class="fa fa-flash"></i> Электроэнергия</a></li>
-                <li><a href="/water/1"><i class="fa fa-tint"></i> Холодная вода</a></li>
-                <li><a href="/heat/1"><i class="fa fa-fire"></i> Тепловая энергия</a></li>
+                <li><a href="{{ url('/meters/1') }}"><i class="fa fa-flash"></i> Электроэнергия</a></li>
+                <li><a href="{{ url('/meters/7') }}"><i class="fa fa-tint"></i> Холодная вода</a></li>
+                <li><a href="{{ url('/meters/25') }}"><i class="fa fa-fire"></i> Тепловая энергия</a></li>
             </ul>
         </li>
         <li class="treeview">
@@ -177,8 +177,8 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="building/1"><i class="fa fa-circle-o"></i> Сводка по зданию</a></li>
-                                <li><a href="building/1"><i class="fa fa-circle-o"></i> Отчёт по зданию</a></li>
+                                <li><a href="{{ url('/building/1') }}"><i class="fa fa-circle-o"></i> Сводка по зданию</a></li>
+                                <li><a href="{{ url('/building/1') }}"><i class="fa fa-circle-o"></i> Отчёт по зданию</a></li>
                             </ul>
                         </li>
                         <li class="treeview">
@@ -188,8 +188,8 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="building/1"><i class="fa fa-circle-o"></i> Сводка по зданию</a></li>
-                                <li><a href="building/1"><i class="fa fa-circle-o"></i> Отчёт по зданию</a></li>
+                                <li><a href="{{ url('/building/1') }}"><i class="fa fa-circle-o"></i> Сводка по зданию</a></li>
+                                <li><a href="{{ url('/building/1') }}"><i class="fa fa-circle-o"></i> Отчёт по зданию</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -211,32 +211,32 @@
             </a>
             <ul class="treeview-menu">
                 <li>
-                    <a href="../../backend/logika-spt-943">
+                    <a href="#">
                     <i class="fa fa-fire text-blue"></i>Логика СПТ941
                     </a>
                 </li>
                 <li>
-                    <a href="../../backend/logika-spt-941">
+                    <a href="#">
                     <i class="fa fa-fire text-blue"></i>Логика СПТ943
                     </a>
                 </li>
                 <li>
-                    <a href="../../backend/mercury-230">
+                    <a href="#">
                     <i class="fa fa-flash text-blue"></i>Меркурий 230
                     </a>
                 </li>
                 <li>
-                    <a href="../../backend/mercury-230-monitoring">
+                    <a href="#">
                     <i class="fa fa-flash text-blue"></i>Меркурий 230 мониторинг
                     </a>
                 </li>
                 <li>
-                    <a href="../../backend/oven-si8">
+                    <a href="#">
                     <i class="fa fa-tint text-blue"></i>Овен СИ8
                     </a>
                 </li>
                 <li>
-                    <a href="../../backend/pulsar-2m">
+                    <a href="#">
                     <i class="fa fa-tint text-blue"></i>Пульсар 2М
                     </a>
                 </li>
