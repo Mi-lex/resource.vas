@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Meter;
 use App\Building;
-use Carbon\Carbon;
-
 use Illuminate\Http\Request;
 
 class MetersController extends Controller
@@ -17,14 +15,6 @@ class MetersController extends Controller
         'heat' => 'heat_consumptions'
     ];
 
-    private $consumption_attributes = [
-        'electricity_consumptions' => 
-            ['id', 'created_at', 'device_id', 'sumDirectActive'],
-        'water_consumptions' => null
-           ,
-        'heat_consumptions' => null
-    ];
-
     public function show(Meter $meter)
     {
         $current_consumption = $meter->last_consumption();
@@ -34,20 +24,7 @@ class MetersController extends Controller
 
     public function consumption(Meter $meter, int $days)
     {
-        $meter_type = $meter->type->name;
-
-        $consumption_type = $this->type_methods[$meter_type];
-
-        $consumptions = $meter->consumptions($this->consumption_attributes[$consumption_type])
-            ->where('created_at', '>=', Carbon::now()->subDays($days)->startOfDay())
-            ->get()
-            ->groupBy(function($item) {
-                return Carbon::parse($item->created_at)->format('d');
-            })
-            ->mapWithKeys(function ($item) {
-                return [Carbon::parse($item[0]['created_at'])->format('d-m-Y') => 
-                    [$item->first(), $item->last()]];
-            });
+        $consumptions = $meter->consumptions_by_days($days);
 
         return response()->json($consumptions);
     }
