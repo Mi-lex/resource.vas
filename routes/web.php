@@ -26,3 +26,8 @@ Route::get('/sectors/{sector}', 'SectorsController@show');
 
 Route::get('/objects/{object}', 'ObjectsController@show');
 
+// Building
+
+Route::get('/buildings/{building}', 'BuildingsController@show');
+
+
