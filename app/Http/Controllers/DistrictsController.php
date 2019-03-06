@@ -8,8 +8,12 @@ class DistrictsController extends Controller
 {
     public function show(MiltaryDistrict $district)
     {
-        $objects = $district->objects;
+        if ($district && $district->objects()->exists()) {
+            $objects = $district->objects;
 
-        return view('pages.district', compact('objects'));
+           return view('pages.district', compact('objects'));
+        } else {
+            return view('pages.underdevelopment');
+        }
     }
 }

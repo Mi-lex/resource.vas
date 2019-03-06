@@ -56,7 +56,7 @@
         if ($(this).data("url")){
           window.location.href = $(this).data("url");
         } else {
-          window.location.href = "/resource/pages/construction.php";
+          window.location.href = "/districts/5";
         }
       });
     // клик на пустоту вне округов
@@ -84,7 +84,7 @@
         if ($(this).data("url")){
           window.location.href = $(this).data("url");
         } else {
-          window.location.href = "/resource/pages/construction.php";
+          window.location.href = "/districts/5";
         }
       });
     $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
