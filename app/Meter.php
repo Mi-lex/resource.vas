@@ -11,6 +11,8 @@ class Meter extends Model
 
     private $consumption_attributes;
 
+    private $main_type_consumptions; 
+
     public function __construct()
     {
         $this->typesConsumptions = [
@@ -26,6 +28,13 @@ class Meter extends Model
                ,
             'heat' => null
         ];
+
+        $this->main_type_consumptions = [
+            'electric' => 'sumDirectActive',
+            'water' => 'consumption_amount'
+               ,
+            'heat' => null
+        ];
     }
 
     public function consumptions($attributes = null)
@@ -38,7 +47,7 @@ class Meter extends Model
             ->select($attributes);
     }
 
-    public function consumptions_by_days($days_count)
+    public function consumptions_by_days(int $days_count = 30)
     {
         $meter_type = $this->type->name;
 
@@ -54,6 +63,19 @@ class Meter extends Model
             });
 
         return $consumptions;
+    }
+
+    public function diff_consumption(int $days) {
+        $start_date = Carbon::now()->subDays($days);
+
+        $main_consumption = $this->main_type_consumptions[$this->type->name];
+
+        $last_consumption = $this->last_consumption($main_consumption);
+        $start_consumption = $this->consumptions()->select($main_consumption)->where('created_at', '>=', $start_date)->take(1)->get()->first();
+
+        $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
+
+        return $diff;
     }
 
     public function last_consumption($attr = null)
