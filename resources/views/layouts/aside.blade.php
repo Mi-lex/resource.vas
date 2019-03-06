@@ -103,10 +103,10 @@
                     <!-- Menu Footer-->
                     <li class="user-footer">
                         <div class="pull-left">
-                            <a href="training" class="btn btn-default btn-flat">Профиль</a>
+                            <a href="{{ url('/games/sapper') }}" class="btn btn-default btn-flat">Профиль</a>
                         </div>
                         <div class="pull-right">
-                            <a href="training" class="btn btn-default btn-flat">Выйти</a>
+                            <a href="{{ url('/games/sapper') }}" class="btn btn-default btn-flat">Выйти</a>
                         </div>
                     </li>
                 </ul>

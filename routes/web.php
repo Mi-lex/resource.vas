@@ -30,4 +30,8 @@ Route::get('/objects/{object}', 'ObjectsController@show');
 
 Route::get('/buildings/{building}', 'BuildingsController@show');
 
+// Game
+
+Route::get('/games/sapper', 'GamesController@sapper');
+
 
