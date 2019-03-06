@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Система учёта ресурсов</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Bootstrap css. Font-awesome + main.css --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     {{-- Fancybox css --}}
@@ -46,7 +47,7 @@
     {{-- jQuery --}}
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     {{-- Chart js --}}
-    <script src="/js/Chart.min.js"></script>
+    <script src="{{ asset('js/Chart.min.js') }}"></script>
     {{-- Fancybox. Bootstrap js. AdminLTI --}}
     <script src="{{ asset('js/app.js') }}"></script>
     {{-- Additional scripts or js libraries --}}
