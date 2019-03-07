@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class WaterConsumption extends Model
 {
-    public $timestamps = false;
+    
 }

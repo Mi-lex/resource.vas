@@ -21,19 +21,11 @@ class MiltaryObject extends Model
         return $this->buildings()->withCount('meters')->get()->sum('meters_count');  
     }
 
-    public function water_consumption()
+    public function consumption(string $type)
     {
-        $sum = $this->buildings->sum(function ($building) {
-            return $building->water_consumption();
-        });
-
-        return $sum;
-    }
-
-    public function electricity_consumption()
-    {
-        $sum = $this->buildings->sum(function ($building) {
-            return $building->electricity_consumption();
+        $sum = $this->buildings
+            ->sum(function ($building) use ($type) {
+                return $building->consumption($type);
         });
 
         return $sum;

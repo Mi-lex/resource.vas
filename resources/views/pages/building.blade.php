@@ -88,8 +88,8 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        @if ($building->electricity_meters()->where('active', '==', 1)->exists())
-                            @foreach ($building->electricity_meters as $electricity_meter)
+                        @if ($building->special_meters('electricity')->active()->exists())
+                            @foreach ($building->special_meters('electricity')->active()->get() as $electricity_meter)
                                 <div class="col-md-6 col-lg-4">
                                     <div class="panel panel-success">
                                         <div class="panel-heading">
@@ -114,7 +114,7 @@
                                             </li>
                                         </ul>
                                         <div class="panel-footer">Сведения получены
-                                            {{ $electricity_meter->last_consumption()->created_at }} назад
+                                            {{ $electricity_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
                                         </div>
                                     </div>
                                 </div>
@@ -140,8 +140,8 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        @if ($building->heat_meters()->first())
-                            @foreach ($building->heat_meters as $heat_meter)
+                        @if ($building->special_meters('heat')->active()->exists())
+                            @foreach ($building->special_meters('heat')->active()->get() as $heat_meter)
                                 <div class="col-md-6 col-lg-4">
                                     <div class="panel panel-success">
                                         <!-- Default panel contents -->
@@ -184,8 +184,8 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        @if ($building->water_meters()->where('active', '==', 1)->exists())
-                            @foreach ($building->water_meters->where('active', '==', 1) as $water_meter)
+                        @if ($building->special_meters('water')->active()->exists())
+                            @foreach ($building->special_meters('water')->active()->get() as $water_meter)
                                 <div class="col-md-6 col-lg-4">
                                     <div class="panel panel-success">
                                         <div class="panel-heading">
@@ -208,13 +208,7 @@
                                             </li>
                                         </ul>
                                         <div class="panel-footer">Сведения получены
-                                            <!-- @if ($water_meter)
-
-                                            @else
-
-                                            @endif -->
-
-                                            {{ $water_meter->last_consumption()->created_at }} назад
+                                            {{ $water_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
                                         </div>
                                     </div>
                                 </div>

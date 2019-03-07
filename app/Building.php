@@ -13,42 +13,17 @@ class Building extends Model
         return $this->hasMany('App\Meter');
     }
 
-    public function electricity_meters()
+    public function special_meters($type)
     {
-        return $this->meters()->where('type_id', 1);
+        return $this->meters()->ofType($type);
     }
 
-    public function water_meters()
+    public function consumption(string $type) : ?int
     {
-        return $this->meters()->where('type_id', 2);
-    }
-
-    public function heat_meters()
-    {
-        return $this->meters()->where('type_id', 3);
-    }
-
-    public function water_consumption()
-    {
-        $summ = $this->water_meters->sum(function ($meter) {
-            $consumption_amount = $meter
-                ->last_consumption('consumption_amount')['consumption_amount'];
-
-            return $consumption_amount;
+        $sum = $this->special_meters($type)->get()->sum(function ($meter) {
+            return $meter->last_consumption(null, true);
         });
 
-        return $summ;
-    }
-
-    public function electricity_consumption()
-    {
-        $summ = $this->electricity_meters->sum(function ($meter) {
-            $consumption_amount = $meter
-                ->last_consumption('sumDirectActive')['sumDirectActive'];
-
-            return $consumption_amount;
-        });
-
-        return $summ;
+        return $sum;
     }
 }

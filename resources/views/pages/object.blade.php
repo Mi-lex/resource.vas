@@ -127,7 +127,7 @@
                                             </span> счётчиков</span></span>
                                         <span class="info-box-number">
                                             <span class="cityWaterConsumption">
-                                                {{ $sector->water_consumption() }}
+                                                {{ $sector->consumption('water') }}
                                             </span>м<sup>3</sup>
                                         </span>
 
@@ -154,7 +154,7 @@
                                             </span> счётчиков</span></span>
                                         <span class="info-box-number">
                                             <span class="cityEnergyConsumption">
-                                                {{ $sector->electricity_consumption() }}
+                                                {{ $sector->consumption('electricity') }}
                                             </span>кВт-ч</span>
                                         <div class="progress">
                                             <div class="progress-bar cityEnergyConsumptionProgressbar" style="width: 50%">

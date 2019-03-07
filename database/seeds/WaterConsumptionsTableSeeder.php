@@ -13,10 +13,9 @@ class WaterConsumptionsTableSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        $start_date = Carbon::now()->subDays(40);
+        $start_date = Carbon::now()->subDays(90)->startOfDay();
         
-        $records_amount = 961;
-        // $active_water_meters = [7, 17, 19, 21, 23];
+        $records_amount = 2162;
         $active_water_meters = [7, 17, 19, 21, 23];
 
         foreach ($active_water_meters as $device_id) {

@@ -50,7 +50,7 @@
                                         <span class="info-box-text">Холодная вода</span>
 
                                         <span class="info-box-number">
-                                            {{ $object->water_consumption() }} м<sup>3</sup>
+                                            {{ $object->consumption('water') }} м<sup>3</sup>
                                         </span>
 
                                         <div class="progress">
@@ -71,7 +71,7 @@
                                         <span class="info-box-text">Электроэнергия</span>
                                         
                                         <span class="info-box-number">
-                                            {{ round($object->electricity_consumption(), 1) }} кВт-ч
+                                            {{ round($object->consumption('electricity'), 1) }} кВт-ч
                                         </span>
 
                                         <div class="progress">

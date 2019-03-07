@@ -15,7 +15,7 @@ class TypesTableSeeder extends Seeder
     {
         $types = [
             [
-                'name' => 'electric'
+                'name' => 'electricity'
             ],
             [
                 'name' => 'water'

@@ -118,18 +118,20 @@
                             <li class="list-group-item list-group-item-info">
                                 <i class="icon fa fa-tint"></i> Расход воды: 
                                     <span class="buildingWaterConsumption">
-                                        {{ $building->water_consumption() }}
+                                        {{ $building->consumption('water') }}
                                     </span> м<sup>3</sup>
                             </li>
                             <li class="list-group-item list-group-item-danger">
                                 <i class="icon fa fa-fire"></i> Расход тепла:
                                 <span class="buildingHeatConsumption">
-                                    {{ $building->electricity_consumption() }}    
+                                    - 
                                 </span> ГКал
                             </li>
                             <li class="list-group-item list-group-item-warning">
                                 <i class="icon fa fa-flash"></i> Расход энергии: 
-                                <span class="buildingEnergyConsumption">-</span>
+                                <span class="buildingEnergyConsumption">
+                                    {{ $building->consumption('electricity') }}
+                                </span>
                                 кВт-ч
                             </li>
                         </ul>

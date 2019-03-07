@@ -315,7 +315,7 @@ class MetersTableSeeder extends Seeder
                 'name' => "Тепловой ввод ГП-1",
                 'type_id' => '3',
                 'building_id' => 1,
-                'active' => true,
+                'active' => false,
                 'description' => "Главный тепловой ввод ГП-1",
                 'model' => "Логика СПТ943",
                 'server_ip' => "10.155.169.241",

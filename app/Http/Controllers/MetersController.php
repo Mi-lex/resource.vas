@@ -8,13 +8,6 @@ use Illuminate\Http\Request;
 
 class MetersController extends Controller
 {
-    // map for using relavant methods
-    private $type_methods = [
-        'electric' => 'electricity_consumptions',
-        'water' => 'water_consumptions',
-        'heat' => 'heat_consumptions'
-    ];
-
     public function show(Meter $meter)
     {
         $current_consumption = $meter->last_consumption();

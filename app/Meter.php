@@ -7,33 +7,33 @@ use Carbon\Carbon;
 
 class Meter extends Model
 {
+    private $type_names;
+
     private $typesConsumptions;
 
     private $consumption_attributes;
 
-    private $main_type_consumptions; 
-
     public function __construct()
     {
         $this->typesConsumptions = [
-            'electric' => 'App\ElectricityConsumption',
+            'electricity' => 'App\ElectricityConsumption',
             'water'    => 'App\WaterConsumption',
             'heat'     => 'App\HeatConsumption',
         ];
 
         $this->consumption_attributes = [
-            'electric' => 
+            'electricity' => 
                 ['id', 'created_at', 'device_id', 'sumDirectActive'],
-            'water' => null
-               ,
-            'heat' => null
+            'water' => 
+                ['id', 'created_at', 'device_id', 'consumption_amount'],
+            'heat' => 
+                ['id', 'created_at', 'device_id', 'thermal_energy']
         ];
 
-        $this->main_type_consumptions = [
-            'electric' => 'sumDirectActive',
-            'water' => 'consumption_amount'
-               ,
-            'heat' => null
+        $this->type_names = [
+            'electricity' => '1',
+            'water' => '2',
+            'heat' => '3'
         ];
     }
 
@@ -69,7 +69,7 @@ class Meter extends Model
     {
         $date = new Carbon($month);
 
-        $main_consumption = $this->main_type_consumptions[$this->type->name];
+        $main_consumption = end($this->consumption_attributes[$this->type->name]);
         
         $last_consumption = $this->consumptions()->select()
             ->where('created_at', '>=', $date->endOfMonth()->startOfDay())
@@ -87,7 +87,7 @@ class Meter extends Model
     public function diff_consumption(int $days) : int {
         $start_date = Carbon::now()->subDays($days);
 
-        $main_consumption = $this->main_type_consumptions[$this->type->name];
+        $main_consumption = end($this->consumption_attributes[$this->type->name]);
 
         $last_consumption = $this->last_consumption($main_consumption);
         $start_consumption = $this->consumptions()->select($main_consumption)
@@ -103,7 +103,7 @@ class Meter extends Model
     {
         $last_consumption = $this->consumptions($attr)
             ->latest()->first();
-        $consumptin_type = $this->main_type_consumptions[$this->type->name];
+        $consumptin_type = end($this->consumption_attributes[$this->type->name]);
 
         return $onlyAmount ? $last_consumption[$consumptin_type] : 
             $last_consumption;
@@ -112,5 +112,15 @@ class Meter extends Model
     public function type()
     {
         return $this->belongsTo('App\Type');
+    }
+
+    public function scopeOfType($query, $type_number)
+    {
+        return $query->where('type_id', $this->type_names[$type_number]);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
     }
 }

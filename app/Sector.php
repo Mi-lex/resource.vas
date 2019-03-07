@@ -11,30 +11,22 @@ class Sector extends Model
         return $this->hasMany('App\Building', 'sector_id');
     }
 
-    public function meters_count($type = null)
+    public function meters_count(string $type = null) : int
     {
-        $method = $type ? $type.'_' : '';
-
-        $count = $this->buildings->sum(function ($building) use ($method) {
-            return $building->{$method.'meters'}()->count();
+        $count = $this->buildings->sum(function ($building) use ($type) {
+            return $type ? 
+                $building->special_meters($type)->count() : 
+                $building->meters->count();
         });
 
         return $count;
     }
 
-    public function water_consumption()
+    public function consumption(string $type)
     {
-        $sum = $this->buildings->sum(function ($building) {
-            return $building->water_consumption();
-        });
-
-        return $sum;
-    }
-
-    public function electricity_consumption()
-    {
-        $sum = $this->buildings->sum(function ($building) {
-            return $building->electricity_consumption();
+        $sum = $this->buildings
+            ->sum(function ($building) use ($type) {
+                return $building->consumption($type);
         });
 
         return $sum;
