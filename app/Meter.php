@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Type;
 use Carbon\Carbon;
 
 class Meter extends Model
@@ -58,13 +57,11 @@ class Meter extends Model
 
         $main_consumption = end($this->consumption_attributes[$this->type->name]);
         
-        $last_consumption = $this->consumptions()->select()
-            ->where('created_at', '>=', $date->endOfMonth()->startOfDay())
-            ->take(1)->get()->first();
+        $last_consumption = $this->consumptions($main_consumption)
+            ->firstAfter($date->endOfMonth()->startOfDay());
 
-        $start_consumption = $this->consumptions()->select()
-            ->where('created_at', '>=', $date->startOfMonth()->startOfDay())
-            ->take(1)->get()->first();
+        $start_consumption = $this->consumptions($main_consumption)
+            ->firstAfter($date->startOfMonth()->startOfDay());
 
         $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
 
@@ -77,22 +74,21 @@ class Meter extends Model
         $main_consumption = end($this->consumption_attributes[$this->type->name]);
 
         $last_consumption = $this->last_consumption($main_consumption);
-        $start_consumption = $this->consumptions()->select($main_consumption)
-            ->where('created_at', '>=', $start_date)
-            ->take(1)->get()->first();
+        $start_consumption = $this->consumptions($main_consumption)
+            ->firstAfter($start_date);
 
         $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
 
-        return $diff;
+        return $diff > 0 ? $diff : 0;
     }
 
-    public function last_consumption($attr = null, bool $onlyAmount = false)
+    public function last_consumption($attr = null, bool $onlyValue = false)
     {
         $last_consumption = $this->consumptions($attr)
             ->latest()->first();
         $consumptin_type = end($this->consumption_attributes[$this->type->name]);
 
-        return $onlyAmount ? $last_consumption[$consumptin_type] : 
+        return $onlyValue ? $last_consumption[$consumptin_type] : 
             $last_consumption;
     }
 
@@ -101,14 +97,15 @@ class Meter extends Model
         return $this->belongsTo('App\Type');
     }
 
-    public function scopeOfType($query, $type)
+    public function scopeOfType($query, string $type)
     {
         // can make it even better with joining tables
-        return $query->where('type_id', Type::getIdByName($type));
+        return $query->join('types', 'meters.type_id', '=', 'types.id')
+            ->where('types.name', '=', $type);
     }
 
     public function scopeActive($query)
     {
-        return $query->where('active', 1);
+        return $query->whereActive(true);
     }
 }
