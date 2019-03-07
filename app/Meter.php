@@ -3,24 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Type;
 use Carbon\Carbon;
 
 class Meter extends Model
 {
-    private $type_names;
-
-    private $typesConsumptions;
-
     private $consumption_attributes;
 
     public function __construct()
     {
-        $this->typesConsumptions = [
-            'electricity' => 'App\ElectricityConsumption',
-            'water'    => 'App\WaterConsumption',
-            'heat'     => 'App\HeatConsumption',
-        ];
-
         $this->consumption_attributes = [
             'electricity' => 
                 ['id', 'created_at', 'device_id', 'sumDirectActive'],
@@ -29,21 +20,15 @@ class Meter extends Model
             'heat' => 
                 ['id', 'created_at', 'device_id', 'thermal_energy']
         ];
-
-        $this->type_names = [
-            'electricity' => '1',
-            'water' => '2',
-            'heat' => '3'
-        ];
     }
 
     public function consumptions($attributes = null)
     {
         $attributes = $attributes ?? '*';
 
-        $type = $this->type->name;
+        $model = 'App\\'.ucfirst($this->type->name).'Consumption';
 
-        return $this->hasMany($this->typesConsumptions[$type], 'device_id')
+        return $this->hasMany($model, 'device_id')
             ->select($attributes);
     }
 
@@ -55,11 +40,13 @@ class Meter extends Model
             ->where('created_at', '>=', Carbon::now()->subDays($days_count)->startOfDay())
             ->get()
             ->groupBy(function($item) {
-                return Carbon::parse($item->created_at)->format('d');
+                return Carbon::parse($item->created_at)->format('d-m-Y');
             })
             ->mapWithKeys(function ($item) {
-                return [Carbon::parse($item[0]['created_at'])->format('d-m-Y') => 
-                    [$item->first(), $item->last()]];
+                return [
+                    Carbon::parse($item[0]['created_at'])->format('d-m-Y') => 
+                        [$item->first(), $item->last()]
+                ];
             });
 
         return $consumptions;
@@ -114,9 +101,10 @@ class Meter extends Model
         return $this->belongsTo('App\Type');
     }
 
-    public function scopeOfType($query, $type_number)
+    public function scopeOfType($query, $type)
     {
-        return $query->where('type_id', $this->type_names[$type_number]);
+        // can make it even better with joining tables
+        return $query->where('type_id', Type::getIdByName($type));
     }
 
     public function scopeActive($query)
