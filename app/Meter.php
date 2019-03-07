@@ -86,9 +86,9 @@ class Meter extends Model
     {
         $last_consumption = $this->consumptions($attr)
             ->latest()->first();
-        $consumptin_type = end($this->consumption_attributes[$this->type->name]);
+        $consumption_type = end($this->consumption_attributes[$this->type->name]);
 
-        return $onlyValue ? $last_consumption[$consumptin_type] : 
+        return $onlyValue ? $last_consumption[$consumption_type] : 
             $last_consumption;
     }
 
@@ -99,8 +99,9 @@ class Meter extends Model
 
     public function scopeOfType($query, string $type)
     {
-        // can make it even better with joining tables
-        return $query->join('types', 'meters.type_id', '=', 'types.id')
+        return $query
+        ->select('meters.*')
+        ->leftJoin('types', 'meters.type_id', '=', 'types.id')
             ->where('types.name', '=', $type);
     }
 
