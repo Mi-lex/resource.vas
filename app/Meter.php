@@ -65,23 +65,48 @@ class Meter extends Model
         return $consumptions;
     }
 
-    public function diff_consumption(int $days) {
-        $start_date = Carbon::now()->subDays($days);
+    public function consumption_by_month(string $month) : int
+    {
+        $date = new Carbon($month);
 
         $main_consumption = $this->main_type_consumptions[$this->type->name];
+        
+        $last_consumption = $this->consumptions()->select()
+            ->where('created_at', '>=', $date->endOfMonth()->startOfDay())
+            ->take(1)->get()->first();
 
-        $last_consumption = $this->last_consumption($main_consumption);
-        $start_consumption = $this->consumptions()->select($main_consumption)->where('created_at', '>=', $start_date)->take(1)->get()->first();
+        $start_consumption = $this->consumptions()->select()
+            ->where('created_at', '>=', $date->startOfMonth()->startOfDay())
+            ->take(1)->get()->first();
 
         $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
 
         return $diff;
     }
 
-    public function last_consumption($attr = null)
+    public function diff_consumption(int $days) : int {
+        $start_date = Carbon::now()->subDays($days);
+
+        $main_consumption = $this->main_type_consumptions[$this->type->name];
+
+        $last_consumption = $this->last_consumption($main_consumption);
+        $start_consumption = $this->consumptions()->select($main_consumption)
+            ->where('created_at', '>=', $start_date)
+            ->take(1)->get()->first();
+
+        $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
+
+        return $diff;
+    }
+
+    public function last_consumption($attr = null, bool $onlyAmount = false)
     {
-        return $this->consumptions($attr)
+        $last_consumption = $this->consumptions($attr)
             ->latest()->first();
+        $consumptin_type = $this->main_type_consumptions[$this->type->name];
+
+        return $onlyAmount ? $last_consumption[$consumptin_type] : 
+            $last_consumption;
     }
 
     public function type()
