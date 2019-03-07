@@ -13,7 +13,7 @@ class Building extends Model
         return $this->hasMany('App\Meter');
     }
 
-    public function special_meters($type)
+    public function special_meters(string $type)
     {
         return $this->meters()->ofType($type);
     }
