@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\ElectricityConsumption::class, function (Faker $faker) {
+$factory->define(App\Models\ElectricityConsumption::class, function (Faker $faker) {
     return [
         'device_id' => $faker->numberBetween(1, 6),
         'created_at' => $faker->dateTimeBetween($startDate = '-30 days', $endDate = '-29 days'),

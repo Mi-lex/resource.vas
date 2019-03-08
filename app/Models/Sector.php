@@ -1,14 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sector extends Model
 {
-    public function buildings()
+    public function buildings() : HasMany
     {
-        return $this->hasMany('App\Building', 'sector_id');
+        return $this->hasMany('App\Models\Building', 'sector_id');
     }
 
     public function meters_count(string $type = null) : int
@@ -22,7 +23,7 @@ class Sector extends Model
         return $count;
     }
 
-    public function consumption(string $type)
+    public function consumption(string $type) : int
     {
         $sum = $this->buildings
             ->sum(function ($building) use ($type) {

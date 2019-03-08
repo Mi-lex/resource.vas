@@ -1,27 +1,28 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MiltaryObject extends Model
 {
-    public function sectors()
+    public function sectors() : HasMany
     {
-        return $this->hasMany('App\Sector', 'object_id');    
+        return $this->hasMany('App\Models\Sector', 'object_id');    
     }
 
-    public function buildings()
+    public function buildings() : HasMany
     {
-        return $this->hasMany('App\Building', 'object_id');    
+        return $this->hasMany('App\Models\Building', 'object_id');    
     }
 
-    public function meters_count()
+    public function meters_count() : int
     {
         return $this->buildings()->withCount('meters')->get()->sum('meters_count');  
     }
 
-    public function consumption(string $type)
+    public function consumption(string $type) : int
     {
         $sum = $this->buildings
             ->sum(function ($building) use ($type) {

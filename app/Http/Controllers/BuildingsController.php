@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Building;
+use App\Models\Building;
 
 class BuildingsController extends Controller
 {

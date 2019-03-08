@@ -1,8 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
 
 class Meter extends Model
@@ -21,17 +24,17 @@ class Meter extends Model
         ];
     }
 
-    public function consumptions($attributes = null)
+    public function consumptions($attributes = null) : HasMany
     {
         $attributes = $attributes ?? '*';
 
-        $model = 'App\\'.ucfirst($this->type->name).'Consumption';
+        $model = 'App\Models\\'.ucfirst($this->type->name).'Consumption';
 
         return $this->hasMany($model, 'device_id')
             ->select($attributes);
     }
 
-    public function consumptions_by_days(int $days_count = 30)
+    public function consumptions_by_days(int $days_count = 30) : object
     {
         $meter_type = $this->type->name;
 
@@ -92,12 +95,12 @@ class Meter extends Model
             $last_consumption;
     }
 
-    public function type()
+    public function type() : BelongsTo
     {
-        return $this->belongsTo('App\Type');
+        return $this->belongsTo('App\Models\Type');
     }
 
-    public function scopeOfType($query, string $type)
+    public function scopeOfType($query, string $type) : Builder
     {
         return $query
         ->select('meters.*')
@@ -105,7 +108,7 @@ class Meter extends Model
             ->where('types.name', '=', $type);
     }
 
-    public function scopeActive($query)
+    public function scopeActive($query) : Builder
     {
         return $query->whereActive(true);
     }

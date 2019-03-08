@@ -1,24 +1,25 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Building extends Model
 {
     public $timestamps = false;
 
-    public function meters()
+    public function meters() : ?HasMany
     {
-        return $this->hasMany('App\Meter');
+        return $this->hasMany('App\Models\Meter');
     }
 
-    public function special_meters(string $type)
+    public function special_meters(string $type) : ?HasMany
     {
         return $this->meters()->ofType($type);
     }
 
-    public function consumption(string $type) : ?int
+    public function consumption(string $type) : int
     {
         $sum = $this->special_meters($type)->get()->sum(function ($meter) {
             return $meter->last_consumption(null, true);

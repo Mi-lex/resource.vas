@@ -75,7 +75,6 @@ function showChart() {
 
 function getChartData(consumptionObject) {
     const plotData = [];
-    console.log(consumptionObject);
     // Each day consists two consumption (at the start and at the end)
     days = [...Object.keys(consumptionObject)];
 

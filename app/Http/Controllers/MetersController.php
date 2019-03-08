@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Meter;
-use App\Building;
-use Illuminate\Http\Request;
+use App\Models\Meter;
 
 class MetersController extends Controller
 {

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Sector;
+use App\Models\Sector;
 
 class SectorsController extends Controller
 {

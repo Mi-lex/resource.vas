@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\MiltaryDistrict;
+use App\Models\MiltaryDistrict;
 
 class DistrictsController extends Controller
 {

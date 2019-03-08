@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\MiltaryObject;
+use App\Models\MiltaryObject;
 
 class ObjectsController extends Controller
 {

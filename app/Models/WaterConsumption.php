@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Consumption;
 
-class ElectricityConsumption extends Model
+class WaterConsumption extends Model
 {
     use Consumption;
 }
