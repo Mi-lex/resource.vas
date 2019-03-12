@@ -100,6 +100,11 @@ class Meter extends Model
         return $this->belongsTo('App\Models\Type');
     }
 
+    public function driver() : BelongsTo
+    {
+        return $this->belongsTo('App\Models\Driver');
+    }
+
     public function scopeOfType($query, string $type) : Builder
     {
         return $query

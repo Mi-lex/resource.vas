@@ -2,9 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Type;
-
-class TypesTableSeeder extends Seeder
+class DriversTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,22 +11,6 @@ class TypesTableSeeder extends Seeder
      */
     public function run()
     {
-        $types = [
-            [
-                'name' => 'electricity'
-            ],
-            [
-                'name' => 'water'
-            ],
-            [
-                'name' => 'heat'
-            ]
-        ];
-
-        foreach ($types as $type) {
-            DB::table('types')->insert($type);
-        }
-
         $drivers = [
             [
                 'name' => 'mercury_230'

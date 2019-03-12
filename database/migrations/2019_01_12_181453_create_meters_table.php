@@ -20,6 +20,10 @@ class CreateMetersTable extends Migration
             $table->foreign('type_id')->references('id')
                 ->on('types');
 
+            $table->unsignedInteger('driver_id')->nullable();
+            $table->foreign('driver_id')->references('id')
+                ->on('drivers');
+
             $table->integer('building_id')->nullable();
             $table->string('name');
             $table->string('model');
