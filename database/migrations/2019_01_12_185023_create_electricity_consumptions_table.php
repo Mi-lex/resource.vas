@@ -27,19 +27,19 @@ class CreateElectricityConsumptionsTable extends Migration
             $table->float('t1DirectActive', 9, 3)->nullable();
             $table->float('t1InverseActive', 9, 3)->nullable();
             $table->float('t1DirectReactive', 9, 3)->nullable();
-            $table->float('t1InverseRective', 9, 3)->nullable();
+            $table->float('t1InverseReactive', 9, 3)->nullable();
             $table->float('t2DirectActive', 9, 3)->nullable();
             $table->float('t2InverseActive', 9, 3)->nullable();
             $table->float('t2DirectReactive', 9, 3)->nullable();
-            $table->float('t2InverseRective', 9, 3)->nullable();
+            $table->float('t2InverseReactive', 9, 3)->nullable();
             $table->float('t3DirectActive', 9, 3)->nullable();
             $table->float('t3InverseActive', 9, 3)->nullable();
             $table->float('t3DirectReactive', 9, 3)->nullable();
-            $table->float('t3InverseRective', 9, 3)->nullable();
+            $table->float('t3InverseReactive', 9, 3)->nullable();
             $table->float('t4DirectActive', 9, 3)->nullable();
             $table->float('t4InverseActive', 9, 3)->nullable();
             $table->float('t4DirectReactive', 9, 3)->nullable();
-            $table->float('t4InverseRective', 9, 3)->nullable();
+            $table->float('t4InverseReactive', 9, 3)->nullable();
         });
     }
 

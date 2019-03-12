@@ -13,18 +13,18 @@ $factory->define(App\Models\ElectricityConsumption::class, function (Faker $fake
         't1DirectActive' => $faker->randomFloat(3, 1, 3),
         't1InverseActive' => $faker->randomFloat(3, 1, 3),
         't1DirectReactive' => $faker->randomFloat(3, 1, 3),
-        't1InverseRective' => $faker->randomFloat(3, 1, 3),
+        't1InverseReactive' => $faker->randomFloat(3, 1, 3),
         't2DirectActive' => $faker->randomFloat(3, 1, 3),
         't2InverseActive' => $faker->randomFloat(3, 1, 3),
         't2DirectReactive' => $faker->randomFloat(3, 1, 3),
-        't2InverseRective' => $faker->randomFloat(3, 1, 3),
+        't2InverseReactive' => $faker->randomFloat(3, 1, 3),
         't3DirectActive' => $faker->randomFloat(3, 1, 3),
         't3InverseActive' => $faker->randomFloat(3, 1, 3),
         't3DirectReactive' => $faker->randomFloat(3, 1, 3),
-        't3InverseRective' => $faker->randomFloat(3, 1, 3),
+        't3InverseReactive' => $faker->randomFloat(3, 1, 3),
         't4DirectActive' => $faker->randomFloat(3, 1, 3),
         't4InverseActive' => $faker->randomFloat(3, 1, 3),
         't4DirectReactive' => $faker->randomFloat(3, 1, 3),
-        't4InverseRective' => $faker->randomFloat(3, 1, 3)
+        't4InverseReactive' => $faker->randomFloat(3, 1, 3)
     ];
 });
