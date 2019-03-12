@@ -2,8 +2,6 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Type;
-
 class TypesTableSeeder extends Seeder
 {
     /**
@@ -27,28 +25,6 @@ class TypesTableSeeder extends Seeder
 
         foreach ($types as $type) {
             DB::table('types')->insert($type);
-        }
-
-        $drivers = [
-            [
-                'name' => 'mercury_230'
-            ],
-            [
-                'name' => 'impis_12'
-            ],
-            [
-                'name' => 'logika_941'
-            ],
-            [
-                'name' => 'oven_si9'
-            ],
-            [
-                'name' => 'pulsar_2m'
-            ],
-        ];
-
-        foreach ($drivers as $driver) {
-            DB::table('drivers')->insert($driver);
         }
     }
 }
