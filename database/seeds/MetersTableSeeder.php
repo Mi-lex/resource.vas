@@ -99,10 +99,13 @@ class MetersTableSeeder extends Seeder
                 'meter_pass' => 010101010101
             ],
             // WaterMeters
+
+            // start id = 7
             [
                 'name' => "ВУ-29 ГП-1 основной",
                 'type_id' => '2',
                 'building_id' => 1,
+                'driver_id' => 1,
                 'active' => true,
                 'description' => "Внутренняя хозбытовая линия ГП-1 со стороны ТСО рабочая ветка",
                 'model' => "ВСХНд-40",
