@@ -10,6 +10,14 @@ abstract class Driver {
     protected $connection_params;
     protected $consumption_record;
 
+    public function __construct($device)
+    {
+        $this->device = $device;
+
+        $this->connection_params['ip'] = $device->server_ip;
+        $this->connection_params['port'] = $device->server_port;    
+    }
+
     // Принимает HEX данные и возвращает строку для отображения
     protected function nice_hex(string $str) : string
     {
@@ -32,11 +40,11 @@ abstract class Driver {
     }
 
     // Функция извлечения подстроки из ответа для вычисления контрольной суммы
-    protected function get_clean_answer($answer) : string {
+    protected function get_clean_answer(string $answer) : string {
         return $answer;
     }
 
-    protected function crc_right(string $answer) : bool
+    protected function crc_right(string $answer = '') : bool
     {
         $unpacked_answer = unpack('H*', $answer, null)[1];
 
@@ -54,7 +62,12 @@ abstract class Driver {
         return $str_command;
     }
 
-    protected function make_request(string $message_command)
+    protected function parse_answer(string $data) 
+    {
+        return unpack('H*', $data, null)[1];
+    }
+
+    protected function make_request(string $message_command, bool $parsing = true)
     {
         $command = $this->prepare_command($message_command);
 
@@ -68,15 +81,18 @@ abstract class Driver {
             Log::error("Отсутствует ответ от устройства.");
 
             return;
-        } else if (!$this->crc_right( $binary_answer)) {
+        } else if (!$this->crc_right($binary_answer)) {
             Log::error("Не совпадают контрольные суммы.");
 
             return;
         } else {
-            $answer = unpack('H*', $binary_answer, null)[1];
-
+            if ($parsing) {
+                $answer = $this->parse_answer($binary_answer);
+            } else {
+                $answer = $binary_answer;
+            }
+            
             Log::info("Получаем ответ: ".$this->nice_hex_string($answer));
-
 
             return $answer;
         }

@@ -12,6 +12,8 @@ class Meter extends Model
 {
     private $consumption_attributes;
 
+    const UPDATED_AT = null;
+
     public function __construct()
     {
         $this->consumption_attributes = [

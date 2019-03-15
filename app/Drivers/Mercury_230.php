@@ -5,101 +5,97 @@ namespace App\Drivers;
 use App\Abstracts\Driver;
 use Illuminate\Support\Facades\Log;
 
-class Mercury_230 extends Driver 
+class Mercury_230 extends Driver
 {
     public function __construct($device)
     {
-        $this->device = $device;
+        parent::__construct($device);
 
-        $this->connection_params['ip'] = $device->server_ip;
         $this->connection_params['protocol'] = 'udp';
-        $this->connection_params['port'] = $device->server_port;
     }
 
-    protected function crc_mbus(string $msg) : string {
+    protected function crc_mbus(string $msg): string
+    {
         $data = pack('H*', $msg);
         $crc = 0xFFFF;
 
-        for ($i = 0; $i < strlen($data); $i++)
-        {
-            $crc ^=ord($data[$i]);
+        for ($i = 0; $i < strlen($data); $i++) {
+            $crc ^= ord($data[$i]);
 
-            for ($j = 8; $j !=0; $j--)
-            {
-                if (($crc & 0x0001) !=0)
-                {
+            for ($j = 8; $j != 0; $j--) {
+                if (($crc & 0x0001) != 0) {
                     $crc >>= 1;
                     $crc ^= 0xA001;
-                }
-                else $crc >>= 1;
+                } else $crc >>= 1;
             }
         }
         $crc = sprintf('%04X', $crc);
         // меняем порядок байтов, как требует протокол
-        $crc_inverted = substr($crc, 2, 2).substr($crc, 0, 2);
-        return $crc_inverted; 
+        $crc_inverted = substr($crc, 2, 2) . substr($crc, 0, 2);
+        return $crc_inverted;
     }
 
-    protected function get_clean_answer($answer) : string {
+    protected function get_clean_answer($answer): string
+    {
         return substr($answer, 0, -4);
     }
 
-    protected function prepare_command($str_command) : string 
+    protected function prepare_command($str_command): string
     {
-        $command = dechex($this->device->rs_port).$str_command;
+        $command = dechex($this->device->rs_port) . $str_command;
 
-        $command = strtoupper($command.$this->crc_mbus($command));
+        $command = strtoupper($command . $this->crc_mbus($command));
 
-        $command_hex = pack("H*",$command);
+        $command_hex = pack("H*", $command);
 
         return $command_hex;
     }
 
-    private function test_connection() : bool
+    private function test_connection(): bool
     {
         $testing_command = '00';
         $response = $this->make_request($testing_command);
-        
+
         return !empty($response);
     }
 
-    public function open_connection() : bool
+    public function open_connection(): bool
     {
         // Значение пароля используется только в данном драйвере
         // кроме того, он одинаков для всех счетчиков
         // целесообразность хранить его в базе данных под вопросом
         Log::info('Открытие канала связи.');
         $password = '010101010101';
-        $open_command = '0101'.$password;
+        $open_command = '0101' . $password;
 
         $response = $this->make_request($open_command);
 
-        return strtoupper(substr($response, 0, 4)) == 
-               strtoupper(dechex($this->device->rs_port)."00");
+        return strtoupper(substr($response, 0, 4)) ==
+            strtoupper(dechex($this->device->rs_port) . "00");
     }
 
-    private function calculate_power(string $power_str)
+    private function calculate_power(string $power_str) : float
     {
         if ($power_str == "ffffffff") {
-            return NULL;
+            return null;
         } else {
             return hexdec(substr($power_str, 2, 2)
-                .substr($power_str, 0, 2)
-                .substr($power_str, 6, 2)
-                .substr($power_str, 4, 2)) * 0.001;
+                . substr($power_str, 0, 2)
+                . substr($power_str, 6, 2)
+                . substr($power_str, 4, 2)) * 0.001;
         }
     }
 
-    private function write_power($command, $attrs)
+    private function write_power(int $command, array $attrs)
     {
-        $power_command = '05000'.$command;
+        $power_command = '05000' . $command;
 
         $response = $this->make_request($power_command);
 
         if (strlen($response) === 38) {
             $chunk_response = str_split(substr($response, 2, -4), 8);
 
-            $consumptions = 
+            $consumptions =
                 array_map([$this, 'calculate_power'], $chunk_response);
 
             foreach ($attrs as $i => $attribute) {
@@ -108,7 +104,7 @@ class Mercury_230 extends Driver
         }
     }
 
-    private function write_consumption() : void
+    private function write_consumption(): void
     {
         // Записываем суммарные данные потреблений
         $summ_command = 0;
@@ -126,10 +122,10 @@ class Mercury_230 extends Driver
 
         foreach ($tariff_commands as $t) {
             $this->write_power($t, [
-                "t$t".'DirectActive',
-                "t$t".'InverseActive',
-                "t$t".'DirectReactive',
-                "t$t".'InverseReactive',
+                "t$t" . 'DirectActive',
+                "t$t" . 'InverseActive',
+                "t$t" . 'DirectReactive',
+                "t$t" . 'InverseReactive',
             ]);
         }
     }
@@ -156,4 +152,3 @@ class Mercury_230 extends Driver
         }
     }
 }
-
