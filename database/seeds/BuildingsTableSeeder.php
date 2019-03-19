@@ -155,7 +155,13 @@ class BuildingsTableSeeder extends Seeder
                 'created_at' => '2014',
                 'area' => 5199,
                 'floors' => 1,
-            ]
+            ],
+            [
+                'name' => 'Трансформаторная подстанция',
+                'object_id' => 1,
+                'sector_id' => 1,
+                'floors' => 1,
+            ],
         ];
 
         foreach ($buildings as $building) {

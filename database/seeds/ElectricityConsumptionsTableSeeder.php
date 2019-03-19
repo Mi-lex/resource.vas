@@ -14,9 +14,9 @@ class ElectricityConsumptionsTableSeeder extends Seeder
     public function run(Faker $faker)
     {
         $records_amount = 2162;
-        $devices_amount = 6;
+        $active_devices = [2, 3, 4, 5, 6, 7, 8];
 
-        foreach (range(1, $devices_amount) as $device_id) {
+        foreach ($active_devices as $device_id) {
             $start_date = Carbon::now()->subDays(90)->startOfDay();
             
             $sumDirectActive = $faker->randomFloat(3, 1, 3);

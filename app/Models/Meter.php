@@ -63,10 +63,10 @@ class Meter extends Model
         $main_consumption = end($this->consumption_attributes[$this->type->name]);
         
         $last_consumption = $this->consumptions($main_consumption)
-            ->firstAfter($date->endOfMonth()->startOfDay());
+            ->firstAfter($date->endOfMonth()->startOfDay())->take(1)->get()->first();
 
         $start_consumption = $this->consumptions($main_consumption)
-            ->firstAfter($date->startOfMonth()->startOfDay());
+            ->firstAfter($date->startOfMonth()->startOfDay())->take(1)->get()->first();
 
         $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
 
@@ -80,7 +80,7 @@ class Meter extends Model
 
         $last_consumption = $this->last_consumption($main_consumption);
         $start_consumption = $this->consumptions($main_consumption)
-            ->firstAfter($start_date);
+            ->firstAfter($start_date)->take(1)->get()->first();
 
         $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
 

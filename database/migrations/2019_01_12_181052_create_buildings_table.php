@@ -23,7 +23,7 @@ class CreateBuildingsTable extends Migration
             $table->foreign('sector_id')->references('id')->on('sectors');
 
             $table->string('name');
-            $table->mediumInteger('area');
+            $table->mediumInteger('area')->nullable();
             $table->tinyInteger('floors');
             $table->mediumInteger('max_emit_power')->nullable();
             $table->mediumInteger('max_reserve_power')->nullable();

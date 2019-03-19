@@ -28,7 +28,7 @@ class MetersTableSeeder extends Seeder
                 'meter_pass' => 010101010101
             ],
             [
-                'name' => 'ЦОД  основной ввод',
+                'name' => 'ЦОД основной ввод',
                 'type_id' => '1',
                 'building_id' => 1,
                 'driver_id' => 1,
@@ -98,14 +98,42 @@ class MetersTableSeeder extends Seeder
                 'rs_port' => 40,
                 'meter_pass' => 010101010101
             ],
+            [
+                'name' => 'Ввод 1',
+                'type_id' => '1',
+                'building_id' => 17,
+                'driver_id' => 1,
+                'model' => 'Мерукрий 230',
+                'serial_number' => 9343248,
+                'description' => 'Ввод №1 в РТП-9640',
+                'active' => true,
+                'server_ip' => '10.155.145.100',
+                'server_port' => '40000',
+                'rs_port' => 48,
+                'meter_pass' => 010101010101
+            ],
+            [
+                'name' => 'Ввод 2',
+                'type_id' => '1',
+                'building_id' => 17,
+                'driver_id' => 1,
+                'model' => 'Мерукрий 230',
+                'serial_number' => 10151942,
+                'description' => 'Ввод №2 в РТП-9640',
+                'active' => true,
+                'server_ip' => '10.155.145.100',
+                'server_port' => '40000',
+                'rs_port' => 42,
+                'meter_pass' => 010101010101
+            ],
             // WaterMeters
 
-            // start id = 7
+            // star id: 
             [
                 'name' => "ВУ-29 ГП-1 основной",
                 'type_id' => '2',
                 'building_id' => 1,
-                'driver_id' => 1,
+                'driver_id' => 4,
                 'active' => true,
                 'description' => "Внутренняя хозбытовая линия ГП-1 со стороны ТСО рабочая ветка",
                 'model' => "ВСХНд-40",
@@ -274,6 +302,7 @@ class MetersTableSeeder extends Seeder
                 'name' => "ВУ-5 ГП-4 хозбытовая",
                 'type_id' => '2',
                 'building_id' => 4,
+                'driver_id' => 5,
                 'active' => true,
                 'description' => "Ввод РСО рабочий со стороны поликлиники хозбытовая ветка",
                 'model' => "ВСХНд-40",
@@ -298,6 +327,7 @@ class MetersTableSeeder extends Seeder
                 'name' => "ВУ-4 ГП-4 хозбытовая",
                 'type_id' => '2',
                 'building_id' => 4,
+                'driver_id' => 5,
                 'active' => true,
                 'description' => "Ввод РСО резервный со стороны УЛК хозбытовая ветка",
                 'model' => "ВСХНд-40",
