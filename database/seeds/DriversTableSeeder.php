@@ -15,8 +15,10 @@ class DriversTableSeeder extends Seeder
             [
                 'name' => 'mercury_230'
             ],
+                // 2 - 8
             [
                 'name' => 'impis_12'
+                // 21
             ],
             [
                 'name' => 'logika_941'
@@ -24,8 +26,10 @@ class DriversTableSeeder extends Seeder
             [
                 'name' => 'oven_si9'
             ],
+                // 9
             [
                 'name' => 'pulsar_2m'
+                // 23, 25
             ],
         ];
 

@@ -12,7 +12,7 @@ class DriversController extends Controller
 
         $driver = new $driver_class($meter);
 
-        $driver->collect_data();
+        dd($driver->collect_data());
 
         $driver->write_to_db();
     }

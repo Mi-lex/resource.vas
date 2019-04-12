@@ -110,7 +110,7 @@ class Oven_si9 extends Driver
     private function write_data(string $consumption,
         callable $parser) : void
     {
-        $answer = $this->make_request($consumption, false);
+        $answer = $this->make_request($consumption, true, false);
 
         if ($answer) {
             $this->consumption_record[$consumption] = $parser($answer);

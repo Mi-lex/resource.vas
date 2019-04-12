@@ -67,9 +67,13 @@ abstract class Driver {
         return unpack('H*', $data, null)[1];
     }
 
-    protected function make_request(string $message_command, bool $parsing = true)
+    protected function make_request(string $message_command, bool $preparing = true, bool $parsing = true)
     {
-        $command = $this->prepare_command($message_command);
+        if ($preparing) {
+            $command = $this->prepare_command($message_command);
+        } else {
+            $command = $message_command;
+        }
 
         Log::info("Отправляем команду: ".$this->nice_hex($command));
 

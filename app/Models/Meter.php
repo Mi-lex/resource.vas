@@ -102,6 +102,13 @@ class Meter extends Model
         return $this->belongsTo('App\Models\Type');
     }
 
+    public function channel()
+    {
+        $channel = \DB::table('meters_channels')->whereMeterId($this->id)->first();
+
+        return $channel->channel;
+    }
+
     public function driver() : BelongsTo
     {
         return $this->belongsTo('App\Models\Driver');

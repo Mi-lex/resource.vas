@@ -74,7 +74,7 @@ class Mercury_230 extends Driver
             strtoupper(dechex($this->device->rs_port) . "00");
     }
 
-    private function calculate_power(string $power_str) : float
+    private function calculate_power(string $power_str) : ?float
     {
         if ($power_str == "ffffffff") {
             return null;

@@ -277,6 +277,7 @@ class MetersTableSeeder extends Seeder
               [
                 'name' => "ВУ-7 ГП-5 хозбытовая",
                 'type_id' => '2',
+                'driver_id' => 5,
                 'building_id' => 5,
                 'active' => true,
                 'description' => "Ввод РСО резервный со стороны поликлиники хозбытовая ветка ГП-5",

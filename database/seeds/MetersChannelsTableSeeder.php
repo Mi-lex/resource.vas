@@ -13,27 +13,27 @@ class MetersChannelsTableSeeder extends Seeder
     {
         $meters_channels = [
             [
-                'meter_id' => '23',
+                'meter_id' => '25',
                 'channel' => 2
             ],
             [
-                'meter_id' => '21',
+                'meter_id' => '23',
                 'channel' => 1
             ],
             [
-                'meter_id' => '18',
+                'meter_id' => '20',
                 'channel' => 2
             ],
             [
-                'meter_id' => '17',
+                'meter_id' => '19',
                 'channel' => 0
             ],
             [
-                'meter_id' => '20',
+                'meter_id' => '22',
                 'channel' => 3
             ],
             [
-                'meter_id' => '19',
+                'meter_id' => '21',
                 'channel' => 1
             ]
         ];
