@@ -101,7 +101,7 @@
                             <li><i class="fa fa-circle-o text-green"></i> Западный военный округ</li>
                             <li><i class="fa fa-circle-o text-yellow"></i> Центральный военный округ</li>
                             <li><i class="fa fa-circle-o text-aqua"></i> Восточный военный округ</li>
-                            <li><i class="fa fa-circle-o text-blue"></i> Северный морской флот</li>
+                            <li><i class="fa fa-circle-o text-blue"></i> Северный флот</li>
                           </ul>
                         </div>
                         <!-- /.col -->
@@ -138,7 +138,7 @@
                             <li><i class="fa fa-circle-o text-green"></i> Западный военный округ</li>
                             <li><i class="fa fa-circle-o text-yellow"></i> Центральный военный округ</li>
                             <li><i class="fa fa-circle-o text-aqua"></i> Восточный военный округ</li>
-                            <li><i class="fa fa-circle-o text-blue"></i> Северный морской флот</li>
+                            <li><i class="fa fa-circle-o text-blue"></i> Северный флот</li>
                           </ul>
                         </div>
                         <!-- /.col -->
@@ -175,7 +175,7 @@
                             <li><i class="fa fa-circle-o text-green"></i> Западный военный округ</li>
                             <li><i class="fa fa-circle-o text-yellow"></i> Центральный военный округ</li>
                             <li><i class="fa fa-circle-o text-aqua"></i> Восточный военный округ</li>
-                            <li><i class="fa fa-circle-o text-blue"></i> Северный морской флот</li>
+                            <li><i class="fa fa-circle-o text-blue"></i> Северный флот</li>
                           </ul>
                         </div>
                         <!-- /.col -->
@@ -430,7 +430,7 @@
                 </div>
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="tab_6">
-                  <h3>Северный морской флот</h3>
+                  <h3>Северный флот</h3>
                   <div class="row">
                     <div class="col-xs-4">
                       <div class="info-box bg-aqua-gradient">
