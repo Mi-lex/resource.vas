@@ -38,4 +38,9 @@ class MetersController extends Controller
     {
         return response()->json($meter->last_consumption());
     }
+
+    public function monitoring(Meter $meter)
+    {
+        return view('monitoring.'.$meter->type->name, compact('meter'));
+    }
 }

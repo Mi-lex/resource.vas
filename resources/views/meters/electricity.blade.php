@@ -7,7 +7,7 @@
             {{ $meter->name }}
 
             <small>
-                <a href="meter/{{ $meter->id }}/monitoring">перейти к мониторингу</a>
+                <a href="{{ url("meters/$meter->id/monitoring") }}">перейти к мониторингу</a>
             </small>
         </h1>
     </section>

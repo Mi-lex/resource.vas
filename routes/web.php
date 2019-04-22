@@ -34,6 +34,10 @@ Route::get('/buildings/{building}', 'BuildingsController@show');
 
 Route::get('/games/sapper', 'GamesController@sapper');
 
+// Monitoring
+
+Route::get('/meters/{meter}/monitoring', 'MetersController@monitoring');
+
 // Driver
 
 Route::get('/meters/{meter}/driver', 'DriversController@show');
