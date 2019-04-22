@@ -130,7 +130,7 @@ class Mercury_230 extends Driver
         }
     }
 
-    public function collect_data()
+    public function connection_wrapper(callable $operation)
     {
         if ($this->test_connection()) {
             Log::info('Канал связи успешно протестирован.');
@@ -138,10 +138,7 @@ class Mercury_230 extends Driver
             if ($this->open_connection()) {
                 Log::info('Канал связи открыт');
 
-                // Записываем показатели счетчика в свойство объекта
-                $this->write_consumption();
-
-                return $this->consumption_record;
+                $operation();
             } else {
                 Log::error('Канал связи не открыт.');
                 return false;
@@ -150,5 +147,15 @@ class Mercury_230 extends Driver
             Log::error('Канал связи не прошел тест.');
             return false;
         }
+    }
+
+    public function collect_data()
+    {
+        $this->connection_wrapper(function() {
+            // Записываем показатели счетчика в свойство объекта
+            $this->write_consumption();
+        });
+
+        return $this->consumption_record;
     }
 }
