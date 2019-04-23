@@ -62,22 +62,17 @@
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">
                         <li>
-                            <a href="/heat/1">
-                                <i class="fa fa-fire text-blue"></i>Счётчик тепла
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/electricity/2">
+                            <a href="{{ url('/meters/4') }}">
                                 <i class="fa fa-flash text-blue"></i>Счётчик электроэнергии
                             </a>
                         </li>
                         <li>
-                            <a href="/mercury/2">
+                            <a href="{{ url('/meters/4/monitoring') }}">
                                 <i class="fa fa-flash text-blue"></i>Счётчик электроэнергии (мониторинг)
                             </a>
                         </li>
                         <li>
-                        <a href="/water/1">
+                        <a href="{{ url('/meters/9') }}">
                             <i class="fa fa-flash text-blue"></i>Счётчик ХВС
                         </a>
                         </li>
