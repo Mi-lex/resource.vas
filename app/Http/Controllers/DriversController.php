@@ -12,12 +12,13 @@ class DriversController extends Controller
 
         $driver = new $driver_class($meter);
 
-        $result = $driver->collect_data();
+        // $result = $driver->collect_data();
+        $result = $driver->write_params();
 
-        dd($result);
+        // dd($result);
 
         // $driver->write_to_db();
 
-        // return response()->json($driver->consumption_record);
+        return response()->json($result);
     }
 }

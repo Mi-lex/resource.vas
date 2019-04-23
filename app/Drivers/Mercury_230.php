@@ -7,11 +7,60 @@ use Illuminate\Support\Facades\Log;
 
 class Mercury_230 extends Driver
 {
+    private $params_record;
+    private $params_commands;
+
     public function __construct($device)
     {
         parent::__construct($device);
 
         $this->connection_params['protocol'] = 'udp';
+
+        $this->params_record = [];
+
+        $this->params_commands = [
+            'full_power' => [
+                'operation' => '081608',
+                'symbol'  => 's',
+                'mask'    => 0x3fffff,
+                'with_sum' => true
+            ],
+            'active_power' => [
+                'operation' => '081600',
+                'symbol'  => 'p',
+                'mask'    => 0x3fffff,
+                'with_sum' => true
+            ],
+            'reactive_power' => [
+                'operation' => '081604',
+                'symbol'  => 'q',
+                'mask'    => 0x3fffff,
+                'with_sum' => true
+            ],
+            'voltage' => [
+                'operation' => '081611',
+                'symbol'  => 'u',
+                'mask'    => 0xffffff
+            ],
+            'amperage' => [
+                'operation' => '081621',
+                'symbol'  => 'i',
+                'ratio'   => 0.001,
+                'mask'    => 0xffffff
+            ],
+            'coefficient_power' => [
+                'operation' => '081631',
+                'symbol'  => 'phi',
+                'ratio'   => 0.001,
+                'mask'    => 0x3fffff
+            ],
+            'network_frequency' => [
+                'operation' => '081140',
+                'symbol'  => 'f',
+                'mask'    => 0x3fffff,
+                'with_sum' => true
+            ]
+        ];
     }
 
     protected function crc_mbus(string $msg): string
@@ -74,7 +123,7 @@ class Mercury_230 extends Driver
             strtoupper(dechex($this->device->rs_port) . "00");
     }
 
-    private function calculate_power(string $power_str) : ?float
+    private function calculate_power(string $power_str): ?float
     {
         if ($power_str == "ffffffff") {
             return null;
@@ -157,5 +206,73 @@ class Mercury_230 extends Driver
         });
 
         return $this->consumption_record;
+    }
+
+    /**
+     * Принимает строку шестнадцаатеричных данных,
+     * разделяет ее на блоки. Возвращает
+     * блоки в виде массива
+     * 
+     * @param string $param_str строка шестнадцатеричных данных
+     * @return array массив смысловых блоков
+     */
+    private function parse_param(string $param_str) : array
+    {
+        // remove two first elements and split str into arra
+        $param_arr = str_split(substr($param_str, 2), 6);
+
+        $parser = function($el) {
+            if (strlen($el) < 6) {
+                return $el;
+            } else {
+                return substr($el, 0, 2).substr($el, 4, 2).substr($el, 2, 2);
+            }
+        };
+        // get correct results accroting to protocol
+        $result = array_map($parser, $param_arr);
+
+        return array_slice($result, 0, 4);
+    }
+
+    /**
+     * Отправляет команду устройству,
+     * принимает ответ и парсит значения в массив
+     *
+     * @param array $command  массив, содержащий информацию
+     * о параметре, команде для его получения и т.д.
+     * @return array $result  массив посчитанных параметров
+     */
+    private function get_param(array $command) : array
+    {
+        $unparsed_param = $this->make_request($command['operation']);
+
+        $param_arr = $this->parse_param($unparsed_param);
+
+        $result = [];
+
+        foreach ($param_arr as $i => $value) {
+            $index = isset($command['with_sum']) ? $i : $i + 1;
+
+            $row_name = $command['symbol'] . ($index == 0 ? '' : $index); // f.e S, S1 ...
+
+            $calc_value = (hexdec($value) & $command['mask']) * ($command['ratio'] ?? 0.01);
+
+            $result[$row_name] = $calc_value;
+        }
+
+        return $result;
+    }
+
+    public function write_params()
+    {
+        $this->connection_wrapper(function() {
+            // Записываем показатели счетчика в свойство объекта
+            foreach ($this->params_commands as $command) {
+                $params = $this->get_param($command);
+                $this->params_record = array_merge($this->params_record, $params);
+            }
+        });
+
+        return $this->params_record;
     }
 }
