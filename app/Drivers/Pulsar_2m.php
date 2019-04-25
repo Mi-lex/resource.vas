@@ -27,12 +27,12 @@ class Pulsar_2m extends Driver
 
         $this->commands = [
             // чтение значения потреблений
-            'read_consumptions'         => '01',
+            'consumption_amount'  => '01',
             // чтение значения среднего потребления
-            'read_average_consumption'  => '3E'
+            'current_consumption'  => '3E'
         ];
 
-        $this->consumptions = ['totalConsumption', 'currentConsumption'];
+        $this->consumptions = ['consumption_amount', 'current_consumption'];
     }
 
     protected function crc_mbus(string $msg): string
@@ -64,8 +64,10 @@ class Pulsar_2m extends Driver
     // address - rs_port hex
     // command - 01 | 3E | 04
     // data - mask - 01000000 || 02000000 || 03000000
-    protected function prepare_command(string $command) : string
+    protected function prepare_command(string $command_name) : string
     {
+        $command = $this->commands[$command_name];
+
         $rs_port_hex = '00' . $this->device->rs_port;
 
         $length = 10 + strlen($this->mask) / 2;
@@ -122,7 +124,7 @@ class Pulsar_2m extends Driver
         }
     }
 
-    public function collect_data(): void
+    public function collect_data()
     {
         // Проверка типа прибора
         // logWrite("Проверка типа прибора");
@@ -140,10 +142,8 @@ class Pulsar_2m extends Driver
             if ($type_id === "03029A00") {
                 $this->mask = $this->channels_masks[$this->device->channel()];
 
-                // Записываем общее потребление и усредненное потребление
-                foreach ($this->commands as $command) {
-                    $this->write_data($command, [$this, 'parse_data']);
-                }
+                // Записываем общее потребление
+                $this->write_data('consumption_amount', [$this, 'parse_data']);
 
                 /**
                  * Запсываем показание времени наработки
@@ -152,13 +152,14 @@ class Pulsar_2m extends Driver
                  */
                 $totalTimerCommand = '04';
 
-                // Для всех команд кроме этой используется маска
-                // Поэтому обнуляем значение mask
+                /**
+                 * Для всех команд кроме этой используется маска
+                 * Поэтому обнуляем значение mask
+                 */
+                // $this->mask = '';
+                // $this->write_data($totalTimerCommand, [$this, 'parse_date']);
 
-                $this->mask = '';
-                $this->write_data($totalTimerCommand, [$this, 'parse_date']);
-
-                dd($this->consumption_record);
+                return $this->consumption_record;
             }
         }
     }

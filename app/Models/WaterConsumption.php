@@ -10,4 +10,6 @@ class WaterConsumption extends Model
     use Consumption;
 
     const UPDATED_AT = null;
+
+    protected $guarded = [];
 }

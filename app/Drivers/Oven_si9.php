@@ -26,24 +26,24 @@ class Oven_si9 extends Driver
          * поэтому приводятся все возможные команды для первых 15 адресов
          */
         $this->commands = [
-            '1' => ['totalConsumption' => "GHHGSHNJQOHO", 'currentConsumption' => 'GHHGOVSITLVL', 'totalTimer' => 'GHHGUMPSPISM'],
-            '2' => ['totalConsumption' => "GIHGSHNJUNHQ", 'currentConsumption' => 'GIHGOVSIPQVN', 'totalTimer' => 'GIHGUMPSTTSK'],
-            '3' => ['totalConsumption' => "GJHGSHNJTTUK", 'currentConsumption' => 'GJHGOVSIQGGP', 'totalTimer' => 'GJHGUMPSUNJQ'],
-            '4' => ['totalConsumption' => "GKHGSHNJNPHU", 'currentConsumption' => 'GKHGOVSIGKVJ', 'totalTimer' => 'GKHGUMPSKJSG'],
-            '5' => ['totalConsumption' => "GLHGSHNJKJUG", 'currentConsumption' => 'GLHGOVSIJUGT', 'totalTimer' => 'GLHGUMPSNPJU'],
-            '6' => ['totalConsumption' => "GMHGSHNJGSUI", 'currentConsumption' => 'GMHGOVSINHGV', 'totalTimer' => 'GMHGUMPSJMJS'],
-            '7' => ['totalConsumption' => "GNHGSHNJJMHS", 'currentConsumption' => 'GNHGOVSIKRVH', 'totalTimer' => 'GNHGUMPSGSSI'],
-            '8' => ['totalConsumption' => "GOHGSHNJSQKH", 'currentConsumption' => 'GOHGOVSIRNQS', 'totalTimer' => 'GOHGUMPSVGPV'],
-            '9' => ['totalConsumption' => "GPHGSHNJVGRV", 'currentConsumption' => 'GPHGOVSIOTLI', 'totalTimer' => 'GPHGUMPSSQMH'],
-            '10' => ['totalConsumption' => "GQHGSHNJRVRT", 'currentConsumption' => 'GQHGOVSISILG', 'totalTimer' => 'GQHGUMPSOLMJ'],
-            '11' => ['totalConsumption' => "GRHGSHNJOLKJ", 'currentConsumption' => 'GRHGOVSIVOQU', 'totalTimer' => 'GRHGUMPSRVPT'],
-            '12' => ['totalConsumption' => "GSHGSHNJIHRP", 'currentConsumption' => 'GSHGOVSILSLK', 'totalTimer' => 'GSHGUMPSHRMN'],
-            '13' => ['totalConsumption' => "GTHGSHNJHRKN", 'currentConsumption' => 'GTHGOVSIMMQQ', 'totalTimer' => 'GTHGUMPSIHPP'],
-            '14' => ['totalConsumption' => "GUHGSHNJLKKL", 'currentConsumption' => 'GUHGOVSIIPQO', 'totalTimer' => 'GUHGUMPSMUPR'],
-            '15' => ['totalConsumption' => "GVHGSHNJMURR", 'currentConsumption' => 'GVHGOVSIGJLM', 'totalTimer' => 'GVHGUMPSLKML']
+            '1' => ['consumption_amount' => "GHHGSHNJQOHO", 'current_consumption' => 'GHHGOVSITLVL', 'totalTimer' => 'GHHGUMPSPISM'],
+            '2' => ['consumption_amount' => "GIHGSHNJUNHQ", 'current_consumption' => 'GIHGOVSIPQVN', 'totalTimer' => 'GIHGUMPSTTSK'],
+            '3' => ['consumption_amount' => "GJHGSHNJTTUK", 'current_consumption' => 'GJHGOVSIQGGP', 'totalTimer' => 'GJHGUMPSUNJQ'],
+            '4' => ['consumption_amount' => "GKHGSHNJNPHU", 'current_consumption' => 'GKHGOVSIGKVJ', 'totalTimer' => 'GKHGUMPSKJSG'],
+            '5' => ['consumption_amount' => "GLHGSHNJKJUG", 'current_consumption' => 'GLHGOVSIJUGT', 'totalTimer' => 'GLHGUMPSNPJU'],
+            '6' => ['consumption_amount' => "GMHGSHNJGSUI", 'current_consumption' => 'GMHGOVSINHGV', 'totalTimer' => 'GMHGUMPSJMJS'],
+            '7' => ['consumption_amount' => "GNHGSHNJJMHS", 'current_consumption' => 'GNHGOVSIKRVH', 'totalTimer' => 'GNHGUMPSGSSI'],
+            '8' => ['consumption_amount' => "GOHGSHNJSQKH", 'current_consumption' => 'GOHGOVSIRNQS', 'totalTimer' => 'GOHGUMPSVGPV'],
+            '9' => ['consumption_amount' => "GPHGSHNJVGRV", 'current_consumption' => 'GPHGOVSIOTLI', 'totalTimer' => 'GPHGUMPSSQMH'],
+            '10' => ['consumption_amount' => "GQHGSHNJRVRT", 'current_consumption' => 'GQHGOVSISILG', 'totalTimer' => 'GQHGUMPSOLMJ'],
+            '11' => ['consumption_amount' => "GRHGSHNJOLKJ", 'current_consumption' => 'GRHGOVSIVOQU', 'totalTimer' => 'GRHGUMPSRVPT'],
+            '12' => ['consumption_amount' => "GSHGSHNJIHRP", 'current_consumption' => 'GSHGOVSILSLK', 'totalTimer' => 'GSHGUMPSHRMN'],
+            '13' => ['consumption_amount' => "GTHGSHNJHRKN", 'current_consumption' => 'GTHGOVSIMMQQ', 'totalTimer' => 'GTHGUMPSIHPP'],
+            '14' => ['consumption_amount' => "GUHGSHNJLKKL", 'current_consumption' => 'GUHGOVSIIPQO', 'totalTimer' => 'GUHGUMPSMUPR'],
+            '15' => ['consumption_amount' => "GVHGSHNJMURR", 'current_consumption' => 'GVHGOVSIGJLM', 'totalTimer' => 'GVHGUMPSLKML']
         ];
 
-        $this->consumptions = ['totalConsumption', 'currentConsumption'];
+        $this->consumptions = ['consumption_amount', 'current_consumption'];
     }
 
     protected function get_clean_answer(string $answer): string
@@ -81,7 +81,7 @@ class Oven_si9 extends Driver
     }
 
     // Извлекает время наработки
-    private function parse_timer(string $ascii_str) : array
+    private function parse_date(string $ascii_str) : array
     {
         $time = array();
         $time["miliseconds"] = $this->extract_int(substr($ascii_str, 19, 2));
@@ -121,16 +121,14 @@ class Oven_si9 extends Driver
         }
     }
 
-    public function collect_data() : void
+    public function collect_data()
     {
-        // Записываем общее потребление и нынешнее потребленее
-        foreach ($this->consumptions as $consumption) {
-            $this->write_data($consumption, [$this, 'parse_data']);
-        }
+        // Записываем общее потребление
+        $this->write_data('consumption_amount', [$this, 'parse_data']);
 
-        // Запсываем показание времени наработки (??)
-        $this->write_data('totalTimer', [$this, 'parse_timer']);
+        // Запсываем показание времени наработки
+        // $this->write_data('totalTimer', [$this, 'parse_date']); Don't need it yet
 
-        dd($this->consumption_record);
+        return $this->consumption_record;
     }
 }
