@@ -18,7 +18,7 @@ class DriversTableSeeder extends Seeder
                 // 2 - 8
             [
                 'name' => 'impis_12'
-                // 20, 21
+                // 19, 20, 21 - пока не работают
             ],
             [
                 'name' => 'logika_941'

@@ -254,7 +254,7 @@ class MetersTableSeeder extends Seeder
                 'name' => "ВУ-6 ГП-5 хозбытовая",
                 'type_id' => '2',
                 'building_id' => 5,
-                'active' => true,
+                'active' => false, // yet
                 'description' => "Ввод РСО рабочий со стороны КПП хозбытовая ветка ГП-5",
                 'model' => "ВСХНд-40",
                 'serial_number' => "14557174",
@@ -279,7 +279,7 @@ class MetersTableSeeder extends Seeder
                 'type_id' => '2',
                 'driver_id' => 5,
                 'building_id' => 5,
-                'active' => true,
+                'active' => false,
                 'description' => "Ввод РСО резервный со стороны поликлиники хозбытовая ветка ГП-5",
                 'model' => "ВСХНд-40",
                 'serial_number' => "14557205",

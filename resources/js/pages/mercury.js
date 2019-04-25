@@ -1,5 +1,5 @@
 var meterId = document.getElementById('meter_id').textContent.trim();
-var url = 'http://resource.test/meters/' + meterId + '/driver';
+var url = 'http://resource.test/meters/' + meterId + '/params';
 var timer;
 
 $(document).ready(function() {

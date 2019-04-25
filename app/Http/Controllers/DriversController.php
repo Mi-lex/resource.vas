@@ -46,6 +46,6 @@ class DriversController extends Controller
                 }
             });
 
-        return 'cool';
+        return 'Done';
     }
 }

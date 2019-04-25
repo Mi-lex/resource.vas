@@ -39,8 +39,10 @@ Route::get('/games/sapper', 'GamesController@sapper');
 Route::get('/meters/{meter}/monitoring', 'MetersController@monitoring');
 
 // Driver
+Route::get('/meters/{meter}/driver', 'DriversController@show');
 
-Route::get('/meters/{meter}/driver', 'DriversController@params');
+// Params
+Route::get('/meters/{meter}/params', 'DriversController@params');
 
 // Request electricity devices and write their consumptions
 Route::get('/meters/write/electricity', 'DriversController@write_electricity');
