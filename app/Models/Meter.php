@@ -97,6 +97,11 @@ class Meter extends Model
             $last_consumption;
     }
 
+    public function full_driver_name()
+    {
+        return 'Импульсный счетчик ' . $this->driver->name;
+    }
+
     public function type() : BelongsTo
     {
         return $this->belongsTo('App\Models\Type');
