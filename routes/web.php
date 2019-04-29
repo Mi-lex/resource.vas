@@ -45,6 +45,6 @@ Route::get('/meters/{meter}/driver', 'DriversController@show');
 Route::get('/meters/{meter}/params', 'DriversController@params');
 
 // Request electricity devices and write their consumptions
-Route::get('/meters/write/electricity', 'DriversController@write_electricity');
+Route::get('/meters/write/{type}', 'DriversController@write');
 
 

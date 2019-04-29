@@ -119,6 +119,15 @@ class Meter extends Model
         return $this->belongsTo('App\Models\Driver');
     }
 
+    public function driver_instance()
+    {
+        $driver_class = 'App\Drivers\\'.ucfirst($this->driver->name);
+
+        $driver = new $driver_class($this);
+
+        return $driver;
+    }
+
     public function scopeOfType($query, string $type) : Builder
     {
         return $query

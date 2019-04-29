@@ -9,7 +9,7 @@ class DriversController extends Controller
 {
     public function show(Meter $meter)
     {
-        $driver_class = 'App\Drivers\\'.ucfirst($meter->driver->name);
+        $driver_class = $meter->driver_class;
 
         $driver = new $driver_class($meter);
 
@@ -20,21 +20,19 @@ class DriversController extends Controller
 
     public function params(Meter $meter)
     {
-        $driver_class = 'App\Drivers\\'.ucfirst($meter->driver->name);
-
-        $driver = new $driver_class($meter);
+        $driver = $meter->driver_instance();
 
         $result = $driver->write_params();
 
         return response()->json($result);
     }
 
-    public function write_electricity()
+    public function write($type)
     {
-        Meter::active()->ofType('electricity')->get()
-            ->slice(2)
+        Meter::active()->ofType($type)->get()
+            // ->slice(2) // for not working electricity meters
             ->each(function ($meter) {
-                $driver = new \App\Drivers\Mercury_230($meter);
+                $driver = $meter->driver_instance();
 
                 $result = $driver->collect_data();
 
@@ -46,6 +44,6 @@ class DriversController extends Controller
                 }
             });
 
-        return 'Done';
+        return 'Done';  
     }
 }
