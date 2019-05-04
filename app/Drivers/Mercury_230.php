@@ -7,7 +7,19 @@ use Illuminate\Support\Facades\Log;
 
 class Mercury_230 extends Driver
 {
+    /**
+     * Параметры/состояние устройства,
+     * информация о электричестве, проходящем
+     * через него
+     *
+     * @var object
+     */
     private $params_record;
+    /**
+     * Команды для извлечения того или иного параметра
+     *
+     * @var array
+     */
     private $params_commands;
 
     public function __construct($device)
@@ -123,6 +135,13 @@ class Mercury_230 extends Driver
             strtoupper(dechex($this->device->rs_port) . "00");
     }
 
+    /**
+     * Преобразоывавает hex строку длинной в 8 символов
+     * в числовое десятичное значение значение
+     *
+     * @param string $power_str - hex строка потребления
+     * @return float|null - числовое десятичное значение
+     */
     private function calculate_power(string $power_str): ?float
     {
         if ($power_str == "ffffffff") {
@@ -135,24 +154,51 @@ class Mercury_230 extends Driver
         }
     }
 
+    /**
+     * Парсит ответы, полученные от прибора учета
+     * о потреблениях. Записывает значения в свойство
+     * объекта
+     *
+     * @param integer $command - команда чтения расхода
+     * @param array $attrs - ключи, согласно которым данные
+     * нужно записать в свойство
+     * @return void
+     */
     private function write_power(int $command, array $attrs)
     {
         $power_command = '05000' . $command;
 
         $response = $this->make_request($power_command);
 
-        if (strlen($response) === 38) {
+        $correct_response_length = 38;
+
+        if (strlen($response) === $correct_response_length) {
+            /**
+             * забираем 32 символа и разбиваем строку на массив,
+             * каждый элемент которого содержит по 8 символов,
+             * Согласно протоколу, каждый элемент - числовое значение
+             * расхода
+             */
             $chunk_response = str_split(substr($response, 2, -4), 8);
 
+            // мапируем полученный ответ
             $consumptions =
                 array_map([$this, 'calculate_power'], $chunk_response);
 
+            // записываем значения расхода согласно массиву ключей
             foreach ($attrs as $i => $attribute) {
                 $this->consumption_record[$attribute] = $consumptions[$i];
             }
         }
     }
 
+    /**
+     * Записывает значения всех типов потребления
+     * (я не знаю, что за тарифы, реактивные и
+     * активные параметры)
+     *
+     * @return void
+     */
     private function write_consumption(): void
     {
         // Записываем суммарные данные потреблений
@@ -218,7 +264,7 @@ class Mercury_230 extends Driver
      */
     private function parse_param(string $param_str) : array
     {
-        // remove two first elements and split str into arra
+        // удаляем первые два элемента, преобразуем строку в массив
         $param_arr = str_split(substr($param_str, 2), 6);
 
         $parser = function($el) {
@@ -228,9 +274,13 @@ class Mercury_230 extends Driver
                 return substr($el, 0, 2).substr($el, 4, 2).substr($el, 2, 2);
             }
         };
-        // get correct results accroting to protocol
+        // меняем порядок символов в элементах согласно протоколу
         $result = array_map($parser, $param_arr);
 
+        /**
+         * как правило для полной информации о параметре
+         * достаточно 4-х значений: фазы 1,2,3 и сумма
+         */
         return array_slice($result, 0, 4);
     }
 
@@ -251,8 +301,13 @@ class Mercury_230 extends Driver
         $result = [];
 
         foreach ($param_arr as $i => $value) {
+            /**
+             * если значение параметра одно или также нужна сумма по трем фазам
+             * индекс начинается с нуля, в ином случае с единицы
+             */
             $index = isset($command['with_sum']) ? $i : $i + 1;
 
+            // название ключа не должно содержать нуль
             $row_name = $command['symbol'] . ($index == 0 ? '' : $index); // f.e S, S1 ...
 
             $calc_value = (hexdec($value) & $command['mask']) * ($command['ratio'] ?? 0.01);

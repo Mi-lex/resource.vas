@@ -5,9 +5,13 @@ namespace App\Abstracts;
 use App\Socket\Socket;
 use Illuminate\Support\Facades\Log;
 
-abstract class Driver {
+abstract class Driver
+{  
+    // прибор учета
     protected $device;
+    // параметры соединения с устройством
     protected $connection_params;
+    // запись о потреблении устройства
     protected $consumption_record;
 
     public function __construct($device)
@@ -15,36 +19,63 @@ abstract class Driver {
         $this->device = $device;
 
         $this->connection_params['ip'] = $device->server_ip;
-        $this->connection_params['port'] = $device->server_port;    
+        $this->connection_params['port'] = $device->server_port;
     }
 
-    // Принимает HEX данные и возвращает строку для отображения
-    protected function nice_hex(string $str) : string
+    /**
+     * Принимает двоичные HEX данные и 
+     * возвращает строку для отображения
+     *
+     * @param string $str - запакованные hex данные
+     * @return string распакованный hex
+     */
+    protected function nice_hex(string $str): string
     {
         // Проверить правильность работы с двумя аргументами
-        $unpacked_str = unpack('H*', $str, null);
+        $unpacked_str = unpack('H*', $str, null)[1];
 
-        // почему берется первый элемент ??
-        return strtoupper(implode(' ', str_split($unpacked_str[1], 2)));
+        return $this->nice_hex_string($unpacked_str);
     }
 
-    // Принимает строку с HEX данными и возвращает строку для отображения
-    protected function nice_hex_string(string $str) : string
+    /**
+     * Разбивает полученный hex по два элемента
+     *
+     * @param string $str - hex строка
+     * @return string - разбитая hex строка
+     */
+    protected function nice_hex_string(string $str): string
     {
         return strtoupper(implode(' ', str_split($str, 2)));
     }
 
-    // Принимает данные и возвращает CRC16 стандарта XMODEM в виде HEX строки
-    protected function crc_mbus(string $msg) : string {
+    /**
+     * Принимает данные и возвращает CRC16 стандарта XMODEM в виде HEX строки
+     * Данный метод позволяет определить, совпадают ли контрольные суммы пакетов
+     * протокол у устройств разный, поэтому метод для каждого устройства индивидуален
+     *
+     * @param string $msg - принятый ответ
+     * @return string - высчитанная контрольная сумма
+     * в двоичном виде
+     */
+    protected function crc_mbus(string $msg): string
+    {
         return $msg;
     }
 
-    // Функция извлечения подстроки из ответа для вычисления контрольной суммы
-    protected function get_clean_answer(string $answer) : string {
+    // Функция извлечения контрольной суммы из строки ответа
+    protected function get_clean_answer(string $answer): string
+    {
         return $answer;
     }
 
-    protected function crc_right(string $answer = '') : bool
+    /**
+     * Определяет совпадение контрольной суммы
+     * полученного пакета
+     *
+     * @param string $answer - полученный ответ, запакованная строка
+     * @return boolean
+     */
+    protected function crc_right(string $answer = ''): bool
     {
         $unpacked_answer = unpack('H*', $answer, null)[1];
 
@@ -57,16 +88,33 @@ abstract class Driver {
         return $received_crc === $calculated_crc;
     }
 
-    protected function prepare_command(string $str_command) : string 
+    /**
+     * Фукнция обработки команды перед отправкой
+     * в устройство
+     *
+     * @param string $str_command - команда
+     * @return string обработанная команда
+     */
+    protected function prepare_command(string $str_command): string
     {
         return $str_command;
     }
 
-    protected function parse_answer(string $data) 
+    protected function parse_answer(string $data)
     {
         return unpack('H*', $data, null)[1];
     }
 
+    /**
+     * Метод запроса к устройству
+     *
+     * @param string $message_command - отправляемая команда
+     * @param boolean $preparing - нужно ли обрабатывать перед
+     * отправкой в устройство [optional]
+     * @param boolean $parsing - нужно ли парсить полученный ответ
+     * [optional]
+     * @return void|string - ответ устройства (вид зависит от парсинга)
+     */
     protected function make_request(string $message_command, bool $preparing = true, bool $parsing = true)
     {
         if ($preparing) {
@@ -75,7 +123,7 @@ abstract class Driver {
             $command = $message_command;
         }
 
-        Log::info("Отправляем команду: ".$this->nice_hex($command));
+        Log::info("Отправляем команду: " . $this->nice_hex($command));
 
         $device_connection = new Socket($this->connection_params);
 
@@ -92,17 +140,26 @@ abstract class Driver {
         } else {
             if ($parsing) {
                 $answer = $this->parse_answer($binary_answer);
+
+                Log::info("Получаем ответ: " . $this->nice_hex_string($answer));
             } else {
                 $answer = $binary_answer;
+
+                Log::info("Получаем ответ: " . $this->nice_hex($answer));
             }
-            
-            Log::info("Получаем ответ: ".$this->nice_hex_string($answer));
 
             return $answer;
         }
     }
 
-    public function write_to_db() : void {
+    /**
+     * Записывает данные о потреблении устройства
+     * в базу данных
+     *
+     * @return void
+     */
+    public function write_to_db(): void
+    {
         $this->device->consumptions()
             ->create($this->consumption_record);
     }

@@ -9,9 +9,7 @@ class DriversController extends Controller
 {
     public function show(Meter $meter)
     {
-        $driver_class = $meter->driver_class;
-
-        $driver = new $driver_class($meter);
+        $driver = $meter->driver_instance();
 
         $result = $driver->collect_data();
 
@@ -27,6 +25,13 @@ class DriversController extends Controller
         return response()->json($result);
     }
 
+    /**
+     * Записывает значения потребления
+     * указанного типа в базу данных
+     *
+     * @param [type] $type - тип потребления
+     * @return void
+     */
     public function write($type)
     {
         Meter::active()->ofType($type)->get()
@@ -38,7 +43,8 @@ class DriversController extends Controller
 
                 if ($result) {
                     $driver->write_to_db();
-                    Log::info('Electricity consumption written successfully');
+
+                    Log::info(ucfirst($meter->type->name).' consumption written successfully');
                 } else {
                     Log::error('The consumption wasnt collected. There must be something wrong with connection');
                 }

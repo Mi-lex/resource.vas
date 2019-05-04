@@ -26,7 +26,7 @@
                         <dl class="dl-horizontal">
                             <dt>Тип прибора</dt>
                             <dd>
-                                {{ $meter->full_driver_name() }}
+                                {{ $meter->full_device_name() }}
                             </dd>
                             <dt>Модель</dt>
                             <dd>

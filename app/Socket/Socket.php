@@ -4,6 +4,11 @@ namespace App\Socket;
 
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Класс для создания сокет соединения,
+ * отправки команд через соединение и
+ * получения ответа
+ */
 class Socket {
     private $connection;
     private $errno;

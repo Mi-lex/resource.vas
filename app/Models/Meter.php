@@ -16,6 +16,7 @@ class Meter extends Model
 
     public function __construct()
     {
+        // Основная информация о потреблении
         $this->consumption_attributes = [
             'electricity' => 
                 ['id', 'created_at', 'device_id', 'sumDirectActive'],
@@ -26,67 +27,115 @@ class Meter extends Model
         ];
     }
 
+    /**
+     * Возвращает записи потреблений, принадлежащих
+     * данному устройству
+     *
+     * @param array|string|null $attributes - информация о потрблении,
+     * которую необходимо извлечь
+     * @return HasMany - объекты потреблений устройства
+     */
     public function consumptions($attributes = null) : HasMany
     {
+        // если атрибуты не указаны, выбрать все
         $attributes = $attributes ?? '*';
 
+        // выбирает класс модели потребления согласно ти
         $model = 'App\Models\\'.ucfirst($this->type->name).'Consumption';
 
         return $this->hasMany($model, 'device_id')
             ->select($attributes);
     }
 
+    /**
+     * Выводит ежедневную информацию о расходе ресурсов
+     * (используется для построения графика)
+     * 
+     * @param integer $days_count - количество дней
+     * (предшествующих настоящему), информация о расходах
+     * которых нам необходима
+     * @return object $consumptions - объект, ключи которого - это
+     * даты дней. Значения ключей - массив, содержащий два объекта:
+     *  1) Информация о потреблении на начало дня
+     *  2) Информация о потреблении на конец дня
+     */
     public function consumptions_by_days(int $days_count = 30) : object
     {
         $meter_type = $this->type->name;
-
-        $consumptions = $this->consumptions($this->consumption_attributes[$meter_type])
+        $attributes = $this->consumption_attributes[$meter_type];
+        // извлекаем потребление данного устройства
+        $consumptions = $this->consumptions($attributes)
+            // только позднее даты: наст.время - кол-во дней
             ->where('created_at', '>=', Carbon::now()->subDays($days_count)->startOfDay())
+            // получаем коллекцию потреблений за каждый час
             ->get()
-            ->groupBy(function($item) {
-                return Carbon::parse($item->created_at)->format('d-m-Y');
+            // группируем потребления по дням
+            ->groupBy(function($consumption) {
+                return Carbon::parse($consumption->created_at)->format('d-m-Y');
             })
-            ->mapWithKeys(function ($item) {
-                return [
-                    Carbon::parse($item[0]['created_at'])->format('d-m-Y') => 
-                        [$item->first(), $item->last()]
-                ];
+            // оставляем первое и последнее потребления за день
+            ->map(function($dayly_consumption) {
+                return [$dayly_consumption->first(), $dayly_consumption->last()];
             });
 
         return $consumptions;
     }
 
-    public function consumption_by_month(string $month) : int
+    /**
+     * Определяет первое и последнее значение потребления
+     * на указанный месяц. Вовзращает разницу
+     *
+     * @param string $month - имя месяц (april, march etc)
+     * @return integer $diff - расход за месяц
+     */
+    public function month_consumption(string $month) : int
     {
         $date = new Carbon($month);
-
+        /**
+         * Т.к необходимо только число. Извлекаем информацию только об основном
+         * расходе (без дат, други параметров и.т.д)
+         */
         $main_consumption = end($this->consumption_attributes[$this->type->name]);
         
-        $last_consumption = $this->consumptions($main_consumption)
-            ->firstAfter($date->endOfMonth()->startOfDay())->take(1)->get()->first();
-
         $start_consumption = $this->consumptions($main_consumption)
-            ->firstAfter($date->startOfMonth()->startOfDay())->take(1)->get()->first();
+            ->after($date->startOfMonth()->startOfDay())->take(1)->get()->first();
+
+        $last_consumption = $this->consumptions($main_consumption)
+            ->after($date->endOfMonth()->startOfDay())->take(1)->get()->first();
 
         $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
 
         return $diff;
     }
 
+    /**
+     * Вычисляет расход ресурсов за последние дни
+     *
+     * @param integer $days - кол-во дней
+     * @return integer $diff - расход ресурсов
+     */
     public function diff_consumption(int $days) : int {
         $start_date = Carbon::now()->subDays($days);
 
         $main_consumption = end($this->consumption_attributes[$this->type->name]);
 
-        $last_consumption = $this->last_consumption($main_consumption);
         $start_consumption = $this->consumptions($main_consumption)
-            ->firstAfter($start_date)->take(1)->get()->first();
+            ->after($start_date)->take(1)->get()->first();
+        $last_consumption = $this->last_consumption($main_consumption);
 
         $diff = $last_consumption[$main_consumption] - $start_consumption[$main_consumption];
 
         return $diff > 0 ? $diff : 0;
     }
 
+    /**
+     * Определяет последнее значения счетчика
+     *
+     * @param string|array $attr - информация о потреблении
+     * @param boolean $onlyValue - только числовое значение
+     * @return object|int - объект потребления или числовое
+     * значение
+     */
     public function last_consumption($attr = null, bool $onlyValue = false)
     {
         $last_consumption = $this->consumptions($attr)
@@ -97,7 +146,7 @@ class Meter extends Model
             $last_consumption;
     }
 
-    public function full_driver_name()
+    public function full_device_name() : string
     {
         return 'Импульсный счетчик ' . $this->driver->name;
     }
@@ -107,7 +156,7 @@ class Meter extends Model
         return $this->belongsTo('App\Models\Type');
     }
 
-    public function channel()
+    public function channel() : ?string
     {
         $channel = \DB::table('meters_channels')->whereMeterId($this->id)->first();
 

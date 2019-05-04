@@ -67,8 +67,15 @@ class Oven_si9 extends Driver
         return '#' . $this->commands[$rs_port_hex][$consumption_type] ."\r";
     }
 
-    // переводит двоично-десятичное число из протокола Овен в нормальный вид
-    private function extract_int(string $ascii_str)
+    /**
+     * Переводит двоично-десятичное число из 
+     * протокола Овен в нормальный вид
+     *
+     * @param string $ascii_str десятичное число в виде
+     * бинарной строки
+     * @return int $result - распаршенное десятичное число
+     */
+    private function extract_int(string $ascii_str) : int
     {
         $result = 0;
         
@@ -80,10 +87,16 @@ class Oven_si9 extends Driver
         return $result;
     }
 
-    // Извлекает время наработки
+    /**
+     * Извлекает время наработки устройства
+     *
+     * @param string $ascii_str - бинарная строка
+     * @return array $time - массив времени наработки
+     * устройства
+     */
     private function parse_date(string $ascii_str) : array
     {
-        $time = array();
+        $time = [];
         $time["miliseconds"] = $this->extract_int(substr($ascii_str, 19, 2));
         $time["seconds"] = $this->extract_int(substr($ascii_str, 17, 2));
         $time["minutes"] = $this->extract_int(substr($ascii_str, 15, 2));
@@ -92,7 +105,14 @@ class Oven_si9 extends Driver
         return $time;
     }
 
-    // Извлекает число из псведо-float значения
+    /**
+     * Парсит псевдо-float значение в виде 
+     * бинарной строки в нормальный вид
+     *
+     * @param string $ascii_string - псевдо-float
+     * значение в виде бинрной строки
+     * @return integer
+     */
     protected function parse_data(string $ascii_string) : int
     {
         $exponent_ascii = substr($ascii_string, 9, 1);
@@ -107,9 +127,20 @@ class Oven_si9 extends Driver
         return $mantissa * pow(10, 0 - $exponent);
     }
 
-    private function write_data(string $consumption,
+    /**
+     * Записывает значение расхода
+     * водоснобжения в свойство
+     * объекта
+     *
+     * @param string $consumption - вид потребления
+     * @param callable $parser - фукнция для парсинга
+     * полученных данных
+     * @return void
+     */
+    private function write_consumption(string $consumption,
         callable $parser) : void
     {
+        // для данного устройства ответ не парсится внутри функции make_request
         $answer = $this->make_request($consumption, true, false);
 
         if ($answer) {
@@ -121,13 +152,18 @@ class Oven_si9 extends Driver
         }
     }
 
+    /**
+     * Собирает все данные о потреблении
+     *
+     * @return void
+     */
     public function collect_data()
     {
         // Записываем общее потребление
-        $this->write_data('consumption_amount', [$this, 'parse_data']);
+        $this->write_consumption('consumption_amount', [$this, 'parse_data']);
 
         // Запсываем показание времени наработки
-        // $this->write_data('totalTimer', [$this, 'parse_date']); Don't need it yet
+        // $this->write_data('totalTimer', [$this, 'parse_date']); // Don't need it yet
 
         return $this->consumption_record;
     }
