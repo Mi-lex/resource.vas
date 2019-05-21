@@ -371,6 +371,17 @@ class MetersTableSeeder extends Seeder
                 'serial_number' => "123456",
                 'server_ip' => "10.155.168.49",
                 'server_port' => "4001",
+                'rs_port' => 58
+              ],
+              [
+                'name' => "Тепловой счетчик ИТП ГП-5",
+                'type_id' => '3',
+                'building_id' => 1,
+                'active' => false,
+                'description' => "Тепловой счетчик ИТП ГП-5",
+                'model' => "Логика СПТ943",
+                'server_ip' => "10.154.91.101",
+                'server_port' => "23",
               ],
         ];
 

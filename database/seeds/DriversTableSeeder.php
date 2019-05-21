@@ -31,6 +31,9 @@ class DriversTableSeeder extends Seeder
                 'name' => 'pulsar_2m'
                 // 23, 25
             ],
+            [
+                'name' => 'logika_943'
+            ],
         ];
 
         foreach ($drivers as $driver) {
