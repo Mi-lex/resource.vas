@@ -29,7 +29,9 @@ class Pulsar_2m extends Driver
             // чтение значения потреблений
             'consumption_amount'  => '01',
             // чтение значения среднего потребления
-            'current_consumption'  => '3E'
+            'current_consumption'  => '3E',
+            // чтение значения времени нараотки
+            'total_timer_command' => '04'
         ];
 
         $this->consumptions = ['consumption_amount', 'current_consumption'];
@@ -150,14 +152,14 @@ class Pulsar_2m extends Driver
                  * Эта команда отсутствует в предыдущем переборе команд, 
                  * потому что нужен другой парсер для даты
                  */
-                $totalTimerCommand = '04';
+                // $totalTimerCommand = '04';
 
                 /**
                  * Для всех команд кроме этой используется маска
                  * Поэтому обнуляем значение mask
                  */
                 // $this->mask = '';
-                // $this->write_data($totalTimerCommand, [$this, 'parse_date']);
+                // $this->write_data('total_timer_comand', [$this, 'parse_date']);
 
                 return $this->consumption_record;
             }
