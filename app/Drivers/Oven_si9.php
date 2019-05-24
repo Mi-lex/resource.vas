@@ -19,7 +19,7 @@ class Oven_si9 extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'udp';
+        $this->connection_params['protocol'] = 'tcp';
 
         /**
          * Протокол Овен бессмысленно усложнён, расчёт всех команд - боль,
@@ -64,7 +64,7 @@ class Oven_si9 extends Driver
     {
         $rs_port_hex = $this->device->rs_port;
 
-        return '#' . $this->commands[$rs_port_hex][$consumption_type] ."\r";
+        return '#' . $this->commands[$rs_port_hex][$consumption_type] . "\r";
     }
 
     /**
@@ -75,10 +75,10 @@ class Oven_si9 extends Driver
      * бинарной строки
      * @return int $result - распаршенное десятичное число
      */
-    private function extract_int(string $ascii_str) : int
+    private function extract_int(string $ascii_str): int
     {
         $result = 0;
-        
+
         for ($pos = 1; $pos <= strlen($ascii_str); $pos++) {
             $digit = ord(substr($ascii_str, 0 - $pos, 1)) - 71;
             $result += $digit * pow(10, $pos - 1);
@@ -94,7 +94,7 @@ class Oven_si9 extends Driver
      * @return array $time - массив времени наработки
      * устройства
      */
-    private function parse_date(string $ascii_str) : array
+    private function parse_date(string $ascii_str): array
     {
         $time = [];
         $time["miliseconds"] = $this->extract_int(substr($ascii_str, 19, 2));
@@ -113,7 +113,7 @@ class Oven_si9 extends Driver
      * значение в виде бинрной строки
      * @return integer
      */
-    protected function parse_data(string $ascii_string) : int
+    protected function parse_data(string $ascii_string): float
     {
         $exponent_ascii = substr($ascii_string, 9, 1);
 
@@ -137,14 +137,15 @@ class Oven_si9 extends Driver
      * полученных данных
      * @return void
      */
-    private function write_consumption(string $consumption,
-        callable $parser) : void
-    {
+    private function write_consumption(
+        string $consumption,
+        callable $parser
+    ): void {
         // для данного устройства ответ не парсится внутри функции make_request
         $answer = $this->make_request($consumption, true, false);
 
         if ($answer) {
-            $this->consumption_record[$consumption] = $parser($answer);
+            $this->consumption_record[$consumption] = round($parser($answer), 2);
 
             Log::info("Успешно получены показания: $consumption");
         } else {
