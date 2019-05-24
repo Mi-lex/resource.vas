@@ -18,12 +18,12 @@ class Meter extends Model
     {
         // Основная информация о потреблении
         $this->consumption_attributes = [
-            'electricity' => 
-                ['id', 'created_at', 'device_id', 'sumDirectActive'],
-            'water' => 
-                ['id', 'created_at', 'device_id', 'consumption_amount'],
-            'heat' => 
-                ['id', 'created_at', 'device_id', 'thermal_energy']
+            'electricity' =>
+            ['id', 'created_at', 'device_id', 'sumDirectActive'],
+            'water' =>
+            ['id', 'created_at', 'device_id', 'consumption_amount'],
+            'heat' =>
+            ['id', 'created_at', 'device_id', 'thermal_energy']
         ];
     }
 
@@ -35,13 +35,13 @@ class Meter extends Model
      * которую необходимо извлечь
      * @return HasMany - объекты потреблений устройства
      */
-    public function consumptions($attributes = null) : HasMany
+    public function consumptions($attributes = null): HasMany
     {
         // если атрибуты не указаны, выбрать все
         $attributes = $attributes ?? '*';
 
         // выбирает класс модели потребления согласно ти
-        $model = 'App\Models\\'.ucfirst($this->type->name).'Consumption';
+        $model = 'App\Models\\' . ucfirst($this->type->name) . 'Consumption';
 
         return $this->hasMany($model, 'device_id')
             ->select($attributes);
@@ -59,7 +59,7 @@ class Meter extends Model
      *  1) Информация о потреблении на начало дня
      *  2) Информация о потреблении на конец дня
      */
-    public function consumptions_by_days(int $days_count = 30) : object
+    public function consumptions_by_days(int $days_count = 30): object
     {
         $meter_type = $this->type->name;
         $attributes = $this->consumption_attributes[$meter_type];
@@ -70,11 +70,11 @@ class Meter extends Model
             // получаем коллекцию потреблений за каждый час
             ->get()
             // группируем потребления по дням
-            ->groupBy(function($consumption) {
+            ->groupBy(function ($consumption) {
                 return Carbon::parse($consumption->created_at)->format('d-m-Y');
             })
             // оставляем первое и последнее потребления за день
-            ->map(function($dayly_consumption) {
+            ->map(function ($dayly_consumption) {
                 return [$dayly_consumption->first(), $dayly_consumption->last()];
             });
 
@@ -88,7 +88,7 @@ class Meter extends Model
      * @param string $month - имя месяц (april, march etc)
      * @return integer $diff - расход за месяц
      */
-    public function month_consumption(string $month) : int
+    public function month_consumption(string $month): int
     {
         $date = new Carbon($month);
         /**
@@ -96,7 +96,7 @@ class Meter extends Model
          * расходе (без дат, други параметров и.т.д)
          */
         $main_consumption = end($this->consumption_attributes[$this->type->name]);
-        
+
         $start_consumption = $this->consumptions($main_consumption)
             ->after($date->startOfMonth()->startOfDay())->take(1)->get()->first();
 
@@ -114,7 +114,8 @@ class Meter extends Model
      * @param integer $days - кол-во дней
      * @return integer $diff - расход ресурсов
      */
-    public function diff_consumption(int $days) : int {
+    public function diff_consumption(int $days): int
+    {
         $start_date = Carbon::now()->subDays($days);
 
         $main_consumption = end($this->consumption_attributes[$this->type->name]);
@@ -138,55 +139,64 @@ class Meter extends Model
      */
     public function last_consumption($attr = null, bool $onlyValue = false)
     {
+        $this->write_actual_consumption();
+
         $last_consumption = $this->consumptions($attr)
             ->latest()->first();
         $consumption_type = end($this->consumption_attributes[$this->type->name]);
 
-        return $onlyValue ? $last_consumption[$consumption_type] : 
-            $last_consumption;
+        return $onlyValue ? $last_consumption[$consumption_type] : $last_consumption;
     }
 
-    public function full_device_name() : string
+    public function full_device_name(): string
     {
         return 'Импульсный счетчик ' . $this->driver->name;
     }
 
-    public function type() : BelongsTo
+    public function type(): BelongsTo
     {
         return $this->belongsTo('App\Models\Type');
     }
 
-    public function channel() : ?string
+    public function channel(): ?string
     {
         $channel = \DB::table('meters_channels')->whereMeterId($this->id)->first();
 
         return $channel->channel;
     }
 
-    public function driver() : BelongsTo
+    public function driver(): BelongsTo
     {
         return $this->belongsTo('App\Models\Driver');
     }
 
     public function driver_instance()
     {
-        $driver_class = 'App\Drivers\\'.ucfirst($this->driver->name);
+        $driver_class = 'App\Drivers\\' . ucfirst($this->driver->name);
 
         $driver = new $driver_class($this);
 
         return $driver;
     }
 
-    public function scopeOfType($query, string $type) : Builder
+    public function scopeOfType($query, string $type): Builder
     {
         return $query
-        ->select('meters.*')
-        ->leftJoin('types', 'meters.type_id', '=', 'types.id')
+            ->select('meters.*')
+            ->leftJoin('types', 'meters.type_id', '=', 'types.id')
             ->where('types.name', '=', $type);
     }
 
-    public function scopeActive($query) : Builder
+    public function scopeActive($query): Builder
     {
         return $query->whereActive(true);
+    }
+
+    private function write_actual_consumption()
+    {
+        $driver = $this->driver_instance();
+
+        $driver->collect_data();
+        $driver->write_to_db();
     }
 }
