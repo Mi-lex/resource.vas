@@ -9,8 +9,8 @@ class MetersController extends Controller
     public function show(Meter $meter)
     {
         $current_consumption = $meter->last_consumption();
-        
-        return view('meters.'.$meter->type->name, compact('meter', 'current_consumption'));
+
+        return view('meters.' . $meter->type->name, compact('meter', 'current_consumption'));
     }
 
     public function consumption(Meter $meter, int $days)
@@ -22,15 +22,17 @@ class MetersController extends Controller
 
     public function last_electricity_consumption(Meter $meter)
     {
-        $columns = ['id', 'created_at', 'device_id', 't1DirectActive', 
-            't1DirectReactive', 't2DirectActive', 't2DirectReactive'];
+        $columns = [
+            'id', 'created_at', 'device_id', 't1DirectActive',
+            't1DirectReactive', 't2DirectActive', 't2DirectReactive'
+        ];
 
         $last_consumption = $meter
             ->consumptions()
             ->select($columns)
             ->latest()
             ->first();
-        
+
         return response()->json($last_consumption);
     }
 
@@ -41,6 +43,6 @@ class MetersController extends Controller
 
     public function monitoring(Meter $meter)
     {
-        return view('monitoring.'.$meter->type->name, compact('meter'));
+        return view('monitoring.' . $meter->driver->name, compact('meter'));
     }
 }

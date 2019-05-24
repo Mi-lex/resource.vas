@@ -207,8 +207,10 @@
                                                 {{ $water_meter->model }}
                                             </li>
                                         </ul>
-                                        <div class="panel-footer">Сведения получены
-                                            {{ $water_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
+                                        <div class="panel-footer">
+                                            @isset($water_meter->last_consumption()->created_at)
+                                                Сведения получены {{ $water_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
+                                            @endisset
                                         </div>
                                     </div>
                                 </div>
