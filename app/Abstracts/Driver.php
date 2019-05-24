@@ -6,7 +6,7 @@ use App\Socket\Socket;
 use Illuminate\Support\Facades\Log;
 
 abstract class Driver
-{  
+{
     // прибор учета
     protected $device;
     // параметры соединения с устройством

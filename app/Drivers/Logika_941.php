@@ -12,8 +12,12 @@ class Logika_941 extends Driver
 {
     private $commands;
 
-    public function __construct()
+    public function __construct($device)
     {
+        parent::__construct($device);
+
+        $this->connection_params['protocol'] = 'tcp';
+
         $this->commands = [
             'open_connection' => '3F00000000',
             // чтение тотальной тепловой энергии
@@ -26,12 +30,12 @@ class Logika_941 extends Driver
         ];
     }
 
-    private function get_clean_answer($answer): string
+    protected function get_clean_answer($answer): string
     {
         return substr($answer, 2, -4);
     }
 
-    private function crc_mbus(string $msg): string
+    protected function crc_mbus(string $msg): string
     {
         $buffer = pack('H*', $msg);
 
@@ -51,7 +55,7 @@ class Logika_941 extends Driver
         return $result;
     }
 
-    private function prepare_command($str_command): string
+    protected function prepare_command($str_command): string
     {
         $command_len = strtoupper(dechex(strlen($str_command) / 2));
 
@@ -62,11 +66,11 @@ class Logika_941 extends Driver
         // $address - $this->device->rs_port ?? Првоерить. найти устройство с $adress = 58
         $str_command = $this->device->rs_port . "900000" . $command_len . $str_command;
 
-        $str_command .= CRC16_xmodem($str_command);
+        $MAGIC_NUMBER = 10;
 
-        $hex_command = pack("H*", "10" . $str_command);
+        $str_command .= $this->crc_mbus($str_command);
 
-        return $hex_command;
+        return $MAGIC_NUMBER . $str_command;
     }
 
     private function open_connection(): bool
@@ -75,15 +79,16 @@ class Logika_941 extends Driver
 
         $command = $this->commands['open_connection'];
 
-        $hex_command = $this->prepare_command($command);
+        $pr_command = $this->prepare_command($command);
 
-        $hex_command = $prefix . $hex_command;
+        $pr_command = $prefix . $pr_command;
 
+        $hex_command = pack("H*", $pr_command);
         // !!здесь я убираю приготовление команды, т.к. уже самостоятельно
         // воспользовался командой prepare_command и добавил приставку
         $response = $this->make_request($hex_command, false, true);
 
-        return boolvar($response);
+        return boolval($response);
     }
 
     private function calculate_value(string $data, string $type)
@@ -130,7 +135,8 @@ class Logika_941 extends Driver
     {
         $result = [];
         // извлекаем полное полубайт полезной нагрузки
-        $total_length = 2 * (hexdec(substr($str, 12, 2) + substr($str, 10, 2))) - 2;
+        $total_length = 2 * (hexdec(substr($str, 10, 2)) + hexdec(substr($str, 12, 2))) - 2;
+
         // извлекаем полезную нагрузку
         $packet_data = substr($str, 16, $total_length);
         $parse_start = 0;
@@ -167,18 +173,22 @@ class Logika_941 extends Driver
 
         $command = $this->commands['read_params'];
 
-        $response = $this->make_request($command);
+        $pr_command = $this->prepare_command($command);
+
+        $hex_command = pack("H*", $pr_command);
+
+        $response = $this->make_request($hex_command, false);
 
         $parsed_response = $this->parse_multiple($response);
 
         foreach ($param_names as $i => $param_name) {
-            $this->consumption_record[$param_name] = $parsed_response[$i];
+            $this->consumption_record[$param_name] = round($parsed_response[$i], 3);
         }
         // Почему ?
         $this->consumption_record['sn'] = $this->consumption_record['sn'] - hexdec("EE000000");
     }
 
-    private function collect_data()
+    public function collect_data()
     {
         if ($this->open_connection()) {
             Log::info('Канал связи открыт');
@@ -190,5 +200,19 @@ class Logika_941 extends Driver
             Log::error('Канал связи не открыт.');
             return false;
         }
+    }
+
+    /**
+     * На данный момент из параметров прибора
+     * только потребление, поэтому эту функцию я оставляю,
+     * чтобы не нарушать структуры
+     *
+     * @return void
+     */
+    public function write_params()
+    {
+        $params = $this->collect_data();
+
+        return $params;
     }
 }
