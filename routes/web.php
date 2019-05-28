@@ -64,4 +64,6 @@ Route::get('/meters/write/{type}', 'DriversController@write');
  *     13       id: 19, name: "ВУ-6 ГП-5 хозбытовая",
  */
 
+Route::post('/report', 'ReportController@show');
 
+Route::get('/test/oven30', 'DriversController@testOven30');

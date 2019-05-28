@@ -145,9 +145,9 @@ class Logika_941 extends Driver
         // в цикле пока счётчик остатка не достигнет
         while ($parse_start < $total_length) {
             // logWrite($parse_start." смещение");
+            $type = substr($packet_data, $parse_start, 2);
             $data_length = 2 * hexdec(substr($packet_data, $parse_start + 2, 2));
             // logWrite($data_length." длина данных в полубайтах");
-            $type = substr($packet_data, $parse_start, 2);
             $data = substr($packet_data, $parse_start + 4, $data_length);
             // logWrite(nice_hex_string($data)." данные");
             $value = $this->calculate_value($data, $type);

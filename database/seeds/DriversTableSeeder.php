@@ -14,8 +14,8 @@ class DriversTableSeeder extends Seeder
         $drivers = [
             [
                 'name' => 'mercury_230'
-            ],
                 // 2 - 8
+            ],
             [
                 'name' => 'impis_12'
                 // 19, 20, 21 - пока не работают
@@ -25,14 +25,17 @@ class DriversTableSeeder extends Seeder
             ],
             [
                 'name' => 'oven_si9'
-            ],
                 // 9
+            ],
             [
                 'name' => 'pulsar_2m'
                 // 23, 25
             ],
             [
                 'name' => 'logika_943'
+            ],
+            [
+                'name' => 'oven_si30'
             ],
         ];
 

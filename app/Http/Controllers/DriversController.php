@@ -44,12 +44,21 @@ class DriversController extends Controller
                 if ($result) {
                     $driver->write_to_db();
 
-                    Log::info(ucfirst($meter->type->name).' consumption written successfully');
+                    Log::info(ucfirst($meter->type->name) . ' consumption written successfully');
                 } else {
                     Log::error('The consumption wasnt collected. There must be something wrong with connection');
                 }
             });
 
-        return 'Done';  
+        return 'Done';
+    }
+
+    public function testOven30()
+    {
+        $meter = Meter::whereName('ОВЕН')->take(1)->get()->first();
+
+        $oven = $meter->driver_instance();
+
+        $oven->collect_data();
     }
 }

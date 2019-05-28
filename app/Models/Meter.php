@@ -139,7 +139,7 @@ class Meter extends Model
      */
     public function last_consumption($attr = null, bool $onlyValue = false)
     {
-        $this->write_actual_consumption();
+        // $this->write_actual_consumption();
 
         $last_consumption = $this->consumptions($attr)
             ->latest()->first();
