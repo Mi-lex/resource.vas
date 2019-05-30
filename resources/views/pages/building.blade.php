@@ -48,7 +48,7 @@
 
                             <dt>Приборов учёта</dt>
                             <dd>
-                                {{ $building->meters()->count() }}шт
+                                {{ $building->meters()->active()->count() }}шт
                             </dd>
 
                             <dt>Максимальная выделенная мощность</dt>

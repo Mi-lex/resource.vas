@@ -111,7 +111,7 @@
                         <i class="icon fa fa-tachometer"></i>
                         Приборов учёта:
                         <span class="buildingMetersCount">
-                            {{ $building->meters()->count() }}
+                            {{ $building->meters()->active()->count() }}
                         </span>
                     </li>
                     <li class="list-group-item list-group-item-info">
