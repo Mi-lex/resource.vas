@@ -86,7 +86,7 @@ function getChartData(consumptionObject) {
             consumptionObject[day][0][consumptionName]).toFixed(2);
 
         // push that difference into the plotData
-        plotData.push(diff);
+        plotData.push(diff > 0 ? diff : 0);
     });
 
     return [
