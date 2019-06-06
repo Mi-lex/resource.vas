@@ -74,155 +74,149 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <div class="col-xs-12">
-                <div class="box box-warning box-solid">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-flash"></i> Приборы учёта электроэнергии</h3>
-    
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                        <!-- /.box-tools -->
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        @if ($building->special_meters('electricity')->active()->exists())
-                            @foreach ($building->special_meters('electricity')->active()->get() as $electricity_meter)
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="panel panel-success">
-                                        <div class="panel-heading">
-                                            <a href="{{ url('/meters/'.$electricity_meter->id) }}">
-                                                {{ $electricity_meter->name }}
-                                            </a>
-                                        </div>
-                                        <div class="panel-body">
-                                            <p>
-                                                {{ $electricity_meter->description }}
-                                            </p>
-                                        </div>
-                                        <ul class="list-group">
-                                            <li class="list-group-item">Расход за месяц:
-                                                {{ $electricity_meter->diff_consumption(30) }}
-                                            <li class="list-group-item">Показания (день):
-                                                {{ $electricity_meter->last_consumption()->t1DirectActive }}
-                                            <li class="list-group-item">Показания (ночь):
-                                                {{ $electricity_meter->last_consumption()->t2DirectActive }}
-                                            <li class="list-group-item">Модель:
-                                                {{ $electricity_meter->model }}
-                                            </li>
-                                        </ul>
-                                        <div class="panel-footer">Сведения получены
-                                            {{ $electricity_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
-                                        </div>
+            <div class="col-md-12">
+                <!-- Custom Tabs -->
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" class="bg-yellow color-palette"><i
+                                    class="fa fa-flash"></i> Приборы учёта электроэнергии</a></li>
+                        <li><a href="#tab_2" data-toggle="tab" class="bg-red color-palette"><i class="fa fa-fire"></i> Приборы
+                                учёта тепловой энергии</a></li>
+                        <li><a href="#tab_3" data-toggle="tab" class="bg-aqua color-palette"><i class="fa fa-tint"></i> Холодное
+                                водоснабжение</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active " id="tab_1">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="box-body">
+                                        @if ($building->special_meters('electricity')->active()->exists())
+                                            @foreach ($building->special_meters('electricity')->active()->get() as $electricity_meter)
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="box box-warning box-solid">
+                                                        <div class="box-header with-border">
+                                                            <a href="{{ url('/meters/'.$electricity_meter->id) }}">
+                                                                {{ $electricity_meter->name }}
+                                                            </a>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <p>
+                                                                {{ $electricity_meter->description }}
+                                                            </p>
+                                                        </div>
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">Расход за месяц:
+                                                                {{ $electricity_meter->diff_consumption(30) }}
+                                                            <li class="list-group-item">Показания (день):
+                                                                {{ $electricity_meter->last_consumption()->t1DirectActive }}
+                                                            <li class="list-group-item">Показания (ночь):
+                                                                {{ $electricity_meter->last_consumption()->t2DirectActive }}
+                                                            <li class="list-group-item">Модель:
+                                                                {{ $electricity_meter->model }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="panel-footer">Сведения получены
+                                                            {{ $electricity_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>В выбранном здании нет подключённых счётчиков данного типа ресурсов</p>
+                                        @endif
                                     </div>
+                                    <!-- /.box-body -->
                                 </div>
-                            @endforeach
-                        @else
-                            <p>"В выбранном здании нет подключённых счётчиков данного типа ресурсов"</p>
-                        @endif
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-            </div>
-            <div class="col-xs-12">
-                <div class="box box-danger box-solid">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-fire"></i> Приборы учёта тепловой энергии</h3>
-    
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
+                            </div>
                         </div>
-                        <!-- /.box-tools -->
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        @if ($building->special_meters('heat')->active()->exists())
-                            @foreach ($building->special_meters('heat')->active()->get() as $heat_meter)
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="panel panel-success">
-                                        <!-- Default panel contents -->
-                                        <div class="panel-heading">
-                                            <a href="{{ url('/meters/'.$heat_meter->id) }}">
-                                                {{ $heat_meter->name }}
-                                            </a>
-                                        </div>
-                                        <div class="panel-body">
-                                            <p>
-                                                {{ $heat_meter->description }}
-                                            </p>
-                                        </div>
-                                        <ul class="list-group">
-                                            <li class="list-group-item">Расход за месяц: - ГКал</li>
-                                            <li class="list-group-item">Показания: - ГКал</li>
-                                            <li class="list-group-item">Модель: -</li>
-                                        </ul>
-                                        <div class="panel-footer">Состояние: неизвестно</div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="box-body">
+                                        @if ($building->special_meters('heat')->active()->exists())
+                                            @foreach ($building->special_meters('heat')->active()->get() as $heat_meter)
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="box box-danger box-solid">
+                                                        <div class="box-header with-border">
+                                                            <a href="{{ url('/meters/'.$heat_meter->id) }}">
+                                                                {{ $heat_meter->name }}
+                                                            </a>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <p>
+                                                                {{ $heat_meter->description }}
+                                                            </p>
+                                                        </div>
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">Расход за месяц: - ГКал</li>
+                                                            <li class="list-group-item">Показания: - ГКал</li>
+                                                            <li class="list-group-item">Модель: -</li>
+                                                        </ul>
+                                                        <div class="panel-footer">Сведения получены
+                                                            {{ $heat_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>В выбранном здании нет подключённых счётчиков данного типа ресурсов</p>
+                                        @endif
                                     </div>
+                                    <!-- /.box-body -->
                                 </div>
-                            @endforeach
-                        @else
-                            <p>"В выбранном здании нет подключённых счётчиков данного типа ресурсов"</p>
-                        @endif
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-            </div>
-            <div class="col-xs-12">
-                <div class="box box-info box-solid">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-tint"></i> Холодное водоснабжение</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
+                            </div>
+                            <!-- /.tab-pane -->
                         </div>
-                        <!-- /.box-tools -->
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        @if ($building->special_meters('water')->active()->exists())
-                            @foreach ($building->special_meters('water')->active()->get() as $water_meter)
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="panel panel-success">
-                                        <div class="panel-heading">
-                                            <a href="{{ url('/meters/'.$water_meter->id) }}">
-                                                {{ $water_meter->name }}
-                                            </a>
-                                        </div>
-                                        <div class="panel-body">
-                                            <p>
-                                                {{ $water_meter->description }}
-                                            </p>
-                                        </div>
-                                        <ul class="list-group">
-                                            <li class="list-group-item">Расход за месяц:
-                                                {{ $water_meter->diff_consumption(30) }}
-                                            <li class="list-group-item">Показания:
-                                                {{ $water_meter->last_consumption()['consumption_amount'] }}
-                                            <li class="list-group-item">Модель:
-                                                {{ $water_meter->model }}
-                                            </li>
-                                        </ul>
-                                        <div class="panel-footer">
-                                            @isset($water_meter->last_consumption()->created_at)
-                                                Сведения получены {{ $water_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
-                                            @endisset
-                                        </div>
+                        <div class="tab-pane" id="tab_3">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="box-body">
+                                        @if ($building->special_meters('water')->active()->exists())
+                                            @foreach ($building->special_meters('water')->active()->get() as $water_meter)
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="box box-info box-solid">
+                                                        <div class="box-header with-border">
+                                                            <a href="{{ url('/meters/'.$water_meter->id) }}">
+                                                                {{ $water_meter->name }}
+                                                            </a>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <p>
+                                                                {{ $water_meter->description }}
+                                                            </p>
+                                                        </div>
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">Расход за месяц:
+                                                                {{ $water_meter->diff_consumption(30) }}
+                                                            <li class="list-group-item">Показания:
+                                                                {{ $water_meter->last_consumption()['consumption_amount'] }}
+                                                            <li class="list-group-item">Модель:
+                                                                {{ $water_meter->model }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="panel-footer">Сведения получены
+                                                            {{ $water_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>В выбранном здании нет подключённых счётчиков данного типа ресурсов</p>
+                                        @endif
                                     </div>
+                                    <!-- /.box-body -->
                                 </div>
-                            @endforeach
-                        @else
-                            <p>"В выбранном здании нет подключённых счётчиков данного типа ресурсов"</p>
-                        @endif
+                            </div>
+                        </div>
                     </div>
-                    <!-- /.box-body -->
+                    <!-- /.tab-content-->
                 </div>
+                <!-- nav-tabs-custom -->
             </div>
+            <!-- col -->
         </div>
+        <!-- /row -->
     </section>
     <!-- /.content -->
 @endsection

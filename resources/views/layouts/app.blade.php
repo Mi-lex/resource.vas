@@ -42,8 +42,8 @@
                 </div>
             </div>
                 <a data-fancybox data-src="#hidden-content" href="javascript:;">
-                    Разработчики
-                </a>;
+                    Разработчики ©
+                </a>
         </footer>
     </div>
     <!-- ./wrapper -->
