@@ -246,7 +246,7 @@ class Mercury_230 extends Driver
 
     public function collect_data()
     {
-        $this->connection_wrapper(function() {
+        $this->connection_wrapper(function () {
             // Записываем показатели счетчика в свойство объекта
             $this->write_consumption();
         });
@@ -262,16 +262,16 @@ class Mercury_230 extends Driver
      * @param string $param_str строка шестнадцатеричных данных
      * @return array массив смысловых блоков
      */
-    private function parse_param(string $param_str) : array
+    private function parse_param(string $param_str): array
     {
         // удаляем первые два элемента, преобразуем строку в массив
         $param_arr = str_split(substr($param_str, 2), 6);
 
-        $parser = function($el) {
+        $parser = function ($el) {
             if (strlen($el) < 6) {
                 return $el;
             } else {
-                return substr($el, 0, 2).substr($el, 4, 2).substr($el, 2, 2);
+                return substr($el, 0, 2) . substr($el, 4, 2) . substr($el, 2, 2);
             }
         };
         // меняем порядок символов в элементах согласно протоколу
@@ -292,7 +292,7 @@ class Mercury_230 extends Driver
      * о параметре, команде для его получения и т.д.
      * @return array $result  массив посчитанных параметров
      */
-    private function get_param(array $command) : array
+    private function get_param(array $command): array
     {
         $unparsed_param = $this->make_request($command['operation']);
 
@@ -320,7 +320,7 @@ class Mercury_230 extends Driver
 
     public function write_params()
     {
-        $this->connection_wrapper(function() {
+        $this->connection_wrapper(function () {
             // Записываем показатели счетчика в свойство объекта
             foreach ($this->params_commands as $command) {
                 $params = $this->get_param($command);

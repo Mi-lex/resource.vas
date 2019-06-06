@@ -24,14 +24,14 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body" style="display: none">
-                    <form class="form-horizontal" id="reportForm" action="/report" method="POST">
+                    <form class="form-horizontal" id="reportForm" action="/report_object" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="year" class="col-sm-2 control-label">Год</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="year" id="year">
-                                    <option value="2018">2019</option>
-                                    <option value="2017">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2018">2018</option>
                                 </select>
                             </div>
                         </div>
@@ -39,12 +39,18 @@
                             <label for="month" class="col-sm-2 control-label">Месяц</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="month" id="month">
-                                    <option value="01">Январь</option>
-                                    <option value="02">Февраль</option>
-                                    <option value="03">Март</option>
-                                    <option value="04">Апрель</option>
-                                    <option value="05">Май</option>
-                                    <option value="06" selected>Июнь</option>
+                                    <option value="1">Январь</option>
+                                    <option value="2">Февраль</option>
+                                    <option value="3">Март</option>
+                                    <option value="4">Апрель</option>
+                                    <option value="5" selected>Май</option>
+                                    <option value="6">Июнь</option>
+                                    <option value="7">Июль</option>
+                                    <option value="8">Август</option>
+                                    <option value="9">Сентябрь</option>
+                                    <option value="10">Октябрь</option>
+                                    <option value="11">Ноябрь</option>
+                                    <option value="12">Декабрь</option>
                                 </select>
                             </div>
                         </div>
@@ -56,9 +62,7 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="divisionName" value="Военная академия связи">
-                        <input type="hidden" name="cityName" value="военный городок №123">
-                        <input type="hidden" name="reportJson" id="reportJson">
+                        <input type="hidden" name="object_id" value="{{ $object->id }}">
                     </form>
                 </div>
                 <!-- /.box-body -->
@@ -199,4 +203,8 @@
     </style>
 </section>
 <!-- /.content -->
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('js/pages/object.js') }}"></script>
 @endsection

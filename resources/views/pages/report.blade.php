@@ -1,3 +1,8 @@
+@php
+    extract($report_obj);
+    extract($report);
+@endphp
+
 <html>
 
 <head>
@@ -95,62 +100,50 @@
         <button type="button" onclick="window.print()"> Отправить на печать </button>
     </div>
     <div class="container">
-        <div class="control">
-            <a href="javascript: history.back()" style="position: fixed; left: 15px; top: 15px; padding: 15px 15px; color: white; background: #ccc;">
-                Отставить
-            </a>
-            <button type="button" onclick="window.print()"> Отправить на печать </button>
-        </div>
-        <div class="container">
-            <h1>
-                <b>СПРАВКА</b><br>о расходе энергоресурсов в<br><span class="field">{{ $report['divisionName'] }}</span><br>за 
-                <span class="field">{{ $report['monthName'] }}</span> месяц <span class="field">
-                    {{ $report['year'] }}</span> года<br><span class="field">{{ $report['cityName'] }}</span>
-            </h1>
-            <table>
-                <thead>
-                    <tr>
-                        <td>Наименование ресурса</td>
-                        <td>Единица измерения</td>
-                        <td>Показания на начало периода</td>
-                        <td>Показания на конец периода</td>
-                        <td>Расход</td>
-                        <td>Тариф</td>
-                        <td>Начислено, руб</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Электроэнергия</td>
-                        <td>кВт/ч</td>
-                        <td>{{ $report_object['electricity']['start'] }}</td>
-                        <td>{{ $report_object['electricity']['end'] }}</td>
-                        <td>{{ $report_object['electricity']['diff'] }}</td>
-                        <td>{{ $report_object['electricity']['tarif'] }}</td>
-                        <td>{{ $report_object['electricity']['cost']['str'] }}</td>
-                    </tr>
-                    <tr>
-                        <td>Холодная вода</td>
-                        <td>м<sup>3</sup></td>
-                        <td>{{ $report_object['water']['start'] }}</td>
-                        <td>{{ $report_object['water']['end'] }}</td>
-                        <td>{{ $report_object['water']['diff'] }}</td>
-                        <td>{{ $report_object['water']['tarif'] }}</td>
-                        <td>{{ $report_object['water']['cost']['str'] }}</td>
-                    </tr>
-                    <tr>
-                        <td>Тепловая энергия</td>
-                        <td>ГКалл</td>
-                        <td>{{ $report_object['heat']['start'] }}</td>
-                        <td>{{ $report_object['heat']['end'] }}</td>
-                        <td>{{ $report_object['heat']['diff'] }}</td>
-                        <td>{{ $report_object['heat']['tarif'] }}</td>
-                        <td>{{ $report_object['heat']['cost']['str'] }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p><strong>ИТОГО:</strong> {{ $report_obj['total_str'] }} </p>
-        </div>
+        <h1><b>СПРАВКА</b><br>о расходе энергоресурсов в<br>"<span class="field">{{ $divisionName }}</span>"<br>за <span class="field">{{ $monthName }}</span> месяц <span class="field">{{ $year }}</span> года<br><span class="field">{{ $cityName }}</span></h1>
+        <table>
+            <thead>
+                <tr>
+                    <td>Наименование ресурса</td>
+                    <td>Единица измерения</td>
+                    <td>Показания на начало периода</td>
+                    <td>Показания на конец периода</td>
+                    <td>Расход</td>
+                    <td>Тариф</td>
+                    <td>Начислено, руб</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Электроэнергия</td>
+                    <td>кВт/ч</td>
+                    <td>{{ $electricity['start'] }}</td>
+                    <td>{{ $electricity['end'] }}</td>
+                    <td>{{ $electricity['diff'] }}</td>
+                    <td>{{ $electricity['tarif'] }}</td>
+                    <td>{{ $electricity['cost_str'] }}</td>
+                </tr>
+                <tr>
+                    <td>Холодная вода</td>
+                    <td>м<sup>3</sup></td>
+                    <td>{{ $water['start'] }}</td>
+                    <td>{{ $water['end'] }}</td>
+                    <td>{{ $water['diff'] }}</td>
+                    <td>{{ $water['tarif'] }}</td>
+                    <td>{{ $water['cost_str'] }}</td>
+                </tr>
+                <tr>
+                    <td>Тепловая энергия</td>
+                    <td>ГКалл</td>
+                    <td>{{ $heat['start'] }}</td>
+                    <td>{{ $heat['end'] }}</td>
+                    <td>{{ $heat['diff'] }}</td>
+                    <td>{{ $heat['tarif'] }}</td>
+                    <td>{{ $heat['cost_str'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>ИТОГО:</strong> {{ $total_str }}</p>
     </div>
 </body>
 

@@ -17,38 +17,46 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body" style="display: none">
-                    <form class="form-horizontal" action="report.php" method="post">
+                    <form class="form-horizontal" id="reportForm" action="/report" method="POST">
+                        @csrf
                         <div class="form-group">
-                            <label for="reportYear" class="col-sm-2 control-label">Год</label>
+                            <label for="year" class="col-sm-2 control-label">Год</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="report[year]" id="reportYear">
-                                    <option value="2018">2019</option>
-                                    <option value="2017">2018</option>
+                                <select class="form-control" name="year" id="year">
+                                    <option value="2019">2019</option>
+                                    <option value="2018">2018</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="reportMonth" class="col-sm-2 control-label">Месяц</label>
+                            <label for="month" class="col-sm-2 control-label">Месяц</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="report[month]" id="reportMonth">
-                                    <option value="01">Январь</option>
-                                    <option value="02">Февраль</option>
-                                    <option value="03">Март</option>
-                                    <option value="04">Апрель</option>
-                                    <option value="05">Май</option>
-                                    <option value="06" selected>Июнь</option>
+                                <select class="form-control" name="month" id="month">
+                                    <option value="1">Январь</option>
+                                    <option value="2">Февраль</option>
+                                    <option value="3">Март</option>
+                                    <option value="4">Апрель</option>
+                                    <option value="5" selected>Май</option>
+                                    <option value="6">Июнь</option>
+                                    <option value="7">Июль</option>
+                                    <option value="8">Август</option>
+                                    <option value="9">Сентябрь</option>
+                                    <option value="10">Октябрь</option>
+                                    <option value="11">Ноябрь</option>
+                                    <option value="12">Декабрь</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <div class="checkbox">
-                                    <button type="submit" class="btn btn-primary">Сформировать отчёт</button>
+                                    <button type="submit" id="makeReport" class="btn btn-primary">Сформировать
+                                        отчёт</button>
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="report[division]" value="Военная академия связи">
-                        <input type="hidden" name="report[city]" value="военный городок №123">
+                        <input type="hidden" name="divisionName" value="{{ $sector->object->name }}">
+                        <input type="hidden" name="cityName" value="{{ $sector->name }}">
                     </form>
                 </div>
                 <!-- /.box-body -->
@@ -140,4 +148,8 @@
     </div>
 </section>
 <!-- /.content -->
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('js/pages/object.js') }}"></script>
 @endsection

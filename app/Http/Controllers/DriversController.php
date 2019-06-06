@@ -22,7 +22,7 @@ class DriversController extends Controller
 
         $result = $driver->write_params();
 
-        return response()->json($result);
+        return $result;
     }
 
     /**

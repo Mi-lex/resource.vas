@@ -40,7 +40,6 @@ Route::get('/meters/{meter}/params', 'DriversController@params');
 // Request electricity devices and write their consumptions
 Route::get('/meters/write/{type}', 'DriversController@write');
 
-
 /**
  * Electricity devices
  * 
@@ -63,6 +62,8 @@ Route::get('/meters/write/{type}', 'DriversController@write');
  *     14       id: 20, name: "ВУ-6 ГП-5 пожарная",
  *     13       id: 19, name: "ВУ-6 ГП-5 хозбытовая",
  */
+
+Route::post('/report_object', 'ReportController@show_object');
 
 Route::post('/report', 'ReportController@show');
 
