@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     {{-- Fancybox css --}}
     <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
+    {{-- Icons --}}
+    <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" type="image/x-icon">
     {{-- Additional libraries or css code --}}
     @yield('libraries')
 </head>
@@ -26,15 +29,16 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
-                <b>Версия</b> 0.0.1
+                <b>Версия</b> 0.2.0
             </div>
             <strong>2018 Военная Академия Связи</strong>
             <div class="callout callout-info" style="display: none;" id="hidden-content">
                 <div class="center">
                     <p>Старший оператор научной роты: <b>ефрейтор Шадрин Д.М.</b></p>
+                    <p>Старший оператор научной роты: <b>ефрейтор Исаев И.А.</b></p>
                     <p>Оператор научной роты: <b>рядовой Иващенко Н.А.</b></p>
-                    <p>Оператор научной роты: <b>рядовой Исаев И.А.</b></p>
-                    <p>Оператор научной роты: <b>рядовой Янак А.Ф.</b></p>
+                    <p>Оператор научной роты: <b>рядовой Мишин А.А.</b></p>
+                    <p>Старший оператор научной роты: <b>ефрейтор Янак А.Ф.</b></p>
                 </div>
             </div>
                 <a data-fancybox data-src="#hidden-content" href="javascript:;">
