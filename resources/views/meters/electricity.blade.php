@@ -130,12 +130,9 @@
                 <!-- /.box-tools -->
             </div>
             <!-- /.box-header -->
+        </div> 
 
-            {{-- Implement this soon! --}}
-
-            <!-- /.box-body -->
-        </div>
-
+        {{-- График --}}
         <div class="box">
             <div class="box-header">
                 <i class="fa fa-line-chart"></i>
@@ -150,7 +147,7 @@
             <!-- /.box-body -->
         </div>
 
-
+        {{-- Расход за месяц и История показаний за месяц --}}
         <div class="box box-default collapsed-box">
             <div class="box-header with-border">
                 <i class="fa fa-hourglass-start"></i>
@@ -162,9 +159,26 @@
                 <!-- /.box-tools -->
             </div>
             <!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Расход за период</th>
+                        <th>Показания начало</th>
+                        <th>Показания конец</th>
+                    </tr>
+                    </thead>
+                    <tbody class='month-consumption-table'>
+
+                    </tbody>
+                </table>
+            </div>
             <!-- /.box-body -->
         </div>
 
+        
+        {{--
         <div class="box box-default collapsed-box">
             <div class="box-header with-border">
                 <i class="fa fa-history"></i>
@@ -177,7 +191,8 @@
                 <!-- /.box-tools -->
             </div>
             <!-- /.box-header -->
-        </div>
+        </div> 
+        --}}
 
     </section>
     <!-- /.content -->

@@ -76,7 +76,7 @@ function showChart() {
 function getChartData(consumptionObject) {
     const plotData = [];
     // Each day consists two consumption (at the start and at the end)
-    days = [...Object.keys(consumptionObject)];
+    var days = [...Object.keys(consumptionObject)];
 
     consumptionName = 'sumDirectActive';
 
@@ -187,4 +187,49 @@ function setStatusError() {
 
 function updateTimeFromSuccess() {
     $('#timeFromSuccess').text(successTime);
+}
+
+// Detailed month consumption table
+function getTableData(consumptionObject) {
+    var days = [...Object.keys(consumptionObject)];
+    var daylyConsumptions = [];
+
+    consumptionName = 'sumDirectActive';
+
+    days.forEach((day) => {
+        var daylyConsItem = {};
+
+        daylyConsItem['date'] = day;
+        daylyConsItem['start'] = consumptionObject[day][0][consumptionName];
+        daylyConsItem['end'] = consumptionObject[day][1][consumptionName];
+        daylyConsItem['diff'] = (daylyConsItem['end'] - daylyConsItem['start']).toFixed(2);
+
+        daylyConsumptions.push(daylyConsItem);
+    });
+
+    return daylyConsumptions;
+}
+
+function fullfillTable(daylyConsumptions) {
+    var container = document.createDocumentFragment();
+
+    daylyConsumptions.forEach(function(consump) {
+        var tr = document.createElement('tr');
+
+        var date = document.createElement('td');
+        var diff = document.createElement('td');
+        var start = document.createElement('td');
+        var end = document.createElement('td');
+
+        date.innerText = consump.created_at;
+        diff.innerText = consump.diff;
+        start.innerText = consump.start;
+        end.innerText = consump.end;
+
+        [date, diff, start, end].forEach(function(td) {
+            tr.appendChild(td);
+        });
+
+        container.appendChild(tr);
+    });
 }
