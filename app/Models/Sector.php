@@ -50,4 +50,8 @@ class Sector extends Model
 
         return $sum;
     }
+
+    public function object(){
+        return $this->belongsTo('App\Models\MiltaryObject');
+    }
 }
