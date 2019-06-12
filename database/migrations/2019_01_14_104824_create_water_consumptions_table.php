@@ -18,9 +18,9 @@ class CreateWaterConsumptionsTable extends Migration
 
             $table->unsignedInteger('device_id');
             $table->foreign('device_id')->references('id')->on('meters');
-            
+
             $table->dateTime('created_at');
-            $table->float('consumption_amount', 9, 1);
+            $table->float('consumption_amount', 9, 1)->nullable();
         });
     }
 

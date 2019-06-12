@@ -18,13 +18,13 @@ class CreateHeatConsumptionsTable extends Migration
 
             $table->unsignedInteger('device_id');
             $table->foreign('device_id')->references('id')->on('meters');
-            
+
             $table->dateTime('created_at');
-            $table->integer('thermal_energy');
-            $table->integer('volume_flow_1');
-            $table->integer('volume_flow_2');
-            $table->integer('mass_flow_1');
-            $table->integer('mass_flow_2');
+            $table->integer('thermal_energy')->nullable();
+            $table->integer('volume_flow_1')->nullable();
+            $table->integer('volume_flow_2')->nullable();
+            $table->integer('mass_flow_1')->nullable();
+            $table->integer('mass_flow_2')->nullable();
         });
     }
 
