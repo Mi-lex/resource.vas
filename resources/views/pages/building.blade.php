@@ -155,6 +155,7 @@
                                                         </ul>
                                                         <div class="panel-footer">Сведения получены
                                                             {{ $heat_meter->last_consumption()->created_at->format('h:m d-m-Y') }}
+                                                            -
                                                         </div>
                                                     </div>
                                                 </div>
