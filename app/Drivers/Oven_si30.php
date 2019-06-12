@@ -4,11 +4,6 @@ namespace App\Drivers;
 
 use App\Abstracts\Driver;
 use Illuminate\Support\Facades\Log;
-use ModbusTcpClient\Network\BinaryStreamConnection;
-use ModbusTcpClient\Packet\ModbusFunction\ReadInputRegistersRequest;
-use ModbusTcpClient\Packet\ModbusFunction\ReadInputRegistersResponse;
-use ModbusTcpClient\Packet\ResponseFactory;
-use App\Socket\Socket;
 
 /**
  * Драйвер работает. Вопрос - зачем нужен параметр totalTimer?
@@ -16,110 +11,157 @@ use App\Socket\Socket;
  */
 class Oven_si30 extends Driver
 {
-    private $consumptions;
+    private $commands;
 
-    private $HARDCODED_IP = '192.168.1.2';
-    private $HARDCODED_PORT = '40000';
+    private $consumptions;
 
     public function __construct($device)
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'tcp';
+        $this->connection_params['protocol'] = 'udp';
 
-        $this->consumptions = ['consumption_amount', 'current_consumption'];
-    }
-
-    private function consumption_cmd()
-    {
-        // адрес регистра 
         /**
-         * $startAddress - Адрес регистра текущего значения счетчика (counter value) - 0x0000, 0x0001
-         * $quantity - количество слов (word - 2 байта), которые нужно прочесть
+         * Протокол Овен бессмысленно усложнён, расчёт всех команд - боль,
+         * поэтому приводятся все возможные команды для первых 15 адресов
          */
-        $startAddress = 0;
-        $quantity = 2;
+        $this->commands = [
+            '0'  => ['consumption_amount' => "GGHGQHLOQJRN"],
+            '1'  => ['consumption_amount' => "GHHGQHLOPPKP"],
+            '2'  => ['consumption_amount' => "GIHGQHLOTMKR"],
+            '3'  => ['consumption_amount' => "GJHGQHLOUSRL"],
+            '4'  => ['consumption_amount' => "GKHGQHLOKOKV"],
+            '5'  => ['consumption_amount' => "GLHGQHLONIRH"],
+            '6'  => ['consumption_amount' => "GMHGQHLOJTRI"],
+            '7'  => ['consumption_amount' => "GNHGQHLONKGT"],
+            '8'  => ['consumption_amount' => "GOHGQHLOVRHG"],
+            '9'  => ['consumption_amount' => "GPHGQHLOSHUU"],
+            '10' => ['consumption_amount' => "GQHGQHLOOUUUS"]
+        ];
 
-        $packet = new ReadInputRegistersRequest($startAddress, $quantity);
-
-        return $packet;
+        $this->consumptions = ['consumption_amount'];
     }
 
-    protected function make_own_request($packet_cmd)
+    protected function get_clean_answer(string $answer): string
     {
-        $connection = BinaryStreamConnection::getBuilder()
-            ->setTimeoutSec(10.0)
-            ->setConnectTimeoutSec(10.0)
-            ->setReadTimeoutSec(10.0)
-            ->setPort($this->HARDCODED_PORT)
-            ->setHost($this->HARDCODED_IP)
-            ->build();
+        return substr($answer, 2, -4);
+    }
 
-        try {
-            $binaryData = $connection->connect()
-                ->sendAndReceive($packet_cmd);
+    /**
+     * Переопределяю метод проверки контрльной суммы,
+     * потому что хуй знает, как протокол oven_si9 работает
+     */
+    protected function crc_right(string $answer = ''): bool
+    {
+        return true;
+    }
 
-            Log::info('Binary received (in hex):   ' . unpack('H*', $binaryData)[1]);
-            /**
-             * @var $response ReadHoldingRegistersResponse
-             */
-            $response = ResponseFactory::parseResponseOrThrow($binaryData);
-            // Log::info('Parsed packet (in hex):     ' . 1$2response->3t4oHex());
-            // Log::info('Data parsed from packet (bytes):');
+    protected function prepare_command(string $consumption_type): string
+    {
+        $rs_port_hex = $this->device->rs_port;
 
-            Log::info(print_r($response->getData()));
+        return '#' . $this->commands[$rs_port_hex][$consumption_type] . "\r";
+    }
 
-            Log::info('Response as word');
-            foreach ($response as $word) {
-                Log::info(print_r($word->getBytes()));
-            }
+    /**
+     * Переводит двоично-десятичное число из 
+     * протокола Овен в нормальный вид
+     *
+     * @param string $ascii_str десятичное число в виде
+     * бинарной строки
+     * @return int $result - распаршенное десятичное число
+     */
+    private function extract_int(string $ascii_str): int
+    {
+        $result = 0;
 
-            Log::info('Response as double words');
-            foreach ($response->asDoubleWords() as $doubleWord) {
-                $doubleTrouble = $doubleWord->getBytes();
+        for ($pos = 1; $pos <= strlen($ascii_str); $pos++) {
+            $digit = ord(substr($ascii_str, 0 - $pos, 1)) - 71;
+            $result += $digit * pow(10, $pos - 1);
+        }
 
-                Log::info('Int: ');
-                Log::info(print_r($doubleTrouble->getInt32()));
+        return $result;
+    }
 
-                Log::info('UInt: ');
-                Log::info(print_r($doubleTrouble->getUInt32()));
+    /**
+     * Извлекает время наработки устройства
+     *
+     * @param string $ascii_str - бинарная строка
+     * @return array $time - массив времени наработки
+     * устройства
+     */
+    private function parse_date(string $ascii_str): array
+    {
+        $time = [];
+        $time["miliseconds"] = $this->extract_int(substr($ascii_str, 19, 2));
+        $time["seconds"] = $this->extract_int(substr($ascii_str, 17, 2));
+        $time["minutes"] = $this->extract_int(substr($ascii_str, 15, 2));
+        $time["hours"] = $this->extract_int(substr($ascii_str, 9, 6));
 
-                Log::info('Float: ');
-                Log::info(print_r($doubleTrouble->getFloat()));
-            }
-        } catch (Exception $exception) {
-            Log::error('An exception occurred: ' . $exception->getMessage());
-            Log::error('Trace: ' . $exception->getTraceAsString());
-        } finally {
-            $connection->close();
+        return $time;
+    }
+
+    /**
+     * Парсит псевдо-float значение в виде 
+     * бинарной строки в нормальный вид
+     *
+     * @param string $ascii_string - псевдо-float
+     * значение в виде бинрной строки
+     * @return integer
+     */
+    protected function parse_data(string $ascii_string): float
+    {
+        $exponent_ascii = substr($ascii_string, 9, 1);
+
+        // полагаем, что числа всегда положительные, бит знака игнорируем
+        $exponent = $this->extract_int($exponent_ascii);
+
+        $mantissa_ascii = substr($ascii_string, 10, 7);
+
+        $mantissa = $this->extract_int($mantissa_ascii);
+
+        return $mantissa * pow(10, 0 - $exponent);
+    }
+
+    /**
+     * Записывает значение расхода
+     * водоснобжения в свойство
+     * объекта
+     *
+     * @param string $consumption - вид потребления
+     * @param callable $parser - фукнция для парсинга
+     * полученных данных
+     * @return void
+     */
+    private function write_consumption(
+        string $consumption,
+        callable $parser
+    ): void {
+        // для данного устройства ответ не парсится внутри функции make_request
+        $answer = $this->make_request($consumption, true, false);
+
+        if ($answer) {
+            $this->consumption_record[$consumption] = round($parser($answer), 2);
+
+            Log::info("Успешно получены показания: $consumption");
+        } else {
+            Log::error("Получение $consumption не выполнено");
         }
     }
 
+    /**
+     * Собирает все данные о потреблении
+     *
+     * @return void
+     */
     public function collect_data()
     {
-        $packet = $this->consumption_cmd();
+        // Записываем общее потребление
+        $this->write_consumption('consumption_amount', [$this, 'parse_data']);
 
-        $this->make_own_request($packet);
-    }
+        // Запсываем показание времени наработки
+        // $this->write_data('totalTimer', [$this, 'parse_date']); // Don't need it yet
 
-    public function test_connection()
-    {
-        $device_connection = new Socket($this->connection_params);
-
-        $command = null;
-
-        $binary_answer = $device_connection->get_answer($command);
-
-        if (empty($binary_answer)) {
-            Log::error("Отсутствует ответ от устройства.");
-
-            return;
-        } else {
-            $answer = $binary_answer;
-
-            Log::info("Получаем ответ: " . $this->nice_hex($answer));
-
-            return $answer;
-        }
+        return $this->consumption_record;
     }
 }

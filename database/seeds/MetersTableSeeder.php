@@ -395,6 +395,7 @@ class MetersTableSeeder extends Seeder
         'model' => "Овен си30",
         'server_ip' => "192.168.1.2",
         'server_port' => "40000",
+        'rs_port' => 1
       ],
     ];
 
