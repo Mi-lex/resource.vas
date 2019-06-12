@@ -1,3 +1,7 @@
+import appConst from '../constants';
+
+var base_url = appConst.baseUrl;
+
 var lastConsumptionDatetime, deviceId;
 var currentLocation = window.location.href.split('/');
 var id = currentLocation[currentLocation.length - 1];
@@ -17,60 +21,61 @@ $(document).ready(function () {
 })
 
 function refreshData() {
+    const lastConsumptionUrl = base_url + '/meters/' + id + '/last_consumption';
     let errorCount = 0;
-
-    $.ajax({
-        url: 'http://resource.test/meters/'+ id +'/last_electricity_consumption',
-        type: 'GET',
-        dataType: 'json',
-        beforeSend: setStatusPending()
-    })
-    .done(function (lastConsumption) {
-        $("#a1").text(lastConsumption.t1DirectActive.toFixed(2));
-        $("#r1").text(lastConsumption.t1DirectReactive.toFixed(2));
-        $("#a2").text(lastConsumption.t2DirectActive.toFixed(2));
-        $("#r2").text(lastConsumption.t2DirectReactive.toFixed(2));
-
-        successTime = lastConsumption['created_at'];
-
-        updateTimeFromSuccess();
-        setStatusSuccess();
-    })
-    .fail(function (data) {
-        setStatusError();
-        errorCount++;
-    })
-    .always(function () {
-        if (autoRefresh) {
-            if (errorCount <= errorMaxCount) {
-
-                setTimeout(refreshData, 1000);
-                
-                if (errorCount > 0) {
-                    console.info("Не выполнено запросов подряд: " + errorCount);
-                }
-            } else {
-                console.error("Автоматическое обновление остановлено. Превышел лимит ошибок.")
-                $('#autoRefresh').prop("checked", false)
-                autoRefresh = false;
-            }
-        }
-    });
-}
-
-function showChart() {
-    const lastConsumptionUrl = 'http://resource.test/meters/' + id + '/consumption/30';
 
     $.ajax({
         url: lastConsumptionUrl,
         type: 'GET',
         dataType: 'json',
+        beforeSend: setStatusPending()
     })
-    .done(function (consumptionsObject) {
-        const [labels, plotData] = getChartData(consumptionsObject);
-    
-        loadDataToChart(labels, plotData);
+        .done(function (lastConsumption) {
+            $("#a1").text(lastConsumption.t1DirectActive.toFixed(2));
+            $("#r1").text(lastConsumption.t1DirectReactive.toFixed(2));
+            $("#a2").text(lastConsumption.t2DirectActive.toFixed(2));
+            $("#r2").text(lastConsumption.t2DirectReactive.toFixed(2));
+
+            successTime = lastConsumption['created_at'];
+
+            updateTimeFromSuccess();
+            setStatusSuccess();
+        })
+        .fail(function (data) {
+            setStatusError();
+            errorCount++;
+        })
+        .always(function () {
+            if (autoRefresh) {
+                if (errorCount <= errorMaxCount) {
+
+                    setTimeout(refreshData, 1000);
+
+                    if (errorCount > 0) {
+                        console.info("Не выполнено запросов подряд: " + errorCount);
+                    }
+                } else {
+                    console.error("Автоматическое обновление остановлено. Превышел лимит ошибок.")
+                    $('#autoRefresh').prop("checked", false)
+                    autoRefresh = false;
+                }
+            }
+        });
+}
+
+function showChart() {
+    const consumptionUrl = base_url + '/meters/' + id + '/consumption/30';
+
+    $.ajax({
+        url: consumptionUrl,
+        type: 'GET',
+        dataType: 'json',
     })
+        .done(function (consumptionsObject) {
+            const [labels, plotData] = getChartData(consumptionsObject);
+
+            loadDataToChart(labels, plotData);
+        })
 }
 
 function getChartData(consumptionObject) {
@@ -213,7 +218,7 @@ function getTableData(consumptionObject) {
 function fullfillTable(daylyConsumptions) {
     var container = document.createDocumentFragment();
 
-    daylyConsumptions.forEach(function(consump) {
+    daylyConsumptions.forEach(function (consump) {
         var tr = document.createElement('tr');
 
         var date = document.createElement('td');
@@ -226,7 +231,7 @@ function fullfillTable(daylyConsumptions) {
         start.innerText = consump.start;
         end.innerText = consump.end;
 
-        [date, diff, start, end].forEach(function(td) {
+        [date, diff, start, end].forEach(function (td) {
             tr.appendChild(td);
         });
 
