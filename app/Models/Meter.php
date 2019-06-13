@@ -143,6 +143,12 @@ class Meter extends Model
 
         $last_consumption = $this->consumptions($attr)
             ->latest()->first();
+
+        // if there is no consumption create it
+        if (is_null($last_consumption)) {
+            $last_consumption = $this->consumptions()->create();
+        }
+
         $consumption_type = end($this->consumption_attributes[$this->type->name]);
 
         return $onlyValue ? $last_consumption[$consumption_type] : $last_consumption;
@@ -150,7 +156,7 @@ class Meter extends Model
 
     public function full_device_name(): string
     {
-        return 'Импульсный счетчик ' . $this->driver->name;
+        return 'Импульсный счетчик ' . $this->driver->russ_name();
     }
 
     public function type(): BelongsTo
