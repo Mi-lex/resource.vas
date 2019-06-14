@@ -153,6 +153,11 @@ class Oven_si9 extends Driver
         }
     }
 
+    public function write_params()
+    {
+        return $this->collect_data();
+    }
+
     /**
      * Собирает все данные о потреблении
      *
