@@ -1,6 +1,4 @@
-import appConst from '../constants';
-
-var base_url = appConst.baseUrl;
+var base_url = 'resource.vas.local';
 
 var lastConsumptionDatetime, deviceId;
 var currentLocation = window.location.href.split('/');
