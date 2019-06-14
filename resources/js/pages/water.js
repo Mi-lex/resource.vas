@@ -1,4 +1,4 @@
-var base_url = 'resource.vas.local';
+var base_url = 'http://resource.vas.local';
 
 var lastConsumptionDatetime, deviceId;
 var currentLocation = window.location.href.split('/');
