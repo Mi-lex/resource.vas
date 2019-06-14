@@ -26,7 +26,7 @@ class Mercury_230 extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'udp';
+        $this->connection_params['protocol'] = 'tcp';
 
         $this->params_record = [];
 
