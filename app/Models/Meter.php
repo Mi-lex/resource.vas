@@ -185,6 +185,11 @@ class Meter extends Model
         return $driver;
     }
 
+    public function converter()
+    {
+        return $this->belongsTo('App\Models\Converter');    
+    }
+
     public function scopeOfType($query, string $type): Builder
     {
         return $query

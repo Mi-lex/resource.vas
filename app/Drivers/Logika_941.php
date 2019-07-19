@@ -63,7 +63,6 @@ class Logika_941 extends Driver
 
         $command_len = substr($command_len, 2, 2) . substr($command_len, 0, 2);
 
-        // $address - $this->device->rs_port ?? Првоерить. найти устройство с $adress = 58
         $str_command = $this->device->rs_port . "900000" . $command_len . $str_command;
 
         $MAGIC_NUMBER = 10;
@@ -84,7 +83,7 @@ class Logika_941 extends Driver
         $pr_command = $prefix . $pr_command;
 
         $hex_command = pack("H*", $pr_command);
-        // !!здесь я убираю приготовление команды, т.к. уже самостоятельно
+        // !!здесь я убираю подготовку команды, т.к. уже самостоятельно
         // воспользовался командой prepare_command и добавил приставку
         $response = $this->make_request($hex_command, false, true);
 
