@@ -156,7 +156,7 @@ class Meter extends Model
 
     public function full_device_name(): string
     {
-        return 'Импульсный счетчик ' . $this->driver->russ_name();
+        return 'Импульсный счетчик ' . $this->driver->russ_name;
     }
 
     public function type(): BelongsTo

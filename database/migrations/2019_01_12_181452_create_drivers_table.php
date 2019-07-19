@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DriversTable extends Migration
+class CreateDriversTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class DriversTable extends Migration
         Schema::create('drivers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->timestamps();
+            $table->string('russ_name');
         });
     }
 
@@ -27,6 +27,6 @@ class DriversTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('drivers');
     }
 }

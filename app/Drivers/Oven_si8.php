@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
  * Драйвер работает. Вопрос - зачем нужен параметр totalTimer?
  * в данной версии таймер имеет вид массива, что не может являться записью в базу данных
  */
-class Oven_si9 extends Driver
+class Oven_si8 extends Driver
 {
     private $commands;
 
@@ -53,7 +53,7 @@ class Oven_si9 extends Driver
 
     /**
      * Переопределяю метод проверки контрльной суммы,
-     * потому что хуй знает, как протокол oven_si9 работает
+     * потому что хуй знает, как протокол oven_si8 работает
      */
     protected function crc_right(string $answer = ''): bool
     {
