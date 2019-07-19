@@ -18,8 +18,11 @@ abstract class Driver
     {
         $this->device = $device;
 
-        $this->connection_params['ip'] = $device->server_ip;
-        $this->connection_params['port'] = $device->server_port;
+        $converter = $device->converter;
+
+        $this->connection_params['protocol'] = $converter->protocol;
+        $this->connection_params['ip'] = $converter->ip;
+        $this->connection_params['port'] = $converter->port;
     }
 
     /**
@@ -124,6 +127,7 @@ abstract class Driver
         }
 
         Log::info("Отправляем команду: " . $this->nice_hex($command));
+        Log::info("Отправляем команду (hex): " . $this->nice_hex_string($command));
 
         $device_connection = new Socket($this->connection_params);
 
