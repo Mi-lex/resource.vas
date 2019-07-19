@@ -23,8 +23,10 @@ class Logika_943 extends Driver
      */
     private $consumption_params;
 
-    public function __construct()
+    public function __construct($device)
     {
+        parent::__construct($device);
+
         $this->commands = [
             'open_connection' => '3F00000000',
             // чтение тотальной тепловой энергии
@@ -47,12 +49,12 @@ class Logika_943 extends Driver
         $this->consumption_params = ['v1', 'v2', 'm1', 'm2', 'q'];
     }
 
-    private function get_clean_answer($answer): string
+    protected function get_clean_answer($answer): string
     {
         return substr($answer, 2, -4);
     }
 
-    private function crc_mbus(string $msg): string
+    protected function crc_mbus(string $msg): string
     {
         $buffer = pack('H*', $msg);
 
@@ -72,7 +74,7 @@ class Logika_943 extends Driver
         return $result;
     }
 
-    private function prepare_command($str_command): string
+    protected function prepare_command($str_command): string
     {
         $command_len = strtoupper(dechex(strlen($str_command) / 2));
 
@@ -80,14 +82,31 @@ class Logika_943 extends Driver
 
         $command_len = substr($command_len, 2, 2) . substr($command_len, 0, 2);
 
-        // !!$address - $this->device->rs_port ?? Првоерить. найти устройство с $adress = 58
         $str_command = $this->device->rs_port . "900000" . $command_len . $str_command;
 
-        $str_command .= CRC16_xmodem($str_command);
+        $MAGIC_NUMBER = 10;
 
-        $hex_command = pack("H*", "10" . $str_command);
+        $str_command .= $this->crc_mbus($str_command);
 
-        return $hex_command;
+        return $MAGIC_NUMBER . $str_command;
+    }
+
+    private function open_connection(): bool
+    {
+        $prefix = 'ffffffffffffffffffffffffffffffffffffff';
+
+        $command = $this->commands['open_connection'];
+
+        $pr_command = $this->prepare_command($command);
+
+        $pr_command = $prefix . $pr_command;
+
+        $hex_command = pack("H*", $pr_command);
+        // !!здесь я убираю подготовку команды, т.к. уже самостоятельно
+        // воспользовался командой prepare_command и добавил приставку
+        $response = $this->make_request($hex_command, false, true);
+
+        return boolval($response);
     }
 
     /**
