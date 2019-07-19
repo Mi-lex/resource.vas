@@ -28,14 +28,16 @@ class CreateMetersTable extends Migration
             $table->foreign('building_id')->references('id')
                 ->on('buildings');
 
+            $table->unsignedInteger('converter_id')->nullable();
+            $table->foreign('converter_id')->references('id')
+                ->on('converters');
+
             $table->string('name');
             $table->string('model');
             $table->integer('serial_number')->nullable();
             $table->mediumText('description');
             $table->boolean('active');
             // Probable need to be removed
-            $table->ipAddress('server_ip')->nullable();;
-            $table->mediumInteger('server_port')->nullable();;
             $table->mediumInteger('rs_port')->nullable();;
             $table->binary('meter_pass')->nullable();
         });
