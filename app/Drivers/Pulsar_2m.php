@@ -16,7 +16,7 @@ class Pulsar_2m extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'udp';
+        // $this->connection_params['protocol'] = 'udp';
 
         $this->channels_masks = [
             '1'     => "01000000",

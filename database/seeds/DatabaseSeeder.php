@@ -17,10 +17,11 @@ class DatabaseSeeder extends Seeder
         $this->call(BuildingsTableSeeder::class);
         $this->call(TypesTableSeeder::class);
         $this->call(DriversTableSeeder::class);
-        $this->call(MetersTableSeeder::class);
-        $this->call(ElectricityConsumptionsTableSeeder::class);
-        $this->call(WaterConsumptionsTableSeeder::class);
-        $this->call(MetersChannelsTableSeeder::class);
+        $this->call(ConvertersTableSeeder::class);
+        // $this->call(MetersTableSeeder::class);
+        // $this->call(ElectricityConsumptionsTableSeeder::class);
+        // $this->call(WaterConsumptionsTableSeeder::class);
+        // $this->call(MetersChannelsTableSeeder::class);
         
     }
 }

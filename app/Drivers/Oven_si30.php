@@ -19,7 +19,7 @@ class Oven_si30 extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'udp';
+        // $this->connection_params['protocol'] = 'udp';
 
         /**
          * Протокол Овен бессмысленно усложнён, расчёт всех команд - боль,

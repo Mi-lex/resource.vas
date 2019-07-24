@@ -19,7 +19,7 @@ class Oven_si8 extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'tcp';
+        // $this->connection_params['protocol'] = 'tcp';
 
         /**
          * Протокол Овен бессмысленно усложнён, расчёт всех команд - боль,

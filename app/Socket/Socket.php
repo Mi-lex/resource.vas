@@ -20,7 +20,7 @@ class Socket {
         extract($connection_params);
 
         $this->connection = 
-            stream_socket_client("$protocol://$ip:$port", $this->errno, $this->error_message, 3);
+            stream_socket_client("$protocol://$ip:40000", $this->errno, $this->error_message, 3);
 
         $this->max_bytes_length = 8192;
     }

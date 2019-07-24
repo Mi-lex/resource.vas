@@ -16,7 +16,7 @@ class Logika_941 extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'tcp';
+        // $this->connection_params['protocol'] = 'tcp';
 
         $this->commands = [
             'open_connection' => '3F00000000',

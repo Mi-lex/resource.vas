@@ -37,9 +37,10 @@ class CreateMetersTable extends Migration
             $table->integer('serial_number')->nullable();
             $table->mediumText('description');
             $table->boolean('active');
+            
+            $table->ipAddress('server_ip')->nullable();;
             // Probable need to be removed
             $table->mediumInteger('rs_port')->nullable();;
-            $table->binary('meter_pass')->nullable();
         });
     }
 

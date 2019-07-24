@@ -26,8 +26,6 @@ class Mercury_230 extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'tcp';
-
         $this->params_record = [];
 
         $this->params_commands = [
@@ -123,8 +121,9 @@ class Mercury_230 extends Driver
     public function open_connection(): bool
     {
         // Значение пароля используется только в данном драйвере
-        // кроме того, он одинаков для всех счетчиков
+        // кроме того, он одинаков для всех электрических счетчиков
         // целесообразность хранить его в базе данных под вопросом
+        // meter pass 1090785345
         Log::info('Открытие канала связи.');
         $password = '010101010101';
         $open_command = '0101' . $password;

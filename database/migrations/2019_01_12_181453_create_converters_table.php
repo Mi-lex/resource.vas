@@ -15,11 +15,8 @@ class CreateConvertersTable extends Migration
     {
         Schema::create('converters', function (Blueprint $table) {
             $table->increments('id');
-
             $table->string('name');
-            $table->char('protocol', 5);
-            $table->ipAddress('ip');
-            $table->mediumInteger('port');
+            $table->char('protocol', 3);
         });
     }
 

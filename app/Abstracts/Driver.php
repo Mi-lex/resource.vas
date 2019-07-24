@@ -18,11 +18,8 @@ abstract class Driver
     {
         $this->device = $device;
 
-        $converter = $device->converter;
-
-        $this->connection_params['protocol'] = $converter->protocol;
-        $this->connection_params['ip'] = $converter->ip;
-        $this->connection_params['port'] = $converter->port;
+        $this->connection_params['ip'] = $device->server_ip;
+        $this->connection_params['protocol'] = $device->converter->protocol;
     }
 
     /**

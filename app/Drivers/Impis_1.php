@@ -29,7 +29,7 @@ class Impis_1 extends Driver
     {
         parent::__construct($device);
 
-        $this->connection_params['protocol'] = 'tcp';
+        // $this->connection_params['protocol'] = 'tcp';
 
         $this->pack_int = function (integer $decimal) {
             return str_pad(dechex($decimal), 2, "0", STR_PAD_LEFT);
