@@ -88,6 +88,12 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+
+        'meters' => [
+            'driver' => 'daily',
+            'level' => 'debug',
+            'path' => storage_path('logs/meters.log'),
+        ]
     ],
 
 ];

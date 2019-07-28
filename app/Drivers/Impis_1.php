@@ -3,7 +3,6 @@
 namespace App\Drivers;
 
 use App\Abstracts\Driver;
-use Illuminate\Support\Facades\Log;
 
 class Impis_1 extends Driver
 {

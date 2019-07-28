@@ -190,13 +190,13 @@ class Logika_941 extends Driver
     public function collect_data()
     {
         if ($this->open_connection()) {
-            Log::info('Канал связи открыт');
+            Log::channel('meters')->info('Канал связи открыт');
 
             $this->write_consumption();
 
             return $this->consumption_record;
         } else {
-            Log::error('Канал связи не открыт.');
+            Log::channel('meters')->error('Канал связи не открыт.');
             return false;
         }
     }

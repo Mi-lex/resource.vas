@@ -123,30 +123,30 @@ abstract class Driver
             $command = $message_command;
         }
 
-        Log::info("Отправляем команду: " . $this->nice_hex($command));
-        Log::info("Отправляем команду (hex): " . $this->nice_hex_string($command));
+        Log::channel('meters')->info("Отправляем команду: " . $this->nice_hex($command));
+        Log::channel('meters')->info("Отправляем команду (hex): " . $this->nice_hex_string($command));
 
         $device_connection = new Socket($this->connection_params);
 
         $binary_answer = $device_connection->get_answer($command);
 
         if (empty($binary_answer)) {
-            Log::error("Отсутствует ответ от устройства.");
+            Log::channel('meters')->error("Отсутствует ответ от устройства.");
 
             return;
         } else if (!$this->crc_right($binary_answer)) {
-            Log::error("Не совпадают контрольные суммы.");
+            Log::channel('meters')->error("Не совпадают контрольные суммы.");
 
             return;
         } else {
             if ($parsing) {
                 $answer = $this->parse_answer($binary_answer);
 
-                Log::info("Получаем ответ: " . $this->nice_hex_string($answer));
+                Log::channel('meters')->info("Получаем ответ: " . $this->nice_hex_string($answer));
             } else {
                 $answer = $binary_answer;
 
-                Log::info("Получаем ответ: " . $this->nice_hex($answer));
+                Log::channel('meters')->info("Получаем ответ (бинарный): " . $this->nice_hex($answer));
             }
 
             return $answer;
