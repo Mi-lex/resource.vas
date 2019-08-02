@@ -1,8 +1,10 @@
-var base_url = 'http://resource.vas.local';
+import app_consts from '../constants';
 
-var lastConsumptionDatetime, deviceId;
-var currentLocation = window.location.href.split('/');
-var id = currentLocation[currentLocation.length - 1];
+var { base_url } = app_consts;
+
+var lastConsumptionDatetime;
+var meterId = document.getElementsByClassName('meter_id')[0].value;
+var lastConsumptionUrl = base_url + 'meters/' + meterId + '/last_consumption';
 
 var autoRefresh = $('#autoRefresh').is(':checked');
 var successTime = new Date(lastConsumptionDatetime);
@@ -19,9 +21,6 @@ $(document).ready(function () {
 })
 
 function refreshData() {
-    const lastConsumptionUrl = base_url + '/meters/' + id + '/last_consumption';
-    let errorCount = 0;
-
     $.ajax({
         url: lastConsumptionUrl,
         type: 'GET',
@@ -62,7 +61,7 @@ function refreshData() {
 }
 
 function showChart() {
-    const consumptionUrl = base_url + '/meters/' + id + '/consumption/30';
+    const consumptionUrl = base_url + '/meters/' + meterId + '/consumption/30';
 
     $.ajax({
         url: consumptionUrl,
@@ -81,7 +80,7 @@ function getChartData(consumptionObject) {
     // Each day consists two consumption (at the start and at the end)
     var days = [...Object.keys(consumptionObject)];
 
-    consumptionName = 'sumDirectActive';
+    const consumptionName = 'sumDirectActive';
 
     days.forEach((day) => {
         // get dayly consumptions by subtracting max and min values

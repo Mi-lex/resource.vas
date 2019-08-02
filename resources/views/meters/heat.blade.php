@@ -4,8 +4,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
+            <input type="hidden" class="meter_id" name="meter_id" value="{{ $meter->id }}">
             {{ $meter->name }}
-
             <small>
                 <a href="{{ url("meters/$meter->id/monitoring") }}">перейти к мониторингу</a>
             </small>

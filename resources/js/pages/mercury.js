@@ -1,5 +1,8 @@
-var meterId = document.getElementById('meter_id').textContent.trim();
-var url = 'http://resource.vas.local/meters/' + meterId + '/params';
+import app_consts from '../constants';
+
+var { base_url } = app_consts;
+var meterId = document.getElementsByClassName('meter_id')[0].value;
+var url = base_url + '/meters/' + meterId + '/params';
 var timer;
 
 $(document).ready(function () {

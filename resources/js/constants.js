@@ -1,3 +1,3 @@
 export default {
-    'baseUrl': 'resource.test'
-};
+    'base_url': 'http://resource.test/'
+}

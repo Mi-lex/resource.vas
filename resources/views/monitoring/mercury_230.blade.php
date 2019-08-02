@@ -4,7 +4,7 @@
     <section class="content-header">
         <h1>
             {{ $meter->name }}
-
+            <input type="hidden" class="meter_id" name="meter_id" value="{{ $meter->id }}">
             <small>
                 <a href="{{ url("meters/$meter->id") }}">перейти к потреблению</a>
             </small>

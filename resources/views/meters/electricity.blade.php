@@ -4,8 +4,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
+            <input type="hidden" class="meter_id" name="meter_id" value="{{ $meter->id }}">
             {{ $meter->name }}
-
             <small>
                 <a href="{{ url("meters/$meter->id/monitoring") }}">перейти к мониторингу</a>
             </small>
@@ -26,7 +26,7 @@
                         <dl class="dl-horizontal">
                             <dt>Тип прибора</dt>
                             <dd>
-                                {{ $meter->type->name }}
+                                {{ $meter->full_device_name() }}
                             </dd>
                             <dt>Модель</dt>
                             <dd>

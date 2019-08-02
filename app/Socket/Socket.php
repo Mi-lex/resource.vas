@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Log;
  * отправки команд через соединение и
  * получения ответа
  */
-class Socket {
+class Socket
+{
     private $connection;
     private $errno;
     private $error_message;
@@ -19,7 +20,7 @@ class Socket {
     {
         extract($connection_params);
 
-        $this->connection = 
+        $this->connection =
             stream_socket_client("$protocol://$ip:40000", $this->errno, $this->error_message, 3);
 
         $this->max_bytes_length = 8192;
@@ -46,7 +47,7 @@ class Socket {
 
             $result = fread($this->connection, $this->max_bytes_length);
         }
-        
+
         fclose($this->connection);
 
         return $result;
