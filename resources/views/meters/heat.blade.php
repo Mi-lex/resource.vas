@@ -36,6 +36,13 @@
                             <dd>
                                 {{ $meter->serial_number }}
                             </dd>
+                            <dt>Паспорт</dt>
+                            <dd>
+                                <a data-fancybox="gallery"
+                                    href="{{ asset('img/passports/'.$meter->serial_number.'.jpg') }}">
+                                    Открыть
+                                </a>
+                            </dd>
                         </dl>
                     </div>
                     <!-- /.box-body -->
