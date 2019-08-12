@@ -52,7 +52,14 @@
             <div class="col-md-2 hidden-xs hidden-sm">
                 <div class="box box-solid">
                     <div class="box-body text-center">
-                        <img src="{{ asset('img/mercury230.png') }}" alt="" style="max-height: 140px;">
+                        @php
+                            $meter_model = $meter->model;
+                            $meter_image_name = str_replace(' ', '_', $meter_model).'.jpg';
+
+                            $file_path = asset('img/meters/' . $meter_image_name);
+                        @endphp
+                        <img src="{{ $file_path }}" 
+                            alt="Изображение счетчика" style="max-height: 140px;">
                     </div>
                 </div>
             </div>

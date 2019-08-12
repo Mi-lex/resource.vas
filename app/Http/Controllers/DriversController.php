@@ -56,9 +56,10 @@ class DriversController extends Controller
     public function testOven30()
     {
         $meter = Meter::whereName('Водянка')->take(1)->get()->first();
+        // $meter = Meter::whereName('Водянка')->take(1)->get()->first();
 
         $oven = $meter->driver_instance();
 
-        $oven->collect_data();
+        return $oven->collect_data();
     }
 }
