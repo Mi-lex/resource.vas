@@ -6,7 +6,7 @@
             <div class="box-header with-border">
                 <i class="fa fa-info-circle"></i>
                 <h3 class="box-title">
-                    {{ $building->name }}
+                    {{ $building->short_name . ' ' . $building->name }}
                 </h3>
             </div>
             <!-- /.box-header -->

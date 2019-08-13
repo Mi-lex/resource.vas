@@ -71,7 +71,7 @@
                 <!-- Default panel contents -->
                 <a class="buildingUrl" href="{{ url('/buildings/'.$building->id) }}">
                     <div class="panel-heading buildingName">
-                        {{ $building->name }}
+                        {{ $building->short_name . ' ' . $building->name }}
                     </div>
                     <div class="panel-photo buildingPicture" style="background-image: url('{{ url('img/buildings/'.$building->id.'.jpg') }}');">
                         <!-- Тут картинка -->

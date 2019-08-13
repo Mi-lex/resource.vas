@@ -22,6 +22,7 @@ class CreateBuildingsTable extends Migration
             $table->unsignedInteger('sector_id');
             $table->foreign('sector_id')->references('id')->on('sectors');
 
+            $table->string('short_name', 10);
             $table->string('name');
             $table->mediumInteger('area')->nullable();
             $table->tinyInteger('floors');
