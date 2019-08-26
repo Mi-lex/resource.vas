@@ -10,6 +10,7 @@ use Carbon\Carbon;
 
 class Meter extends Model
 {
+    protected $dates = ['verification_date'];
     private $consumption_attributes;
 
     const UPDATED_AT = null;
@@ -187,7 +188,7 @@ class Meter extends Model
 
     public function converter()
     {
-        return $this->belongsTo('App\Models\Converter');    
+        return $this->belongsTo('App\Models\Converter');
     }
 
     public function scopeOfType($query, string $type): Builder

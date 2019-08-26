@@ -30,7 +30,7 @@
                     <dt>Дата поверки</dt>
                     <dd>
                         {{ $meter->verification_date ? 
-                            Carbon\Carbon::parse($meter->verification_date)->format('d.m.y') : 'Неизвестна' }}
+                            $meter->verification_date->format('d.m.y') : 'Неизвестна' }}
                     </dd>
                 </dl>
             </div>
