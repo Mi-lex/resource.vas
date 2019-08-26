@@ -168,6 +168,7 @@ class Logika_941 extends Driver
 
     private function write_consumption()
     {
+        // sn - тепловая энергия ?
         $param_names = ['sn', 't1', 't2', 'v1', 'm1', 'q'];
 
         $command = $this->commands['read_params'];

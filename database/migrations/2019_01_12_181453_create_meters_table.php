@@ -36,11 +36,13 @@ class CreateMetersTable extends Migration
             $table->string('model');
             $table->integer('serial_number')->nullable();
             $table->mediumText('description');
+            $table->date('verification_date');
             $table->boolean('active');
-            
-            $table->ipAddress('server_ip')->nullable();;
+
+            $table->ipAddress('server_ip')->nullable();
+
             // Probable need to be removed
-            $table->mediumInteger('rs_port')->nullable();;
+            $table->mediumInteger('rs_port')->nullable();
         });
     }
 
