@@ -28,10 +28,18 @@
                         </a>
                     </dd>
                     <dt>Дата поверки</dt>
-                    <dd>
-                        {{ $meter->verification_date ? 
-                            $meter->verification_date->format('d.m.y') : 'Неизвестна' }}
-                    </dd>
+                    @if ($verification_date = $meter->verification_date)
+                        <dd>
+                            {{ $verification_date->format('d.m.y') }}
+                            @if (Carbon\Carbon::now()->diffInDays($verification_date, false) < 30)
+                                <i style="color: red;" class="fa fa-exclamation-circle"></i>
+                            @endif
+                        </dd>
+                    @else
+                        <dd>
+                            {{ 'Неизвестна' }}
+                        </dd>
+                    @endif
                 </dl>
             </div>
             <!-- /.box-body -->

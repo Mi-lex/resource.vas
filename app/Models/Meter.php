@@ -177,7 +177,12 @@ class Meter extends Model
         return $this->belongsTo('App\Models\Driver');
     }
 
-    public function driver_instance()
+    /**
+     * Create driver object of the meter
+     *
+     * @return object
+     */
+    public function driver_instance(): object
     {
         $driver_class = 'App\Drivers\\' . ucfirst($this->driver->name);
 
@@ -186,7 +191,7 @@ class Meter extends Model
         return $driver;
     }
 
-    public function converter()
+    public function converter(): ?BelongsTo
     {
         return $this->belongsTo('App\Models\Converter');
     }
