@@ -126,12 +126,7 @@ abstract class Driver
         Log::channel('meters')->info("Отправляем команду: " . $this->nice_hex($command));
         Log::channel('meters')->info("Отправляем команду (hex): " . $this->nice_hex_string($command));
 
-        $connection = BinaryStreamConnection::getBuilder()
-            ->setProtocol($this->connection_params['protocol'])
-            ->setHost($this->connection_params['ip'])
-            ->setPort(40000)
-            ->setTimeoutSec(2.5)
-            ->build();
+        $connection = $this->make_connection();
 
         $binary_answer = $connection->sendAndReceive($command);
 
@@ -168,5 +163,15 @@ abstract class Driver
     {
         $this->device->consumptions()
             ->create($this->consumption_record);
+    }
+
+    /**
+     * Writes down data, retrieves one main value
+     *
+     * @return float main consumption of meter
+     */
+    public function main_value()
+    {
+        return $this->consumption_record['consumption'];
     }
 }
