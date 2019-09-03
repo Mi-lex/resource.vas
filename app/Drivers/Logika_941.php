@@ -215,4 +215,11 @@ class Logika_941 extends Driver
 
         return $params;
     }
+
+    public function main_value()
+    {
+        $this->collect_data();
+
+        return $this->consumption_record['v1'];
+    }
 }

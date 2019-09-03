@@ -66,15 +66,15 @@ class Pulsar_2m extends Driver
     // address - rs_port hex
     // command - 01 | 3E | 04
     // data - mask - 01000000 || 02000000 || 03000000
-    protected function prepare_command(string $command_name) : string
+    protected function prepare_command(string $command_name): string
     {
         $command = $this->commands[$command_name];
 
         $rs_port_hex = '00' . $this->device->rs_port;
 
         $length = 10 + strlen($this->mask) / 2;
-        Log::info("data :" . $this->mask); 
-        Log::info("Length :" . $length); 
+        Log::info("data :" . $this->mask);
+        Log::info("Length :" . $length);
 
         $length = strtoupper(dechex($length));
         $length = str_pad($length, 2, "0", STR_PAD_LEFT);
@@ -89,14 +89,14 @@ class Pulsar_2m extends Driver
 
     private function parse_date($string)
     {
-        return unpack("Cyear/Cmonth/Cday/Chour/Cminutes/Cseconds", pack('H*',$string));
+        return unpack("Cyear/Cmonth/Cday/Chour/Cminutes/Cseconds", pack('H*', $string));
     }
 
     // выполняет парсинг HEX-строки с несколькими double-числами
     private function parse_data(string $string)
     {
-	    // конвертируем HEX-строку в бинарную строку, парсим её, полагая, что в ней находятся double-числа
-        $floats = unpack("d*", pack('H*',$string));
+        // конвертируем HEX-строку в бинарную строку, парсим её, полагая, что в ней находятся double-числа
+        $floats = unpack("d*", pack('H*', $string));
         // объявляем лямбда-функцию для использования в качестве колбэка
         $roundCents = function ($n) {
             return round($n, 2);
@@ -118,7 +118,7 @@ class Pulsar_2m extends Driver
         $answer = $this->make_request($consumption);
 
         if ($answer) {
-            $this->consumption_record[$consumption] = $parser(substr($answer, 12,-8));
+            $this->consumption_record[$consumption] = $parser(substr($answer, 12, -8));
 
             Log::info("Успешно получены показания: $consumption");
         } else {
@@ -134,7 +134,7 @@ class Pulsar_2m extends Driver
         $device_type_command = '00' . $this->device->rs_port . "0302460001";
         $device_type_command .= $this->crc_mbus($device_type_command);
 
-        $device_type_command = pack("H*",$device_type_command);
+        $device_type_command = pack("H*", $device_type_command);
 
         $response = $this->make_request($device_type_command, false);
 
@@ -164,5 +164,12 @@ class Pulsar_2m extends Driver
                 return $this->consumption_record;
             }
         }
+    }
+
+    public function main_value()
+    {
+        $this->collect_data();
+
+        return $this->consumption_record['consumption_amount'];
     }
 }

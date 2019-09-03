@@ -153,4 +153,11 @@ class Impis_1 extends Driver
 
         dd($this->consumption_record);
     }
+
+    public function main_value()
+    {
+        $this->collect_data();
+
+        return $this->consumption_record['consumption'];
+    }
 }
