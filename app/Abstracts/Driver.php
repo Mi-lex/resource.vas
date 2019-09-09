@@ -105,6 +105,20 @@ abstract class Driver
         return unpack('H*', $data, null)[1];
     }
 
+    public function make_connection()
+    {
+        $connection = BinaryStreamConnection::getBuilder()
+            ->setProtocol('udp')
+            ->setHost($this->connection_params['ip'])
+            ->setPort('40000')
+            ->setTimeoutSec(3.5)
+            ->setWriteTimeoutSec(2.5)
+            ->build()
+            ->connect();
+
+        return $connection;
+    }
+
     /**
      * Метод запроса к устройству
      *
