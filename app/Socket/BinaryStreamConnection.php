@@ -46,7 +46,7 @@ class BinaryStreamConnection extends BinaryStreamConnectionProperties
             $errno,
             $errstr,
             $this->connectTimeoutSec,
-            STREAM_CLIENT_CONNECT,
+            STREAM_CLIENT_CONNECT
         );
 
         if (false === $this->stream) {
