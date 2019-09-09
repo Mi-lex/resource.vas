@@ -26,10 +26,11 @@ class MetersController extends Controller
         $meters_values = [];
 
         foreach ($request->meters as $meter_id) {
-            $driver = Meter::find($meter_id)->driver_instance();
-
             try {
-                if ($main_value = $driver->main_value()) {
+                $main_value = Meter::find($meter_id)
+                    ->connect_device()
+                    ->get_main_value();
+                if ($main_value) {
                     $meters_values[$meter_id] = $main_value;
                 }
             } catch (\Throwable $th) {

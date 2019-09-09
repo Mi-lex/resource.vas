@@ -216,7 +216,7 @@ class Logika_941 extends Driver
         return $params;
     }
 
-    public function main_value()
+    public function get_main_value()
     {
         $this->collect_data();
 

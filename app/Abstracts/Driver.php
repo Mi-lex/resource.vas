@@ -184,7 +184,7 @@ abstract class Driver
      *
      * @return float main consumption of meter
      */
-    public function main_value()
+    public function get_main_value()
     {
         return $this->consumption_record['consumption'];
     }

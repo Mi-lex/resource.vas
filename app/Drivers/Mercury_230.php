@@ -330,7 +330,7 @@ class Mercury_230 extends Driver
         return $this->params_record;
     }
 
-    public function main_value()
+    public function get_main_value()
     {
         $this->collect_data();
 

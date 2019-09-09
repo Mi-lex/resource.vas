@@ -166,7 +166,7 @@ class Pulsar_2m extends Driver
         }
     }
 
-    public function main_value()
+    public function get_main_value()
     {
         $this->collect_data();
 

@@ -174,7 +174,7 @@ class Oven_si8 extends Driver
         return $this->consumption_record;
     }
 
-    public function main_value()
+    public function get_main_value()
     {
         $this->collect_data();
 
