@@ -36,16 +36,20 @@ class DriversController extends Controller
     {
         Meter::active()->ofType($type)->get()
             ->each(function ($meter) {
-                $device = $meter->connect_device();
+                try {
+                    $device = $meter->connect_device();
 
-                $consumption_data = $device->collect_data();
+                    $consumption_data = $device->collect_data();
 
-                if ($consumption_data) {
-                    $device->write_to_db();
+                    if ($consumption_data) {
+                        $device->write_to_db();
 
-                    Log::info(ucfirst($meter->type->name) . ' consumption written successfully');
-                } else {
-                    Log::error('The consumption wasnt collected. There must be something wrong with connection');
+                        Log::info(ucfirst($meter->type->name) . ' consumption written successfully');
+                    } else {
+                        Log::error('The consumption wasnt collected. There must be something wrong with connection');
+                    }
+                } catch (\Throwable $th) {
+                    Log::error('The record wasn\'t written in db. Meter: ' . $meter->id);
                 }
             });
 
