@@ -4,15 +4,15 @@
 @import "~font-awesome/scss/font-awesome.scss";
 
 // AdminLTE
-@import './AdminLTE.scss';
-@import './skin-blue.scss';
+@import './adminLTE';
+@import './skin-blue';
 
 // Pages
-@import './pages/home.scss';
-@import './pages/academy.scss';
-@import './pages/building.scss';
-@import './pages/city.scss';
-@import './pages/device.scss';
-@import './pages/districts.scss';
-@import './pages/mercury.scss';
-@import './pages/training.scss';
+@import './pages/home';
+@import './pages/academy';
+@import './pages/building';
+@import './pages/city';
+@import './pages/device';
+@import './pages/districts';
+@import './pages/mercury';
+@import './pages/training';
