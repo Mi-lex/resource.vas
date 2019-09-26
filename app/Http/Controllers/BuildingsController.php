@@ -10,4 +10,9 @@ class BuildingsController extends Controller
     {
         return view('pages.building', compact('building'));
     }
+
+    public function list()
+    {
+        return Building::with('meters')->get();
+    }
 }
