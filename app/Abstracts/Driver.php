@@ -2,7 +2,7 @@
 
 namespace App\Abstracts;
 
-use App\Socket\Socket;
+use App\Socket\BinaryStreamConnection;
 use Illuminate\Support\Facades\Log;
 
 abstract class Driver
@@ -105,6 +105,20 @@ abstract class Driver
         return unpack('H*', $data, null)[1];
     }
 
+    public function make_connection()
+    {
+        $connection = BinaryStreamConnection::getBuilder()
+            ->setProtocol('udp')
+            ->setHost($this->connection_params['ip'])
+            ->setPort('40000')
+            ->setTimeoutSec(3.5)
+            ->setWriteTimeoutSec(2.5)
+            ->build()
+            ->connect();
+
+        return $connection;
+    }
+
     /**
      * Метод запроса к устройству
      *
@@ -126,9 +140,9 @@ abstract class Driver
         Log::channel('meters')->info("Отправляем команду: " . $this->nice_hex($command));
         Log::channel('meters')->info("Отправляем команду (hex): " . $this->nice_hex_string($command));
 
-        $device_connection = new Socket($this->connection_params);
+        $connection = $this->make_connection();
 
-        $binary_answer = $device_connection->get_answer($command);
+        $binary_answer = $connection->sendAndReceive($command);
 
         if (empty($binary_answer)) {
             Log::channel('meters')->error("Отсутствует ответ от устройства.");
@@ -163,5 +177,15 @@ abstract class Driver
     {
         $this->device->consumptions()
             ->create($this->consumption_record);
+    }
+
+    /**
+     * Writes down data, retrieves one main value
+     *
+     * @return float main consumption of meter
+     */
+    public function get_main_value()
+    {
+        return $this->consumption_record['consumption'];
     }
 }

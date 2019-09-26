@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meter;
+use Illuminate\Http\Request;
 
 class MetersController extends Controller
 {
@@ -18,6 +19,26 @@ class MetersController extends Controller
         $consumptions = $meter->consumptions_by_days($days);
 
         return response()->json($consumptions);
+    }
+
+    public function metersValues(Request $request)
+    {
+        $meters_values = [];
+
+        foreach ($request->meters as $meter_id) {
+            try {
+                $main_value = Meter::find($meter_id)
+                    ->connect_device()
+                    ->get_main_value();
+                if ($main_value) {
+                    $meters_values[$meter_id] = $main_value;
+                }
+            } catch (\Throwable $th) {
+                $meters_values[$meter_id] = 0;
+            }
+        }
+
+        return $meters_values;
     }
 
     public function last_electricity_consumption(Meter $meter)

@@ -182,13 +182,11 @@ class Meter extends Model
      *
      * @return object
      */
-    public function driver_instance(): object
+    public function connect_device(): object
     {
         $driver_class = 'App\Drivers\\' . ucfirst($this->driver->name);
 
-        $driver = new $driver_class($this);
-
-        return $driver;
+        return new $driver_class($this);
     }
 
     public function converter(): ?BelongsTo
@@ -207,13 +205,5 @@ class Meter extends Model
     public function scopeActive($query): Builder
     {
         return $query->whereActive(true);
-    }
-
-    private function write_actual_consumption()
-    {
-        $driver = $this->driver_instance();
-
-        $driver->collect_data();
-        $driver->write_to_db();
     }
 }

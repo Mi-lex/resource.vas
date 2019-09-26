@@ -9,20 +9,20 @@ class DriversController extends Controller
 {
     public function show(Meter $meter)
     {
-        $driver = $meter->driver_instance();
+        $consumption_data = $meter
+            ->connect_device()
+            ->collect_data();
 
-        $result = $driver->collect_data();
-
-        return response()->json($result);
+        return response()->json($consumption_data);
     }
 
     public function params(Meter $meter)
     {
-        $driver = $meter->driver_instance();
+        $device_params = $meter
+            ->connect_device()
+            ->write_params();
 
-        $result = $driver->write_params();
-
-        return $result;
+        return $device_params;
     }
 
     /**
@@ -35,31 +35,24 @@ class DriversController extends Controller
     public function write($type)
     {
         Meter::active()->ofType($type)->get()
-            // ->slice(2) // for not working electricity meters
             ->each(function ($meter) {
-                $driver = $meter->driver_instance();
+                try {
+                    $device = $meter->connect_device();
 
-                $result = $driver->collect_data();
+                    $consumption_data = $device->collect_data();
 
-                if ($result) {
-                    $driver->write_to_db();
+                    if ($consumption_data) {
+                        $device->write_to_db();
 
-                    Log::info(ucfirst($meter->type->name) . ' consumption written successfully');
-                } else {
-                    Log::error('The consumption wasnt collected. There must be something wrong with connection');
+                        Log::info(ucfirst($meter->type->name) . ' consumption written successfully');
+                    } else {
+                        Log::error('The consumption wasnt collected. There must be something wrong with connection');
+                    }
+                } catch (\Throwable $th) {
+                    Log::error('The record wasn\'t written in db. Meter: ' . $meter->id);
                 }
             });
 
         return 'Done';
-    }
-
-    public function testOven30()
-    {
-        $meter = Meter::whereName('Водянка')->take(1)->get()->first();
-        // $meter = Meter::whereName('Водянка')->take(1)->get()->first();
-
-        $oven = $meter->driver_instance();
-
-        return $oven->collect_data();
     }
 }
