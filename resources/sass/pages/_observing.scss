@@ -1,0 +1,135 @@
+.obs-controll-panel {
+    display: flex;
+    align-items: center;
+    width: 97%;
+    max-width: 1503px;
+    margin: 0 auto;
+    margin-top: 35px;
+    margin-bottom: 33px;
+    padding-right: 25px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #707070;
+
+    border-radius: 3px;
+    border: 1px solid #C9C9C9;
+}
+
+.obs-sorting__item {
+    padding: 15px 25px;
+    margin-bottom: 0;
+}
+
+.obs-start-monitoring-btn {
+    width: 267px;
+    height: 35px;
+    margin-left: auto;
+    padding: 2px 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+
+    background: #2ECC71;
+    border: 1px solid #2ECC71;
+    border-radius: 3px;
+
+    transition: all ease-out 0.18s;
+
+    &:hover {
+        transform: scale(1.03);
+    }
+}
+
+.obs-building__list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 97%;
+    max-width: 1503px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+.obs-building__item {
+    position: relative;
+    width: 22%;
+    margin-bottom: 20px;
+    border: 1px solid #707070;
+    border-radius: 3px;
+    z-index: 10;
+
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px 18px;
+        background-color: #34495E;
+    }
+
+    &-title {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: white;
+    }
+
+    &-body {
+        min-height: 133px;
+    }
+
+    
+}
+
+.obs-devices {
+    &__list {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        min-height: 133px;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        padding: 13px 34px;
+        list-style: none;
+    }
+
+    &__item {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+        border: 1px solid #BDC3C7;
+        border-radius: 50%;
+        text-align: center;
+        background-color: #ECF0F1;
+
+        font-size: 30px;
+        line-height: 50px;
+        vertical-align: middle;
+
+
+        @media (min-width: $desktop-large-width) {
+            width: 70px;
+            height: 70px;
+            font-size: 40px;
+            line-height: 70px;
+        }
+
+        &--active {
+            background-color: #DFF0D8;
+            border-color: #3C763D;
+        }
+
+        &--broken {
+            background-color: #F2DEDE;
+            border-color: #A94442;
+        }
+
+        &:not(:nth-child(3n)) {
+            margin-right: 18px;
+        }
+    }
+}

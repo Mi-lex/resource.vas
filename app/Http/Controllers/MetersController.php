@@ -66,4 +66,9 @@ class MetersController extends Controller
     {
         return view('monitoring.' . $meter->driver->name, compact('meter'));
     }
+
+    public function observe()
+    {
+        return view('pages.observing');
+    }
 }

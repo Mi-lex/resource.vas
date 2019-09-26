@@ -70,3 +70,5 @@ Route::post('/report', 'ReportController@show');
 Route::get('/test/oven30', 'DriversController@testOven30');
 
 Route::post('/meters/values', 'MetersController@metersValues');
+
+Route::get('/observing', 'MetersController@observe');
