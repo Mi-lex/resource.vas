@@ -21,24 +21,30 @@ class MetersController extends Controller
         return response()->json($consumptions);
     }
 
-    public function metersValues(Request $request)
+    public function metersValues()
     {
-        $meters_values = [];
+        $active_meters = Meter::active()->get();
 
-        foreach ($request->meters as $meter_id) {
+        $response = [];
+
+        foreach ($active_meters as $meter) {
+            $item = [];
+            $item['meter_id'] = $meter->id;
+
             try {
-                $main_value = Meter::find($meter_id)
+                $main_value = $meter
                     ->connect_device()
                     ->get_main_value();
-                if ($main_value) {
-                    $meters_values[$meter_id] = $main_value;
-                }
+
+                $item['meter_value'] = $main_value;
             } catch (\Throwable $th) {
-                $meters_values[$meter_id] = 0;
+                $item['meter_value'] = 0;
             }
+
+            array_push($response, $item);
         }
 
-        return $meters_values;
+        return $response;
     }
 
     public function last_electricity_consumption(Meter $meter)
