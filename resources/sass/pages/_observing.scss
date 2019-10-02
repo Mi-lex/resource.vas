@@ -128,7 +128,7 @@
             border-color: #A94442;
         }
 
-        &:not(:nth-child(3n)) {
+        &:not(:nth-child(3n)):not(:last-child) {
             margin-right: 18px;
         }
     }
