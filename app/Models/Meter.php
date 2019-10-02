@@ -28,6 +28,11 @@ class Meter extends Model
         ];
     }
 
+    public function path()
+    {
+        return "/meters/" . $this->id;
+    }
+
     /**
      * Возвращает записи потреблений, принадлежащих
      * данному устройству

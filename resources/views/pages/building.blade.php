@@ -95,7 +95,7 @@
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="box box-warning box-solid">
                                                         <div class="box-header with-border">
-                                                            <a href="{{ url('/meters/'.$electricity_meter->id) }}">
+                                                            <a href="{{ $electricity_meter->path() }}">
                                                                 {{ $electricity_meter->name }}
                                                             </a>
                                                         </div>
@@ -139,7 +139,7 @@
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="box box-danger box-solid">
                                                         <div class="box-header with-border">
-                                                            <a href="{{ url('/meters/'.$heat_meter->id) }}">
+                                                            <a href="{{ $heat_meter->path() }}">
                                                                 {{ $heat_meter->name }}
                                                             </a>
                                                         </div>
@@ -178,7 +178,7 @@
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="box box-info box-solid">
                                                         <div class="box-header with-border">
-                                                            <a href="{{ url('/meters/'.$water_meter->id) }}">
+                                                            <a href="{{ $water_meter->path() }}">
                                                                 {{ $water_meter->name }}
                                                             </a>
                                                         </div>

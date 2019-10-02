@@ -6,7 +6,7 @@
         {{ $meter->name }}
         <input type="hidden" class="meter_id" name="meter_id" value="{{ $meter->id }}">
         <small>
-            <a href="{{ url("meters/$meter->id") }}">перейти к потреблению</a>
+            <a href="{{ $meter->path() }}">перейти к потреблению</a>
         </small>
         <div class="hidden" id="meter_id">
             {{ $meter->id }}
