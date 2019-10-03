@@ -9,6 +9,19 @@ const iconNames = {
     'heat': 'fire'
 }
 
+const ONE_MINUTE = 3600;
+
+const getJson = url => {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+        }).done(resolve)
+            .fail(reject);
+    });
+}
+
 function getElementFromTemplate(templateString, containerElement = { tag: 'div', className: '' }) {
     const container = document.createElement(containerElement.tag);
     container.className = containerElement.className;
@@ -88,40 +101,22 @@ class BuildingList {
         wrapper.appendChild(this.domList);
     }
 
-    showElemenet() {
-        $.ajax({
-            url: this.buildingListUrl,
-            type: 'GET',
-            dataType: 'json',
-            beforeSend: this.loadSpinner
-        })
-            .done(buildingsData => {
-                this.buildingList = buildingsData
-                    .map(buildingData => new Building(buildingData));
-                this.renderBuildings();
-                this.showActiveness();
-            })
-            .fail(function (data) {
-                console.log(this.base_url)
-                console.log(data.responseText);
-            });
+    async showElemenet() {
+        const buildingsData = await getJson(this.buildingListUrl);
+
+        this.buildingList = buildingsData.map(buildingData => new Building(buildingData))
+            // remove buildings with no meters
+            .filter(building => building.meters.length > 0);
+
+        this.renderBuildings();
+        this.showActiveness();
     }
 
-    showActiveness() {
-        $.ajax({
-            url: this.meterValuesUrl,
-            type: 'GET',
-            dataType: 'json',
-        })
-            .done(valuesData => {
-                this.meterValues = valuesData;
-                this.insertMeterClasses();
-            })
-            .fail(function (data) {
-                console.log(data.responseText);
-            });
-    }
+    async showActiveness() {
+        this.meterValues = await getJson(this.meterValuesUrl);
 
+        this.insertMeterClasses();
+    }
 
     insertMeterClasses() {
         this.meterValues.forEach(el => {
