@@ -32,7 +32,7 @@
                                         <span class="info-box-icon ">V</span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Расход холодной воды</span>
-                                            <span class="info-box-number" id="consumption">-</span>
+                                            <span class="info-box-number" id="consumption_amount">-</span>
                                             <span class="info-box-comment">м<sup>3</sup></span>
                                         </div>
                                     </div>
@@ -75,5 +75,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/pages/oven_si8.js') }}"></script>
+    <script src="{{ asset('js/libs/monitoring.js') }}"></script>
 @endsection

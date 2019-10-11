@@ -107,10 +107,8 @@
                                                         <ul class="list-group">
                                                             <li class="list-group-item">Расход за месяц:
                                                                 {{ $electricity_meter->diff_consumption(30) }}
-                                                            <li class="list-group-item">Показания (день):
-                                                                {{ $electricity_meter->last_consumption()->t1DirectActive }}
-                                                            <li class="list-group-item">Показания (ночь):
-                                                                {{ $electricity_meter->last_consumption()->t2DirectActive }}
+                                                            <li class="list-group-item">Показания:
+                                                                {{ $electricity_meter->last_consumption()->sumDirecActive }}
                                                             <li class="list-group-item">Модель:
                                                                 {{ $electricity_meter->model }}
                                                             </li>
