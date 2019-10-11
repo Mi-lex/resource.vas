@@ -30,7 +30,7 @@ function setStatusRun() {
 }
 
 function setStatusPending() {
-  $("#text-status").text('выполняется обновление')
+  $("#text-status").text('Выполняется обновление')
 }
 
 function setStatusError() {
@@ -39,8 +39,8 @@ function setStatusError() {
   $("#box-status").removeClass();
   $("#box-status").addClass('bg-red-active');
   $("#box-status").addClass('box-header with-border');
-
 }
+
 function setStatusStop() {
   $("#text-status").text('остановлен')
   $("#box-status").removeClass();
