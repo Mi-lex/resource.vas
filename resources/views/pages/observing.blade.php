@@ -8,13 +8,13 @@
         <form action="" class="obs-sorting" method="get">
             <label class="obs-sorting__item obs-sorting__item--green">
                 Активные
-                <input type="checkbox"><span></span></label>
+                <input type="checkbox" data-filtertype="active" checked><span></span></label>
             <label class="obs-sorting__item obs-sorting__item--grey">
                 Неактивные
-                <input type="checkbox"><span></span></label>
+                <input type="checkbox" checked data-filtertype="inactive"><span></span></label>
             <label class="obs-sorting__item obs-sorting__item--red">
                 Ошибка соединения
-                <input type="checkbox"><span></span></label>
+                <input type="checkbox" checked data-filtertype="broken"><span></span></label>
         </form>
         <button class="obs-start-monitoring-btn">Начать мониторинг</button>
     </section>

@@ -1,6 +1,6 @@
-// Для начала нужно получить на странице полный список зданий с устройствами в них
-// Пройтись по ним массивом и зарендерить все согласно шаблону
 import app_constants from "../constants";
+import { getJson } from "../utilities";
+
 const { base_url } = app_constants;
 
 const iconNames = {
@@ -10,17 +10,6 @@ const iconNames = {
 }
 
 const ONE_MINUTE = 3600;
-
-const getJson = url => {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-        }).done(resolve)
-            .fail(reject);
-    });
-}
 
 function getElementFromTemplate(templateString, containerElement = { tag: 'div', className: '' }) {
     const container = document.createElement(containerElement.tag);
@@ -36,11 +25,16 @@ class Meter {
         this.id = meter.id
         this.name = meter.name;
         this.type = meter.typeName;
+        this.statusStr = 'inactive';
+    }
+
+    get statusClass() {
+        return `obs-devices__item obs-devices__item--${this.statusStr}`;
     }
 
     get template() {
         return `
-            <li class="obs-devices__item" id=meter_id_${this.id}>
+            <li class="${this.statusClass}" id=meter_id_${this.id}>
                 <a class="obs-devices__item-icon" href=${base_url + 'meters/' + this.id}>
                     <i style="color: #84DBFF;" class="fa fa-${iconNames[this.type]}"></i>
                 </a>
@@ -53,7 +47,8 @@ class Building {
     constructor(building) {
         this.id = building.id
         this.name = building.short_name;
-        this.meters = building.meters_arr.map(meter => new Meter(meter));
+        this.initialMeters = building.meters_arr.map(meter => new Meter(meter));
+        this.currentMeters = this.initialMeters.slice();
     }
 
     get template() {
@@ -69,7 +64,7 @@ class Building {
                 </header>
                 <div class="obs-building__item-body">
                     <ul class="obs-devices__list">
-                        ${this.meters.map(meter => meter.template).join(``)}
+                        ${this.currentMeters.map(meter => meter.template).join(``)}
                     </ul>
                 </div>
             </li>`.trim();
@@ -86,13 +81,24 @@ class BuildingList {
         return null;
     }
 
-    renderBuildings() {
-        const template = this.buildingList.map(building => building.template)
+    renderBuildings(buildings = this.elements) {
+        // don't render buildings with no meters
+        const template = buildings.filter(building => building.currentMeters.length > 0)
+            .map(building => building.template)
             .join(``).trim();
 
+        const containerTag = 'ul';
+        const containerClassName = 'obs-building__list';
+
+        const oldContainer = document.querySelector(`.${containerClassName}`);
+
+        if (oldContainer) {
+            oldContainer.parentElement.removeChild(oldContainer);
+        }
+
         const container = {
-            tag: 'ul',
-            className: 'obs-building__list'
+            tag: containerTag,
+            className: containerClassName
         };
 
         this.domList = getElementFromTemplate(template, container);
@@ -101,15 +107,14 @@ class BuildingList {
         wrapper.appendChild(this.domList);
     }
 
-    async showElemenet() {
+    async showElement() {
         const buildingsData = await getJson(this.buildingListUrl);
 
-        this.buildingList = buildingsData.map(buildingData => new Building(buildingData))
-            // remove buildings with no meters
-            .filter(building => building.meters.length > 0);
+        this._buildingList = buildingsData.map(buildingData => new Building(buildingData));
 
         this.renderBuildings();
-        this.showActiveness();
+        await this.showActiveness();
+        console.log('fine');
     }
 
     async showActiveness() {
@@ -119,22 +124,88 @@ class BuildingList {
     }
 
     insertMeterClasses() {
-        this.meterValues.forEach(el => {
-            const domMeter = document.getElementById(`meter_id_${el.meter_id}`);
+        const buildingsWithFilteredMeters = this.elements.map(building => {
+            building.currentMeters = building.initialMeters.map(meter => {
+                const valueItem = this.meterValues
+                    .find(valueItem => valueItem.meter_id == meter.id);
 
-            let statusStr = 'obs-devices__item--';
-            statusStr += el.meter_value ? 'active' : 'broken';
+                if (valueItem) {
+                    meter.statusStr = valueItem.meter_value ? 'active' : 'broken';
+                }
 
-            domMeter.classList.add(statusStr);
+                return meter;
+            })
+
+            return building;
         });
+
+        console.log(buildingsWithFilteredMeters);
+
+        this.renderBuildings(buildingsWithFilteredMeters);
     }
 
     get elements() {
-        return this.buildingList;
+        return this._buildingList;
     }
 }
 
-const app = new BuildingList();
-app.showElemenet();
+class CockPit {
+    constructor() {
+        this.sortPanel = document.body.querySelector('.obs-sorting');
+        this.monitoringBtn = document.body.querySelector('.obs-start-monitoring-btn');
+    }
 
+    disable() {
+        this.sortPanel.addEventListener('click', this.disableTarget);
+        this.monitoringBtn.addEventListener('click', this.disableTarget);
+    }
+
+    unDisable() {
+        this.sortPanel.removeEventListener('click', this.disableTarget);
+        this.monitoringBtn.removeEventListener('click', this.disableTarget);
+    }
+
+    disableTarget(ev) {
+        ev.preventDefault();
+        return;
+    }
+}
+
+class ObservingApp {
+    constructor() {
+        this.cockPit = new CockPit();
+        this.buildingList = new BuildingList();
+    }
+
+    async init() {
+        this.cockPit.disable();
+        this.cockPit.sortPanel.addEventListener('change', this.filterChangeHandler.bind(this));
+        console.log('Waiting for execution');
+        await this.buildingList.showElement();
+        console.log('End of execution');
+        this.cockPit.unDisable();
+    }
+
+    filterChangeHandler(event) {
+        const checkBox = event.target.closest('.obs-sorting__item input');
+
+        if (!checkBox) return;
+
+        const checkedInputsSelector = '.obs-sorting__item input:checked';
+
+        const filters = Array.from(document.querySelectorAll(checkedInputsSelector))
+            .map(element => element.dataset.filtertype);
+
+        const buildingsWithFilteredMeters = this.buildingList.elements.map(building => {
+            building.currentMeters = building.initialMeters.filter(meter => filters.includes(meter.statusStr))
+
+            return building;
+        });
+
+        this.buildingList.renderBuildings(buildingsWithFilteredMeters);
+    }
+}
+
+const app = new ObservingApp();
+app.init();
 
