@@ -48,3 +48,8 @@ mix.sass('resources/sass/app.scss', 'public/css/')
 getFiles('resources/js/pages').forEach(function (filename) {
     mix.js('resources/js/pages/' + filename, 'public/js/pages');
 });
+
+// Libs
+getFiles('resources/js/libs').forEach(function (filename) {
+    mix.js('resources/js/libs/' + filename, 'public/js/libs');
+});
