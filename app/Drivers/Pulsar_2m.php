@@ -111,6 +111,11 @@ class Pulsar_2m extends Driver
         }
     }
 
+    public function write_params()
+    {
+        return $this->collect_data();
+    }
+
     private function write_data(
         string $consumption,
         callable $parser
