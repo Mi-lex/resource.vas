@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/js/libs/monitoring.js": "/js/libs/monitoring.js",
     "/js/pages/electricity.js": "/js/pages/electricity.js",
     "/js/pages/home.js": "/js/pages/home.js",
     "/js/pages/logika_941.js": "/js/pages/logika_941.js",
