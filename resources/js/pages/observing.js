@@ -114,7 +114,6 @@ class BuildingList {
 
         this.renderBuildings();
         await this.showActiveness();
-        console.log('fine');
     }
 
     async showActiveness() {
@@ -130,6 +129,7 @@ class BuildingList {
                     .find(valueItem => valueItem.meter_id == meter.id);
 
                 if (valueItem) {
+                    meter.value = valueItem.meter_value;
                     meter.statusStr = valueItem.meter_value ? 'active' : 'broken';
                 }
 
@@ -138,8 +138,6 @@ class BuildingList {
 
             return building;
         });
-
-        console.log(buildingsWithFilteredMeters);
 
         this.renderBuildings(buildingsWithFilteredMeters);
     }
@@ -180,9 +178,7 @@ class ObservingApp {
     async init() {
         this.cockPit.disable();
         this.cockPit.sortPanel.addEventListener('change', this.filterChangeHandler.bind(this));
-        console.log('Waiting for execution');
         await this.buildingList.showElement();
-        console.log('End of execution');
         this.cockPit.unDisable();
     }
 
