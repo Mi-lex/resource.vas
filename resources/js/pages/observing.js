@@ -1,17 +1,20 @@
-import app_constants from "../constants";
-import { getJson } from "../utilities";
+import app_constants from '../constants';
+import { getJson } from '../utilities';
 
 const { base_url } = app_constants;
 
 const iconNames = {
-    'electricity': 'flash',
-    'water': 'tint',
-    'heat': 'fire'
-}
+    electricity: 'flash',
+    water: 'tint',
+    heat: 'fire'
+};
 
 const ONE_MINUTE = 3600;
 
-function getElementFromTemplate(templateString, containerElement = { tag: 'div', className: '' }) {
+function getElementFromTemplate(
+    templateString,
+    containerElement = { tag: 'div', className: '' }
+) {
     const container = document.createElement(containerElement.tag);
     container.className = containerElement.className;
 
@@ -22,7 +25,7 @@ function getElementFromTemplate(templateString, containerElement = { tag: 'div',
 
 class Meter {
     constructor(meter) {
-        this.id = meter.id
+        this.id = meter.id;
         this.name = meter.name;
         this.type = meter.typeName;
         this.statusStr = 'inactive';
@@ -35,8 +38,10 @@ class Meter {
     get template() {
         return `
             <li class="${this.statusClass}" id=meter_id_${this.id}>
-                <a class="obs-devices__item-icon" href=${base_url + 'meters/' + this.id}>
-                    <i style="color: #84DBFF;" class="fa fa-${iconNames[this.type]}"></i>
+                <a class="obs-devices__item-icon" href="/meters/${this.id}">
+                    <i style="color: #84DBFF;" class="fa fa-${
+            iconNames[this.type]
+            }"></i>
                 </a>
             </li>
         `.trim();
@@ -45,7 +50,7 @@ class Meter {
 
 class Building {
     constructor(building) {
-        this.id = building.id
+        this.id = building.id;
         this.name = building.short_name;
         this.initialMeters = building.meters_arr.map(meter => new Meter(meter));
         this.currentMeters = this.initialMeters.slice();
@@ -55,7 +60,9 @@ class Building {
         return `
             <li class="obs-building__item" id=building_id_${this.id}>
                 <header class="obs-building__item-header">
-                    <a class="obs-building__item-title" href=${base_url + 'buildings/' + this.id}>
+                    <a class="obs-building__item-title" href=${base_url +
+            'buildings/' +
+            this.id}>
                         ${this.name}
                     </a>
                     <svg width="31" height="31" class="page-header__icon page-header__icon--search">
@@ -64,12 +71,14 @@ class Building {
                 </header>
                 <div class="obs-building__item-body">
                     <ul class="obs-devices__list">
-                        ${this.currentMeters.map(meter => meter.template).join(``)}
+                        ${this.currentMeters
+                .map(meter => meter.template)
+                .join(``)}
                     </ul>
                 </div>
             </li>`.trim();
     }
-};
+}
 
 class BuildingList {
     constructor() {
@@ -83,9 +92,11 @@ class BuildingList {
 
     renderBuildings(buildings = this.elements) {
         // don't render buildings with no meters
-        const template = buildings.filter(building => building.currentMeters.length > 0)
+        const template = buildings
+            .filter(building => building.currentMeters.length > 0)
             .map(building => building.template)
-            .join(``).trim();
+            .join(``)
+            .trim();
 
         const containerTag = 'ul';
         const containerClassName = 'obs-building__list';
@@ -110,7 +121,9 @@ class BuildingList {
     async showElement() {
         const buildingsData = await getJson(this.buildingListUrl);
 
-        this._buildingList = buildingsData.map(buildingData => new Building(buildingData));
+        this._buildingList = buildingsData.map(
+            buildingData => new Building(buildingData)
+        );
 
         this.renderBuildings();
         await this.showActiveness();
@@ -125,16 +138,19 @@ class BuildingList {
     insertMeterClasses() {
         const buildingsWithFilteredMeters = this.elements.map(building => {
             building.currentMeters = building.initialMeters.map(meter => {
-                const valueItem = this.meterValues
-                    .find(valueItem => valueItem.meter_id == meter.id);
+                const valueItem = this.meterValues.find(
+                    valueItem => valueItem.meter_id == meter.id
+                );
 
                 if (valueItem) {
                     meter.value = valueItem.meter_value;
-                    meter.statusStr = valueItem.meter_value ? 'active' : 'broken';
+                    meter.statusStr = valueItem.meter_value
+                        ? 'active'
+                        : 'broken';
                 }
 
                 return meter;
-            })
+            });
 
             return building;
         });
@@ -150,7 +166,9 @@ class BuildingList {
 class CockPit {
     constructor() {
         this.sortPanel = document.body.querySelector('.obs-sorting');
-        this.monitoringBtn = document.body.querySelector('.obs-start-monitoring-btn');
+        this.monitoringBtn = document.body.querySelector(
+            '.obs-start-monitoring-btn'
+        );
     }
 
     disable() {
@@ -177,7 +195,10 @@ class ObservingApp {
 
     async init() {
         this.cockPit.disable();
-        this.cockPit.sortPanel.addEventListener('change', this.filterChangeHandler.bind(this));
+        this.cockPit.sortPanel.addEventListener(
+            'change',
+            this.filterChangeHandler.bind(this)
+        );
         await this.buildingList.showElement();
         this.cockPit.unDisable();
     }
@@ -189,19 +210,94 @@ class ObservingApp {
 
         const checkedInputsSelector = '.obs-sorting__item input:checked';
 
-        const filters = Array.from(document.querySelectorAll(checkedInputsSelector))
-            .map(element => element.dataset.filtertype);
+        const filters = Array.from(
+            document.querySelectorAll(checkedInputsSelector)
+        ).map(element => element.dataset.filtertype);
 
-        const buildingsWithFilteredMeters = this.buildingList.elements.map(building => {
-            building.currentMeters = building.initialMeters.filter(meter => filters.includes(meter.statusStr))
+        const buildingsWithFilteredMeters = this.buildingList.elements.map(
+            building => {
+                building.currentMeters = building.initialMeters.filter(meter =>
+                    filters.includes(meter.statusStr)
+                );
 
-            return building;
-        });
+                return building;
+            }
+        );
 
         this.buildingList.renderBuildings(buildingsWithFilteredMeters);
     }
 }
 
+class AlertPopUp {
+    constructor(meter, building) {
+        this.meter = meter;
+        this.building = building;
+    }
+
+    init() {
+        this.appendPopUp();
+
+        this.close_btn = document.querySelector('.obs-alert-popup__close-btn');
+
+        this.close_btn.addEventListener(
+            'click',
+            this.closeBtnHandler.bind(this)
+        );
+    }
+
+    appendPopUp() {
+        this.domElement = getElementFromTemplate(
+            this.template,
+            {
+                tag: 'div',
+                className: 'obs-alert-popup__overlay'
+            }
+        );
+
+        this.parentElement = document.querySelector('.content-wrapper');
+
+        this.parentElement.appendChild(this.domElement);
+    }
+
+    closeBtnHandler() {
+        // ...
+    }
+
+    show() {
+        this.domElement.style.display = "block";
+    }
+
+    hide() {
+        this.domElement.style.display = 'none';
+    }
+
+    get template() {
+        return `
+            <div class="obs-alert-popup__container">
+                <section class="obs-alert-popup">
+                    <div class="obs-alert-popup__upper-part">
+                        <button class="obs-alert-popup__close-btn">
+                            ✕
+                        </button>
+                    </div>
+                    
+                    <div class="obs-alert-popup__body">
+                        <strong class="obs-alert-popup__message">Внимание!</strong>
+                        <p class="obs-alert-popup__text">
+                            Обнаружено подозрительное потребление в приборе учета 
+                            <a href="/meters/${this.meter.id}">
+                                ${this.meter.name}
+                            </a>, 
+                            расположенном в 
+                            <a href="/buildings/${this.building.id}">
+                                ${this.building.name}
+                            </a>.
+                        </p>
+                    </div>
+                </section>
+            </div>`.trim();
+    }
+}
+
 const app = new ObservingApp();
 app.init();
-
