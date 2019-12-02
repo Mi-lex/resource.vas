@@ -1,21 +1,19 @@
 /* Academy */
 
 .widget-user-header {
-    filter: saturate(0.3);
     min-height: 200px;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
-}
 
-.widget-user-header {
     color: white;
-}
+    filter: saturate(0.3);
 
-.widget-user-header:hover {
-    color: #ccc;
-    filter: saturate(1);
-    transition: filter 0.3s;
+    &:hover {
+        color: #ccc;
+        filter: saturate(1);
+        transition: filter 0.3s;
+    }
 }
 
 .info-box .progress {

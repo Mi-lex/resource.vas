@@ -1,12 +1,12 @@
 /* District */
 
 .widget-user-header {
-    filter: saturate(0.3);
-    color: white;
     background-color: #3c8dbc;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
+    color: white;
+    filter: saturate(0.3);
 }
 
 .widget-user-header:hover {
@@ -17,8 +17,8 @@
 
 .widget-user .widget-user-header {
     height: 250px;
-    background-size: cover;
     background-position: center center;
+    background-size: cover;
 }
 
 .unit {
