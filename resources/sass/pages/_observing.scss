@@ -21,13 +21,12 @@
 }
 
 .obs-start-monitoring-btn {
-    width: 267px;
     height: 35px;
     padding: 2px 20px;
     border: 1px solid #2ecc71;
     margin-left: auto;
 
-    background: #2ecc71;
+    background-color: #2ecc71;
     border-radius: 3px;
     color: white;
     font-size: 20px;
@@ -38,6 +37,11 @@
 
     &:hover {
         transform: scale(1.03);
+    }
+
+    &--active {
+        border-color: #c0392b;
+        background-color: #e74c3c;
     }
 }
 
@@ -162,6 +166,15 @@
         color: white;
         font-size: 40px;
         line-height: 52px;
+        transition: transform 0.3s ease-in-out;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        &:active {
+            outline: none;
+        }
     }
 
     &__overlay {
