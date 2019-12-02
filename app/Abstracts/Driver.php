@@ -108,7 +108,7 @@ abstract class Driver
     public function make_connection()
     {
         $connection = BinaryStreamConnection::getBuilder()
-            ->setProtocol('udp')
+            ->setProtocol($this->connection_params['protocol']) 
             ->setHost($this->connection_params['ip'])
             ->setPort('40000')
             ->setTimeoutSec(3.5)
