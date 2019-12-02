@@ -1,15 +1,61 @@
 import app_constants from '../constants';
 import { getJson } from '../utilities';
+import { createStore } from 'redux';
 
 const { base_url } = app_constants;
+const CHANGE_FILTER = 'CHANGE_FILTER';
+const TOGGLE_MONITORING = 'TOGGLE_MONITORING';
+const REFRESH_BUILDING_LIST = 'REFRESH_BUILDING_LIST';
+
+const initialState = {
+    'filters': ['active', 'inactive', 'broken'],
+    'monitoringActivness': false,
+    'buildings': []
+};
+
+const changeFilters = (newFilters) => ({
+    'type': CHANGE_FILTER,
+    'filters': newFilters
+});
+
+const toggleMonitoring = () => ({
+    'type': TOGGLE_MONITORING,
+});
+
+const refreshBuildingList = (buildings) => ({
+    'type': REFRESH_BUILDING_LIST,
+    'buildings': buildings
+});
+
+const mainreducer = (state = initialState, action) => {
+    switch (action.type) {
+        case CHANGE_FILTER:
+            return {
+                ...state,
+                'filters': action.filters
+            }
+        case TOGGLE_MONITORING:
+            return {
+                ...state,
+                'monitoringActivness': !state.monitoringActivness
+            }
+        case REFRESH_BUILDING_LIST:
+            return {
+                ...state,
+                'buildings': action.buildings
+            }
+        default:
+            return state;
+    }
+}
+
+const store = createStore(mainreducer);
 
 const iconNames = {
     electricity: 'flash',
     water: 'tint',
     heat: 'fire'
 };
-
-const ONE_MINUTE = 3600;
 
 function getElementFromTemplate(
     templateString,
@@ -28,6 +74,7 @@ class Meter {
         this.id = meter.id;
         this.name = meter.name;
         this.type = meter.typeName;
+        this.building_id = meter.building_id;
         this.statusStr = 'inactive';
     }
 
@@ -52,8 +99,7 @@ class Building {
     constructor(building) {
         this.id = building.id;
         this.name = building.short_name;
-        this.initialMeters = building.meters_arr.map(meter => new Meter(meter));
-        this.currentMeters = this.initialMeters.slice();
+        this.meters = building.meters_arr.map(meter => new Meter(meter));
     }
 
     get template() {
@@ -71,12 +117,29 @@ class Building {
                 </header>
                 <div class="obs-building__item-body">
                     <ul class="obs-devices__list">
-                        ${this.currentMeters
+                        ${this.meters
+                .filter(meter => store.getState().filters.includes(meter.statusStr))
                 .map(meter => meter.template)
                 .join(``)}
                     </ul>
                 </div>
             </li>`.trim();
+    }
+
+    compareMeterValues(meter, newValue) {
+        if (meter.value) {
+            console.log(`Old value: ${meter.value}, new value: ${newValue}`);
+
+            const diff = ((newValue - meter.value) / meter.value) * 100;
+
+            if (diff > 0.3) {
+                const alertWindow = new AlertPopUp(meter, this);
+                alertWindow.init();
+                alertWindow.show();
+            }
+        }
+
+        meter.value = newValue;
     }
 }
 
@@ -90,10 +153,10 @@ class BuildingList {
         return null;
     }
 
-    renderBuildings(buildings = this.elements) {
+    renderBuildings(buildings = store.getState().buildings) {
         // don't render buildings with no meters
         const template = buildings
-            .filter(building => building.currentMeters.length > 0)
+            .filter(building => building.meters.length > 0)
             .map(building => building.template)
             .join(``)
             .trim();
@@ -120,46 +183,44 @@ class BuildingList {
 
     async showElement() {
         const buildingsData = await getJson(this.buildingListUrl);
-
-        this._buildingList = buildingsData.map(
+        const buildingList = buildingsData.map(
             buildingData => new Building(buildingData)
         );
 
-        this.renderBuildings();
+        store.dispatch(refreshBuildingList(buildingList));
+
         await this.showActiveness();
     }
 
     async showActiveness() {
         this.meterValues = await getJson(this.meterValuesUrl);
 
-        this.insertMeterClasses();
+        this.inserValues();
     }
 
-    insertMeterClasses() {
-        const buildingsWithFilteredMeters = this.elements.map(building => {
-            building.currentMeters = building.initialMeters.map(meter => {
-                const valueItem = this.meterValues.find(
-                    valueItem => valueItem.meter_id == meter.id
-                );
+    inserValues() {
+        const buildingsWithFilteredMeters = store.getState()
+            .buildings.map(building => {
+                building.meters = building.meters.map(meter => {
+                    const valueItem = this.meterValues.find(
+                        valueItem => valueItem.meter_id == meter.id
+                    );
 
-                if (valueItem) {
-                    meter.value = valueItem.meter_value;
-                    meter.statusStr = valueItem.meter_value
-                        ? 'active'
-                        : 'broken';
-                }
+                    if (valueItem) {
+                        building.compareMeterValues(meter, valueItem);
 
-                return meter;
+                        meter.statusStr = valueItem.meter_value
+                            ? 'active'
+                            : 'broken';
+                    }
+
+                    return meter;
+                });
+
+                return building;
             });
 
-            return building;
-        });
-
-        this.renderBuildings(buildingsWithFilteredMeters);
-    }
-
-    get elements() {
-        return this._buildingList;
+        store.dispatch(refreshBuildingList(buildingsWithFilteredMeters));
     }
 }
 
@@ -169,6 +230,22 @@ class CockPit {
         this.monitoringBtn = document.body.querySelector(
             '.obs-start-monitoring-btn'
         );
+    }
+
+    get btnText() {
+        return store.getState().monitoringActivness ?
+            'Остановить мониторинг' :
+            'Начать мониторинг';
+    }
+
+    refreshMonitoringStatus() {
+        this.monitoringBtn.textContent = this.btnText;
+        this.monitoringBtn.classList.toggle('obs-start-monitoring-btn--active');
+    }
+
+    disabledMonitoringStatus() {
+        this.monitoringBtn.textContent = this.monitoringStatuses.initial;
+        this.monitoringBtn.classList.remove('obs-start-monitoring-btn--active');
     }
 
     disable() {
@@ -203,6 +280,10 @@ class ObservingApp {
         this.cockPit.unDisable();
     }
 
+    async toggleMonitoring(ev) {
+        store.dispatch(toggleMonitoring);
+    }
+
     filterChangeHandler(event) {
         const checkBox = event.target.closest('.obs-sorting__item input');
 
@@ -214,17 +295,7 @@ class ObservingApp {
             document.querySelectorAll(checkedInputsSelector)
         ).map(element => element.dataset.filtertype);
 
-        const buildingsWithFilteredMeters = this.buildingList.elements.map(
-            building => {
-                building.currentMeters = building.initialMeters.filter(meter =>
-                    filters.includes(meter.statusStr)
-                );
-
-                return building;
-            }
-        );
-
-        this.buildingList.renderBuildings(buildingsWithFilteredMeters);
+        store.dispatch(changeFilters(filters));
     }
 }
 
@@ -259,8 +330,8 @@ class AlertPopUp {
         this.parentElement.appendChild(this.domElement);
     }
 
-    closeBtnHandler() {
-        // ...
+    closeBtnHandler(e) {
+        this.hide();
     }
 
     show() {
@@ -301,3 +372,4 @@ class AlertPopUp {
 
 const app = new ObservingApp();
 app.init();
+store.subscribe(app.buildingList.renderBuildings.bind(app.buildingList));
